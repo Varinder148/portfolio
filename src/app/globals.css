@@ -9,25 +9,22 @@
   --color-green-light: #606C38;
   --color-orange-dark: #BC6C25;
   --color-orange-light: #DDA15E;
+  --color-black-light: #393E46;
+  --color-dirty-white: #FAFDF3;
 }
 
-:root {
-  font-family: 'Montserrat', sans-serif;
+html > * {
+  @apply text-black-light;
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
 .container::-webkit-scrollbar { 
+  
   display: none;  /* Safari and Chrome */
   -ms-overflow-style: none;  /* Internet Explorer 10+ */
   scrollbar-width: none;  /* Firefox */
 }
 
-.polygon-color {
-  fill: var(--color-olive-light);
-}
 
-.polygon-path {
-  fill: #A78E50; /* Example color */
-}

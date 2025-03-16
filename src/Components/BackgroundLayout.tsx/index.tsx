@@ -7,9 +7,9 @@ import Triangle from "./Triangle";
 const BackgroundLayout = ({ children }: { children: ReactNode }) => {
   const BackgroundHeight = `${NUMBER_OF_SECTIONS * 100}vh`;
   return (
-    <div>
+    <>
       <div
-        className={`relative -z-1 overflow-x-hidden w-screen opacity-80 `}
+        className={`relative -z-1 overflow-x-hidden w-full opacity-80 `}
         style={{
           height: BackgroundHeight,
         }}
@@ -24,12 +24,13 @@ const BackgroundLayout = ({ children }: { children: ReactNode }) => {
           variant
         />
         <Triangle
-          className="w-[300px] h-[300px] float-right absolute top-[400px] right-0 translate-x-1/2"
+          className="w-[300px] h-[300px] float-right absolute top-[400px] right-0 translate-x-1/5"
           fill="fill-orange-light"
         />
         <Polygon
-          className="h-[600px] absolute top-[1400px] right-20 rotate-90 translate-x-1/4"
+          className="h-[600px] absolute top-[1400px] right-20 rotate-45 translate-x-1/4"
           fill="fill-green-dark"
+          variant
         />
         <Triangle
           className="w-[300px] h-[300px] absolute top-[1800px] left-0 -translate-x-1/2"
@@ -45,8 +46,8 @@ const BackgroundLayout = ({ children }: { children: ReactNode }) => {
           variant
         />
       </div>
-      {children}
-    </div>
+      <div className="absolute top-0 w-full h-auto">{children}</div>
+    </>
   );
 };
 
