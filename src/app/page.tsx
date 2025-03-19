@@ -1,14 +1,17 @@
 import Navigation from "@/Components/Navigation";
 import About from "@/Components/Sections/About";
+import Education from "@/Components/Sections/Education";
+import Experience from "@/Components/Sections/Experience";
+import Skills from "@/Components/Sections/Skills";
 
 export default function Home() {
   return (
-    <div className="snap-y overflow-y-scroll max-h-screen snap-mandatory container">
+    <div className=" ">
       <Navigation />
-      <About className=" snap-start h-screen" />
-      <About className=" snap-start h-screen" />
-      <About className=" snap-start h-screen" />
-      <About className=" snap-start h-screen" />
+      <About />
+      <Experience />
+      <Skills />
+      <Education />
     </div>
   );
 }

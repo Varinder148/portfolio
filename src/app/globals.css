@@ -11,14 +11,10 @@
   --color-orange-light: #DDA15E;
   --color-black-light: #393E46;
   --color-dirty-white: #FAFDF3;
+  --color-red-matte: #BE3144;
 }
 
-html > * {
-  @apply text-black-light;
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+html, body {margin: 0; padding: 0; overflow-x:hidden;}
 
 .container::-webkit-scrollbar { 
   

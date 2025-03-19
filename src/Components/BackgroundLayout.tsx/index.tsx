@@ -28,22 +28,13 @@ const BackgroundLayout = ({ children }: { children: ReactNode }) => {
           fill="fill-orange-light"
         />
         <Polygon
-          className="h-[600px] absolute top-[1400px] right-20 rotate-45 translate-x-1/4"
+          className="h-[600px] absolute top-[1200px] right-20 rotate-45 translate-x-1/4"
           fill="fill-green-dark"
           variant
         />
         <Triangle
           className="w-[300px] h-[300px] absolute top-[1800px] left-0 -translate-x-1/2"
           fill="fill-orange-light"
-        />
-        <Circle
-          className="h-[500px] w-[500px] absolute top-[2200px] left-1/2 "
-          fill="fill-green-light"
-        />
-        <Polygon
-          className="h-[600px] absolute top-[2800px]  rotate-90 -translate-x-1/4 "
-          fill="fill-olive-lighter"
-          variant
         />
       </div>
       <div className="absolute top-0 w-full h-auto">{children}</div>

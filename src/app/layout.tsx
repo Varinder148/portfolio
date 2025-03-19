@@ -3,16 +3,9 @@ import "./globals.css";
 import BackgroundLayout from "../Components/BackgroundLayout.tsx";
 import { Montserrat } from "next/font/google";
 
-import type { Viewport } from "next";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/all";
 
-export const viewport: Viewport = {
-  width: "device-width",
-  initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
-  // Also supported but less commonly used
-  // interactiveWidget: 'resizes-visual',
-};
 const montserrat = Montserrat({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -25,9 +18,11 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  gsap.registerPlugin(ScrollTrigger);
+
   return (
     <html lang="en">
-      <body className={"h-[6000px]  bg-dirty-white " + montserrat.className}>
+      <body className={"h-[6000px]   " + montserrat.className}>
         <BackgroundLayout>{children}</BackgroundLayout>
       </body>
     </html>
