@@ -1,5 +1,3 @@
-"use client";
-
 import { useGSAP } from "@gsap/react";
 import Time from "./Time";
 import gsap from "gsap";

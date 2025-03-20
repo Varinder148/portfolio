@@ -1,6 +1,4 @@
-"use client";
-
-import { useState } from "react";
+import { useState, RefObject } from "react";
 import Circle from "../BackgroundLayout.tsx/Circle";
 import Image from "next/image";
 import menuItems from "./constants";
@@ -60,9 +58,10 @@ export const animateNavOpeningandClosing = (visible: boolean) => {
 
 interface NavigationProps {
   className?: string;
+  refs: RefObject<{ [key: string]: HTMLDivElement | null }>;
 }
 
-const Navigation: React.FC<NavigationProps> = ({ className = "" }) => {
+const Navigation: React.FC<NavigationProps> = ({ className = "", refs }) => {
   const [activeItem, setActiveItem] = useState(0);
   const [visible, setVisible] = useState(false);
 
@@ -73,6 +72,13 @@ const Navigation: React.FC<NavigationProps> = ({ className = "" }) => {
   const toggleNav = () => {
     setVisible((prev) => !prev);
     animateNavOpeningandClosing(visible);
+  };
+
+  const handleClick = (anchor: string, index: number) => {
+    setActiveItem(index);
+    animateCompass();
+    refs.current[anchor]?.scrollIntoView({ behavior: "smooth" });
+    toggleNav();
   };
 
   return (
@@ -128,10 +134,7 @@ const Navigation: React.FC<NavigationProps> = ({ className = "" }) => {
             return (
               <li
                 key={index}
-                onClick={() => {
-                  setActiveItem(index);
-                  animateCompass();
-                }}
+                onClick={() => handleClick(item.anchor as string, index)}
                 className={`absolute top-1/2 left-1/2  -translate-x-1/2 -translate-y-1/2 transition-all  ${
                   activeItem === index
                     ? "text-red-matte text-2xl"
@@ -143,9 +146,7 @@ const Navigation: React.FC<NavigationProps> = ({ className = "" }) => {
                   }px) rotate(${rotation * -1}deg)`,
                 }}
               >
-                <a href={`#${item.name.toLowerCase().split(" ").join("-")}`}>
-                  {item.name}
-                </a>
+                {item.name}
               </li>
             );
           })}
