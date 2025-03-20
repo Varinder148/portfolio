@@ -27,7 +27,9 @@ const Experience: React.FC = () => {
           duration: 0.1, // Reduced snap animation duration
           ease: "power1.inOut",
         },
-        end: () => "+=" + document.querySelector("#experience")!.offsetWidth,
+        end: () =>
+          "+=" +
+          (document.querySelector("#experience") as HTMLElement)!.offsetWidth,
       },
     });
   }, []);
