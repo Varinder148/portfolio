@@ -3,8 +3,13 @@ import { ReactNode } from "react";
 import Circle from "./Circle";
 import Polygon from "./Polygon";
 import Triangle from "./Triangle";
+import React from "react";
 
-const BackgroundLayout = ({ children }: { children: ReactNode }) => {
+interface BackgroundLayoutProps {
+  children: ReactNode;
+}
+
+const BackgroundLayout: React.FC<BackgroundLayoutProps> = ({ children }) => {
   const BackgroundHeight = `${NUMBER_OF_SECTIONS * 100}vh`;
   return (
     <>

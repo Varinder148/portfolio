@@ -1,8 +1,9 @@
 "use client";
 
+import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/all";
-import React, { useEffect } from "react";
+import React from "react";
 
 const Experience: React.FC = () => {
   const cards = [
@@ -13,7 +14,7 @@ const Experience: React.FC = () => {
     { id: 5, color: "#66ffff" },
   ];
 
-  useEffect(() => {
+  useGSAP(() => {
     gsap.registerPlugin(ScrollTrigger);
     gsap.to("#experience div", {
       xPercent: -100 * (cards.length - 1),
@@ -32,7 +33,7 @@ const Experience: React.FC = () => {
           (document.querySelector("#experience") as HTMLElement)!.offsetWidth,
       },
     });
-  }, []);
+  });
 
   return (
     <div

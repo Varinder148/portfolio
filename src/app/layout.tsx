@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import BackgroundLayout from "../Components/BackgroundLayout.tsx";
 import { Montserrat } from "next/font/google";
+import React from "react";
 
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/all";

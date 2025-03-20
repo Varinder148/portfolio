@@ -1,4 +1,4 @@
-let menuItems = [
+const menuItems = [
   {
     name: "About",
   },
