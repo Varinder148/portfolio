@@ -5,7 +5,8 @@ const isDev = process.env.NODE_ENV !== "production";
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   images: {
-    unoptimized: true, // Disable default image optimization
+    loader: "custom",
+    loaderFile: "./imgLoader.ts",
   },
   assetPrefix: !isDev ? "/portfolio/" : "",
   basePath: !isDev ? "/portfolio" : "",
