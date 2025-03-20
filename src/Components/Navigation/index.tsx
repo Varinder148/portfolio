@@ -5,8 +5,8 @@ import Circle from "../BackgroundLayout.tsx/Circle";
 import Image from "next/image";
 import menuItems from "./constants";
 import clsx from "clsx";
-
 import gsap from "gsap";
+import React from "react";
 
 export const animateCompass = () => {
   gsap
@@ -58,7 +58,11 @@ export const animateNavOpeningandClosing = (visible: boolean) => {
   }
 };
 
-const Navigation: React.FC = ({ className }) => {
+interface NavigationProps {
+  className?: string;
+}
+
+const Navigation: React.FC<NavigationProps> = ({ className = "" }) => {
   const [activeItem, setActiveItem] = useState(0);
   const [visible, setVisible] = useState(false);
 
