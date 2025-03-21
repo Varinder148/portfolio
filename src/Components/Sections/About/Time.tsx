@@ -20,7 +20,13 @@ const Time = () => {
     return () => clearInterval(id);
   }, []);
 
-  return <span className="text-3xl text-theme-gray about-body ">{time}</span>;
+  return (
+    <div className="text-3xl text-theme-gray about-body ">
+      {time.split(" ").slice(0, 6).join(" ")}
+      <br />
+      {time.split(" ").slice(6).join(" ")}
+    </div>
+  );
 };
 
 export default Time;

@@ -1,23 +1,30 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import BackgroundLayout from "../Components/BackgroundLayout.tsx";
-import { Montserrat, Alegreya_Sans, McLaren } from "next/font/google";
+import {
+  Montserrat,
+  Alegreya_Sans,
+  McLaren,
+  Meddon,
+  Biryani,
+  Rancho,
+} from "next/font/google";
 import React from "react";
 
-const montserrat = Montserrat({
-  subsets: ["latin"],
-  variable: "--font-montserrat",
+const meddon = Meddon({
+  weight: ["400"],
+  subsets: ["latin", "latin-ext"],
+  variable: "--font-meddon",
 });
 
-const alegreya_sans = Alegreya_Sans({
-  weight: "400",
+const rancho = Rancho({
+  weight: ["400"],
   subsets: ["latin"],
-  variable: "--font-alegreya-sans",
+  variable: "--font-rancho",
 });
-const mcLaren = McLaren({
-  weight: "400",
-  subsets: ["latin"],
-  variable: "--font-mclaren",
+const biryani = Biryani({
+  weight: ["200", "400", "600"],
+  subsets: ["latin", "latin-ext"],
+  variable: "--font-biryani",
 });
 
 export const metadata: Metadata = {
@@ -33,7 +40,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={` bg-theme-black grainy-bg text-theme-ivory ${montserrat.variable} ${mcLaren.variable} ${alegreya_sans.variable} `}
+        className={` bg-theme-black grainy-bg font-biryani text-theme-ivory  ${meddon.variable} ${rancho.variable} ${biryani.variable} `}
       >
         {children}
       </body>

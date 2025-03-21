@@ -26,10 +26,9 @@
 
   --shadow-custom1: 11px -14px 74px -5px;
   
-  --font-montserrat: var(--font-montserrat); 
-  --font-mclaren: var(--font-mclaren);
-  --font-alegreya-sans: var(--font-alegreya-sans);
- 
+  --font-meddon: var(--font-meddon);
+  --font-rancho: var(--font-rancho);
+  --font-biryani: var(--font-biryani);
 }
 
 html, body {margin: 0; padding: 0; overflow-x:hidden;}
@@ -39,6 +38,10 @@ html, body {margin: 0; padding: 0; overflow-x:hidden;}
   display: none;  /* Safari and Chrome */
   -ms-overflow-style: none;  /* Internet Explorer 10+ */
   scrollbar-width: none;  /* Firefox */
+}
+
+.polygon-bg{
+  background-image: url(../../public/polygon.svg);
 }
 
 .grainy-bg{

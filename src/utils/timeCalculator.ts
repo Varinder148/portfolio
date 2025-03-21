@@ -12,7 +12,7 @@ const formatTime = (ms: number) => {
   const seconds = Math.floor(ms / 1000);
   ms -= seconds * 1000;
 
-  return `${years} years ${months} months ${days} days ${hours} hrs ${minutes} mins & ${seconds} sec`;
+  return `${years} years ${months} months ${days} days ${hours}: ${minutes}: ${seconds}`;
 };
 
 export default formatTime;
