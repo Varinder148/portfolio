@@ -88,11 +88,12 @@ const Navigation: React.FC<NavigationProps> = ({ className = "", refs }) => {
         className={clsx("h-[100vh] w-[100vw] bg-black opacity-20 z-10 fixed", {
           hidden: !visible,
         })}
+        id="layout"
       ></button>
       <button
         onClick={toggleNav}
         className={clsx(
-          "fixed top-20 right-20 w-20 h-20 bg-amber-50 rounded-full shadow-md grid place-content-center border-2 border-black cursor-pointer z-20",
+          "fixed top-20 right-20 w-20 h-20 bg-theme-ivory rounded-full shadow-custom1 shadow-theme-red  grid place-content-center border-2 border-theme-black cursor-pointer z-20",
           {
             hidden: visible,
           }
@@ -107,8 +108,8 @@ const Navigation: React.FC<NavigationProps> = ({ className = "", refs }) => {
         />
       </button>
       <Circle
-        fill="fill-white "
-        className="h-[1500px] w-[1500px]  top-0 right-0 fixed -translate-y-1/2 translate-x-1/2 scale-0 border-4 border-olive-dark rounded-full shadow-2xl z-20"
+        fill="fill-theme-ivory "
+        className="h-[1500px] w-[1500px]  top-0 right-0 fixed  -translate-y-1/2 translate-x-1/2 scale-0 border-4 border-theme-black  rounded-full shadow-2xl shadow-theme-red z-20"
         id="circle"
       />
 

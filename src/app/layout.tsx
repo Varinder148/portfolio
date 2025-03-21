@@ -1,13 +1,24 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import BackgroundLayout from "../Components/BackgroundLayout.tsx";
-import { Montserrat } from "next/font/google";
+import { Montserrat, Alegreya_Sans, McLaren } from "next/font/google";
 import React from "react";
 
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/all";
+const montserrat = Montserrat({
+  subsets: ["latin"],
+  variable: "--font-montserrat",
+});
 
-const montserrat = Montserrat({ subsets: ["latin"] });
+const alegreya_sans = Alegreya_Sans({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-alegreya-sans",
+});
+const mcLaren = McLaren({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-mclaren",
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -19,12 +30,12 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  gsap.registerPlugin(ScrollTrigger);
-
   return (
     <html lang="en">
-      <body className={"h-[6000px]   " + montserrat.className}>
-        <BackgroundLayout>{children}</BackgroundLayout>
+      <body
+        className={` bg-theme-black grainy-bg text-theme-ivory ${montserrat.variable} ${mcLaren.variable} ${alegreya_sans.variable} `}
+      >
+        {children}
       </body>
     </html>
   );

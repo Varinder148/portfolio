@@ -20,7 +20,7 @@ const Time = () => {
     return () => clearInterval(id);
   }, []);
 
-  return <span className="text-3xl text-black-light about-body ">{time}</span>;
+  return <span className="text-3xl text-theme-gray about-body ">{time}</span>;
 };
 
 export default Time;

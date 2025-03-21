@@ -1,14 +1,20 @@
 "use client";
 
 import Navigation from "@/Components/Navigation";
-import menuItems, { refs } from "@/Components/Navigation/constants";
+import { refs } from "@/Components/Navigation/constants";
 import About from "@/Components/Sections/About";
 import Education from "@/Components/Sections/Education";
 import Experience from "@/Components/Sections/Experience";
 import Skills from "@/Components/Sections/Skills";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/all";
 import { useRef } from "react";
 
 export default function Home() {
+  gsap.registerPlugin(ScrollTrigger);
+  gsap.registerPlugin(useGSAP);
+
   const anchorRefs = useRef<{ [key: string]: HTMLDivElement | null }>({
     [refs.About]: null,
     [refs.Experience]: null,
