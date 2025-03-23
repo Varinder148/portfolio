@@ -5,7 +5,7 @@ import React from "react";
 
 const Experience: React.FC = () => {
   const cards = [
-    { id: 1, color: "#ff6666" },
+    { id: 1, color: "#000000" },
     { id: 2, color: "#66ff66" },
     { id: 3, color: "#6666ff" },
     { id: 4, color: "#ffff66" },
@@ -38,15 +38,16 @@ const Experience: React.FC = () => {
       className="flex "
       id="experience"
       style={{
-        backgroundColor: "#f0f0f0",
+        // backgroundColor: "#f0f0f0",
         height: "100vh",
         width: "500vw",
-        opacity: 0.5,
+        borderRadius: "50%",
       }}
     >
       {cards.map((card) => (
         <div
           key={card.id}
+          className="bg-opacity-5"
           style={{
             backgroundColor: card.color,
             width: "100vw",

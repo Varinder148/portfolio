@@ -13,7 +13,7 @@ const Time = () => {
       setTime(formatTime(totalTime));
     };
 
-    updateTime(); // Set the initial time immediately
+    updateTime();
 
     const id = setInterval(updateTime, 1000);
 
@@ -21,7 +21,7 @@ const Time = () => {
   }, []);
 
   return (
-    <div className="text-3xl text-theme-gray about-body ">
+    <div className="text-3xl text-theme-gray ">
       {time.split(" ").slice(0, 6).join(" ")}
       <br />
       {time.split(" ").slice(6).join(" ")}

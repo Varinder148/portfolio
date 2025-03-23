@@ -1,5 +1,6 @@
 "use client";
 
+import CustomMousePointer from "@/Components/CustomMousePointer";
 import Navigation from "@/Components/Navigation";
 import { refs } from "@/Components/Navigation/constants";
 import About from "@/Components/Sections/About";
@@ -15,6 +16,8 @@ export default function Home() {
   gsap.registerPlugin(ScrollTrigger);
   gsap.registerPlugin(useGSAP);
 
+  const loading = ".loading";
+
   const anchorRefs = useRef<{ [key: string]: HTMLDivElement | null }>({
     [refs.About]: null,
     [refs.Experience]: null,
@@ -22,37 +25,54 @@ export default function Home() {
     [refs.Skills]: null,
   });
 
+  useGSAP(() => {
+    gsap.to(loading, {
+      yPercent: -100,
+      display: "none",
+    });
+  });
+
   return (
-    <div className=" ">
+    <>
+      <CustomMousePointer />
       <Navigation refs={anchorRefs} />
+      <div className="loading w-screen h-screen bg-theme-red absolute z-50" />
       <div
-        ref={(ref) => {
-          anchorRefs.current[refs.About] = ref;
-        }}
+        className={" grid grid-cols-3 lg:mx-10 border-x-2 border-theme-gray  "}
       >
-        <About />
+        <div
+          className="col-span-3"
+          ref={(ref) => {
+            anchorRefs.current[refs.About] = ref;
+          }}
+        >
+          <About />
+        </div>
+        <div
+          className="col-span-3"
+          ref={(ref) => {
+            anchorRefs.current[refs.Experience] = ref;
+          }}
+        >
+          <Experience />
+        </div>
+        <div
+          className="col-span-3"
+          ref={(ref) => {
+            anchorRefs.current[refs.Skills] = ref;
+          }}
+        >
+          <Skills />
+        </div>
+        <div
+          className="col-span-3"
+          ref={(ref) => {
+            anchorRefs.current[refs.Education] = ref;
+          }}
+        >
+          <Education />
+        </div>
       </div>
-      <div
-        ref={(ref) => {
-          anchorRefs.current[refs.Experience] = ref;
-        }}
-      >
-        <Experience />
-      </div>
-      <div
-        ref={(ref) => {
-          anchorRefs.current[refs.Skills] = ref;
-        }}
-      >
-        <Skills />
-      </div>
-      <div
-        ref={(ref) => {
-          anchorRefs.current[refs.Education] = ref;
-        }}
-      >
-        <Education />
-      </div>
-    </div>
+    </>
   );
 }

@@ -1,13 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import {
-  Montserrat,
-  Alegreya_Sans,
-  McLaren,
-  Meddon,
-  Biryani,
-  Rancho,
-} from "next/font/google";
+import "./neon.css";
+import { Meddon, Biryani, Rancho } from "next/font/google";
 import React from "react";
 
 const meddon = Meddon({

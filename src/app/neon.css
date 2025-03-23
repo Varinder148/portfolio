@@ -1,0 +1,49 @@
+
+:root{
+    
+  --theme-black: #0F0F0F;
+  --theme-red: #CC2936;
+  --theme-ivory: #F6F7EB;
+  --theme-olive:#6F7C12;
+  --theme-sandy:#E28413;
+  --theme-gray: #757780;
+
+}
+
+.stroke-text {
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
+}
+
+.text-neon-subtle {
+  text-shadow:
+    0 0 1px ,
+    0 0 2px ,
+    0 0 4px ,
+    0 0 8px ;
+}
+
+.text-neon-sharp {
+  text-shadow:
+    0 0 3px var(--theme-ivory),
+    0 0 5px var(--theme-ivory),
+    0 0 10px var(--theme-ivory),
+    0 0 20px var(--theme-ivory),
+    0 0 40px var(--theme-ivory),
+    0 0 50px var(--theme-ivory),
+    0 0 60px var(--theme-ivory),
+    0 0 70px var(--theme-ivory);
+}
+
+.text-neon-sharpest {
+    text-shadow:
+        0 0 7px var(--theme-ivory),
+        0 0 10px var(--theme-ivory),
+        0 0 21px var(--theme-ivory),
+        0 0 42px var(--theme-ivory),
+        0 0 82px var(--theme-ivory),
+        0 0 92px var(--theme-ivory),
+        0 0 102px var(--theme-ivory),
+        0 0 151px var(--theme-ivory);
+  }

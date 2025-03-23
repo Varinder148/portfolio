@@ -3,6 +3,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Alegreya+Sans&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Montserrat&display=swap");
 
+
+
 @theme {
   --color-olive-dark: #504B38;
   --color-olive-light: #B9B28A;
@@ -25,7 +27,8 @@
   --color-theme-gray: #757780;
 
   --shadow-custom1: 11px -14px 74px -5px;
-  
+  --shadow-neon:0 0 0.3em 0.08em ;
+
   --font-meddon: var(--font-meddon);
   --font-rancho: var(--font-rancho);
   --font-biryani: var(--font-biryani);
