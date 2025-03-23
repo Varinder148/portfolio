@@ -16,10 +16,12 @@ const About: React.FC<AboutProps> = ({ className = "" }) => {
   const delayedText = ".delayed-text";
   useGSAP(() => {
     gsap.from(delayedText, {
-      visibility: "hidden",
+      // visibility: "hidden",
       ease: "back",
       opacity: 0,
+      duration: 0.5,
       yPercent: 5,
+      stagger: 0.5,
       delay: 4,
     });
 
@@ -60,10 +62,10 @@ const About: React.FC<AboutProps> = ({ className = "" }) => {
 
   return (
     <section
-      className={"w-full min-h-screen relative px-20 p-20 " + className}
+      className={"w-full min-h-screen relative px-20 pt-20 " + className}
       id="about"
     >
-      <h1 className="font-meddon text-8xl justify-self-center pb-20 relative">
+      <h1 className="font-meddon text-8xl justify-self-center pb-15 relative">
         <div className={"stroke-text absolute -left-2 top-1  "}>Welcome</div>
 
         <RecursiveWrapper
@@ -93,14 +95,16 @@ const About: React.FC<AboutProps> = ({ className = "" }) => {
           </div>
         </div>
       </div>
-      <div className="flex justify-center pt-20">
-        <Button>Click here for resume</Button>
-        <Button variant="secondary">Click here to contact me</Button>
+      <div
+        className={"flex justify-center pt-40 " + delayedText.replace(".", "")}
+      >
+        <Button>My resume</Button>
+        <Button variant="secondary">Contact me</Button>
       </div>
 
       <div
         className={
-          "flex flex-col items-center absolute mt-auto bottom-20 left-1/2 -translate-x-1/2 " +
+          "flex flex-col items-center -z-1 relative left-1/2 -translate-x-1/2 pt-15 self-center " +
           delayedText.replace(".", "")
         }
       >

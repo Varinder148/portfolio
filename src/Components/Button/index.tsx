@@ -64,7 +64,7 @@ const Button = ({ children, variant = "primary" }: ButtonProps) => {
     <button
       ref={buttonRef}
       className={clsx(
-        "min-w-[350px] px-20 py-10 relative overflow-hidden border-2 border-theme-red",
+        "min-w-[350px] uppercase cursor-pointer px-20 py-10 relative overflow-hidden border-2 border-theme-red",
         {
           "rounded-bl-full rounded-tr-full rounded-tl-2xl rounded-br-2xl":
             variant === "primary",
