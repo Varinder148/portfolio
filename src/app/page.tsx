@@ -36,7 +36,8 @@ export default function Home() {
     <>
       <CustomMousePointer />
       <Navigation refs={anchorRefs} />
-      <div className="loading w-screen h-screen bg-theme-red absolute z-50" />
+      <div className="loading w-screen h-screen  bg-theme-red absolute z-50" />
+      <div className="w-1/2 absolute border-x-2 left-1/2 -translate-1/2 border-theme-gray h-[200vh]"></div>
       <div
         className={" grid grid-cols-3 lg:mx-10 border-x-2 border-theme-gray  "}
       >

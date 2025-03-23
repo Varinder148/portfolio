@@ -5,6 +5,7 @@ import Image from "next/image";
 import React from "react";
 import RecursiveWrapper from "@/Components/SpellingAnimation/RecursiveWrapper";
 import SplitAndId from "@/Components/SpellingAnimation";
+import Button from "@/Components/Button";
 
 interface AboutProps {
   className?: string;
@@ -15,9 +16,8 @@ const About: React.FC<AboutProps> = ({ className = "" }) => {
   const delayedText = ".delayed-text";
   useGSAP(() => {
     gsap.from(delayedText, {
-      display: "none",
-      // ease: "back",
-      // duration: 2,
+      visibility: "hidden",
+      ease: "back",
       opacity: 0,
       yPercent: 5,
       delay: 4,
@@ -54,13 +54,13 @@ const About: React.FC<AboutProps> = ({ className = "" }) => {
           delay: 0.5,
           ease: "elastic.inOut",
           repeat: 2,
-        }
+        },
       );
   });
 
   return (
     <section
-      className={"w-full h-screen relative px-20 p-20 " + className}
+      className={"w-full min-h-screen relative px-20 p-20 " + className}
       id="about"
     >
       <h1 className="font-meddon text-8xl justify-self-center pb-20 relative">
@@ -74,7 +74,7 @@ const About: React.FC<AboutProps> = ({ className = "" }) => {
         </RecursiveWrapper>
       </h1>
       <div className="grid grid-cols-1 justify-center items-end ">
-        <div className="text-2xl font-rancho text-center pt-20">
+        <div className="text-2xl font-rancho text-center">
           <div>
             <RecursiveWrapper
               Wrapper={SplitAndId}
@@ -93,6 +93,11 @@ const About: React.FC<AboutProps> = ({ className = "" }) => {
           </div>
         </div>
       </div>
+      <div className="flex justify-center pt-20">
+        <Button>Click here for resume</Button>
+        <Button variant="secondary">Click here to contact me</Button>
+      </div>
+
       <div
         className={
           "flex flex-col items-center absolute mt-auto bottom-20 left-1/2 -translate-x-1/2 " +

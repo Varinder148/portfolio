@@ -85,18 +85,21 @@ const Navigation: React.FC<NavigationProps> = ({ className = "", refs }) => {
     <>
       <button
         onClick={toggleNav}
-        className={clsx("h-[100vh] w-[100vw] bg-white opacity-20 z-10 fixed", {
-          hidden: !visible,
-        })}
+        className={clsx(
+          "min-h-[100vh] w-[100vw] bg-white opacity-20 z-10 fixed",
+          {
+            hidden: !visible,
+          },
+        )}
         id="layout"
       ></button>
       <button
         onClick={toggleNav}
         className={clsx(
-          "fixed top-10 right-10 w-20 h-20 bg-theme-ivory rounded-full shadow-md shadow-theme-gray  grid place-content-center border-2 border-theme-black cursor-pointer z-20",
+          "fixed top-10 right-10 w-20 h-20 bg-theme-ivory rounded-full shadow-xl  shadow-theme-red  grid place-content-center border-2 border-theme-black cursor-pointer z-20",
           {
             hidden: visible,
-          }
+          },
         )}
       >
         <Image

@@ -1,5 +1,3 @@
-import { useGSAP } from "@gsap/react";
-import gsap from "gsap";
 import React, { ReactNode } from "react";
 
 interface SpellingAnimationProps {
