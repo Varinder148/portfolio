@@ -37,12 +37,12 @@ export default function Home() {
       <CustomMousePointer />
       <Navigation refs={anchorRefs} />
       <div className="loading w-screen h-screen  bg-theme-red absolute z-50" />
-      <div className="w-1/2 absolute -z-50 border-x-2 left-1/2 -translate-1/2 border-theme-gray h-[200vh]"></div>
-      <div
-        className={" grid grid-cols-3 lg:mx-10 border-x-2 border-theme-gray  "}
-      >
+      <div className="w-1/2 absolute -z-50 border-x-2 left-1/2 -translate-1/2 border-theme-gray h-[10000px]"></div>
+      <div className="w-2/3 absolute -z-50 border-x-2 left-1/2 -translate-1/2 border-theme-gray h-[10000px]"></div>
+
+      <div className="">
         <div
-          className="col-span-3"
+          className="w-full col-span-3"
           ref={(ref) => {
             anchorRefs.current[refs.About] = ref;
           }}
@@ -50,7 +50,7 @@ export default function Home() {
           <About />
         </div>
         <div
-          className="col-span-3"
+          className="w-full col-span-3"
           ref={(ref) => {
             anchorRefs.current[refs.Experience] = ref;
           }}
@@ -58,7 +58,7 @@ export default function Home() {
           <Experience />
         </div>
         <div
-          className="col-span-3"
+          className="w-full col-span-3"
           ref={(ref) => {
             anchorRefs.current[refs.Skills] = ref;
           }}

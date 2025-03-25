@@ -10,9 +10,12 @@ const formatTime = (ms: number) => {
   const minutes = Math.floor(ms / (1000 * 60));
   ms -= minutes * (1000 * 60);
   const seconds = Math.floor(ms / 1000);
-  ms -= seconds * 1000;
 
-  return `${years} years ${months} months ${days} days ${hours}: ${minutes}: ${seconds}`;
+  const formattedHours = hours.toString().padStart(2, "0");
+  const formattedMinutes = minutes.toString().padStart(2, "0");
+  const formattedSeconds = seconds.toString().padStart(2, "0");
+
+  return `${years} years ${months} months ${days} days ${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
 };
 
 export default formatTime;

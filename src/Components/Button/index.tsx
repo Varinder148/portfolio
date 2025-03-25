@@ -31,7 +31,7 @@ const Button = ({ children, variant = "primary" }: ButtonProps) => {
         duration: 0.5,
         ease: "power1.out",
         boxShadow: "0 0 30px rgba(239, 68, 68, 0.6)",
-      },
+      }
     );
 
     gsap.to(buttonRef.current, {
@@ -70,7 +70,7 @@ const Button = ({ children, variant = "primary" }: ButtonProps) => {
             variant === "primary",
           "rounded-bl-2xl rounded-tr-2xl rounded-tl-full rounded-br-full":
             variant === "secondary",
-        },
+        }
       )}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}

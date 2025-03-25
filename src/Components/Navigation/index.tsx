@@ -7,7 +7,7 @@ import gsap from "gsap";
 import React from "react";
 
 export const animateCompass = () => {
-  gsap
+  const tl = gsap
     .timeline()
     .to("#compass", {
       rotate: 120,
@@ -24,36 +24,46 @@ export const animateCompass = () => {
       duration: 0.6,
       ease: "elastic",
     });
+
+  return () => tl.kill();
 };
 
 export const animateNavOpeningandClosing = (visible: boolean) => {
+  const animations: gsap.core.Tween[] = [];
+
   if (!visible) {
-    gsap.to("#list", {
-      scale: 1,
-      duration: 0.2,
-      top: 200,
-      ease: "back.out(1.7)",
-      right: 200,
-    });
-    gsap.to("#circle", {
-      scale: 1,
-      duration: 0.3,
-      ease: "back.out(1.7)",
-    });
+    animations.push(
+      gsap.to("#list", {
+        scale: 1,
+        duration: 0.2,
+        top: 200,
+        ease: "back.out(1.7)",
+        right: 200,
+      }),
+      gsap.to("#circle", {
+        scale: 1,
+        duration: 0.3,
+        ease: "back.out(1.7)",
+      })
+    );
   } else {
-    gsap.to("#list", {
-      scale: 0,
-      duration: 0.2,
-      ease: "back.in(1.7)",
-      top: 0,
-      right: 0,
-    });
-    gsap.to("#circle", {
-      scale: 0,
-      duration: 0.3,
-      ease: "back.in(1.7)",
-    });
+    animations.push(
+      gsap.to("#list", {
+        scale: 0,
+        duration: 0.2,
+        ease: "back.in(1.7)",
+        top: 0,
+        right: 0,
+      }),
+      gsap.to("#circle", {
+        scale: 0,
+        duration: 0.3,
+        ease: "back.in(1.7)",
+      })
+    );
   }
+
+  return () => animations.forEach((anim) => anim.kill());
 };
 
 interface NavigationProps {
@@ -89,17 +99,17 @@ const Navigation: React.FC<NavigationProps> = ({ className = "", refs }) => {
           "min-h-[100vh] w-[100vw] bg-white opacity-20 z-10 fixed",
           {
             hidden: !visible,
-          },
+          }
         )}
         id="layout"
       ></button>
       <button
         onClick={toggleNav}
         className={clsx(
-          "fixed top-10 right-10 w-20 h-20 bg-theme-ivory rounded-full shadow-xl  shadow-theme-red  grid place-content-center border-2 border-theme-black cursor-pointer z-20",
+          "fixed top-10 right-10 w-20 h-20 bg-theme-ivory rounded-full ring-2 ring-theme-red  grid place-content-center border-2 border-theme-black cursor-pointer z-20",
           {
             hidden: visible,
-          },
+          }
         )}
       >
         <Image
