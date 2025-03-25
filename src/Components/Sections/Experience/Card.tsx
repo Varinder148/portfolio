@@ -1,16 +1,22 @@
 import Image from "next/image";
 
-const Card = () => {
+interface CardProps {
+  data: {
+    logo: string;
+  };
+}
+
+const Card: React.FC<CardProps> = ({ data }) => {
   return (
-    <div className="w-screen flex h-full items-center justify-center">
-      <div className="w-2/3 bg-theme-ivory border-2 border-theme-ivory rounded-4xl flex flex-col">
-        <div className="h-1/4 border-2 border-amber-100 overflow-clip">
+    <div className="w-screen flex h-full items-start justify-center">
+      <div className="w-2/3 bg-theme-ivory h-1/2  flex flex-col border-2 border-theme-black">
+        <div className="grid place-items-center">
           <Image
-            src="./infosys.png"
+            src={data.logo}
             alt="infosys logo"
-            width={-1}
+            width={300}
             height={-1}
-            className="object-contain object-center "
+            className="object-contain object-center bg-theme-black py-5 px-15 rounded-b-4xl "
           />
         </div>
       </div>

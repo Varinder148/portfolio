@@ -44,7 +44,7 @@ export const animateNavOpeningandClosing = (visible: boolean) => {
         scale: 1,
         duration: 0.3,
         ease: "back.out(1.7)",
-      })
+      }),
     );
   } else {
     animations.push(
@@ -59,7 +59,7 @@ export const animateNavOpeningandClosing = (visible: boolean) => {
         scale: 0,
         duration: 0.3,
         ease: "back.in(1.7)",
-      })
+      }),
     );
   }
 
@@ -99,17 +99,18 @@ const Navigation: React.FC<NavigationProps> = ({ className = "", refs }) => {
           "min-h-[100vh] w-[100vw] bg-white opacity-20 z-10 fixed",
           {
             hidden: !visible,
-          }
+          },
         )}
         id="layout"
       ></button>
       <button
         onClick={toggleNav}
         className={clsx(
-          "fixed top-10 right-10 w-20 h-20 bg-theme-ivory rounded-full ring-2 ring-theme-red  grid place-content-center border-2 border-theme-black cursor-pointer z-20",
+          "fixed top-10 right-10 w-20 h-20 bg-theme-ivory rounded-full shadow-[0px_0px_40px_8px] shadow-theme-red  grid place-content-center border-2 border-theme-black cursor-pointer z-20",
           {
+            boxShadow: " 0px 0px 100px 8px ",
             hidden: visible,
-          }
+          },
         )}
       >
         <Image
@@ -149,10 +150,10 @@ const Navigation: React.FC<NavigationProps> = ({ className = "", refs }) => {
               <li
                 key={index}
                 onClick={() => handleClick(item.anchor as string, index)}
-                className={`absolute top-1/2 left-1/2  -translate-x-1/2 -translate-y-1/2 transition-all  ${
+                className={`absolute top-1/2 left-1/2 cursor-pointer -translate-x-1/2 -translate-y-1/2 transition-all  ${
                   activeItem === index
-                    ? "text-red-matte text-2xl"
-                    : "text-black-light"
+                    ? "text-theme-red text-2xl"
+                    : "text-black-light hover:text-theme-red"
                 }`}
                 style={{
                   transform: `rotate(${rotation}deg) translate(${
@@ -160,7 +161,7 @@ const Navigation: React.FC<NavigationProps> = ({ className = "", refs }) => {
                   }px) rotate(${rotation * -1}deg)`,
                 }}
               >
-                {item.name}
+                <button>{item.name}</button>
               </li>
             );
           })}

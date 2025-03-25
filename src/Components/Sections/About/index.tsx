@@ -25,7 +25,7 @@ const About: React.FC<AboutProps> = ({ className = "" }) => {
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.intersectionRatio <= 0.25) {
+        if (entry.intersectionRatio <= 0.5) {
           // Kill animations but ensure elements stay visible
           timelineRef.current?.progress(1).kill();
           delayedAnimRef.current?.progress(1).kill();
@@ -35,7 +35,7 @@ const About: React.FC<AboutProps> = ({ className = "" }) => {
           });
         }
       },
-      { threshold: [0.25] }
+      { threshold: [0.5] },
     );
 
     if (sectionRef.current) {
@@ -86,7 +86,7 @@ const About: React.FC<AboutProps> = ({ className = "" }) => {
           stagger: 0.5,
           ease: "elastic.inOut",
           repeat: 2,
-        }
+        },
       );
     timelineRef.current = tl;
 
