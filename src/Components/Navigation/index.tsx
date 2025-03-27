@@ -106,9 +106,9 @@ const Navigation: React.FC<NavigationProps> = ({ className = "", refs }) => {
       <button
         onClick={toggleNav}
         className={clsx(
-          "fixed top-10 right-10 w-20 h-20 bg-theme-ivory rounded-full shadow-[0px_0px_40px_8px] shadow-theme-red  grid place-content-center border-2 border-theme-black cursor-pointer z-20",
+          "fixed top-10 right-10 w-20 h-20 bg-theme-ivory rounded-full shadow-spread-2  shadow-theme-red  grid place-content-center border-2 border-theme-black cursor-pointer z-20",
           {
-            boxShadow: " 0px 0px 100px 8px ",
+            // boxShadow: " 0px 0px 100px 8px ",
             hidden: visible,
           },
         )}

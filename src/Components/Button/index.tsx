@@ -7,9 +7,14 @@ import { ReactNode } from "react";
 interface ButtonProps {
   children: ReactNode;
   variant?: "primary" | "secondary";
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-const Button = ({ children, variant = "primary" }: ButtonProps) => {
+const Button = ({
+  children,
+  variant = "primary",
+  onClick = () => {},
+}: ButtonProps) => {
   const circleRef = useRef(null);
   const buttonRef = useRef(null);
 
@@ -18,7 +23,12 @@ const Button = ({ children, variant = "primary" }: ButtonProps) => {
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
 
-    gsap.fromTo(
+    const tl = gsap.timeline();
+
+    tl.to(circleRef.current, {
+      opacity: 1,
+      duration: 0,
+    }).fromTo(
       circleRef.current,
       {
         scale: 0,
@@ -31,7 +41,7 @@ const Button = ({ children, variant = "primary" }: ButtonProps) => {
         duration: 0.5,
         ease: "power1.out",
         boxShadow: "0 0 30px rgba(239, 68, 68, 0.6)",
-      }
+      },
     );
 
     gsap.to(buttonRef.current, {
@@ -64,24 +74,26 @@ const Button = ({ children, variant = "primary" }: ButtonProps) => {
     <button
       ref={buttonRef}
       className={clsx(
-        "min-w-[350px] uppercase cursor-pointer px-20 py-10 relative overflow-hidden border-2 border-theme-red",
+        "min-w-[350px] uppercase cursor-pointer px-20 py-10 relative overflow-hidden border-2 border-theme-red font-rancho ",
         {
           "rounded-bl-full rounded-tr-full rounded-tl-2xl rounded-br-2xl":
             variant === "primary",
           "rounded-bl-2xl rounded-tr-2xl rounded-tl-full rounded-br-full":
             variant === "secondary",
-        }
+        },
       )}
+      onClick={onClick}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
       <div
         ref={circleRef}
-        className="bg-theme-red -z-10 absolute rounded-full font-meddon"
+        className="bg-theme-red -z-10 absolute rounded-full "
         style={{
           width: "1000px",
           height: "1000px",
           transform: "translate(-50%, -50%)",
+          opacity: 0,
         }}
       ></div>
       <span className="relative z-10">{children}</span>

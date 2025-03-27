@@ -37,10 +37,10 @@ export default function Home() {
       <CustomMousePointer />
       <Navigation refs={anchorRefs} />
       <div className="loading w-screen h-screen  bg-theme-red absolute z-50" />
-      <div className="w-1/2 absolute -z-50 border-x-2 left-1/2 -translate-1/2 border-theme-gray h-[10000px]"></div>
-      <div className="w-2/3 absolute -z-50 border-x-2 left-1/2 -translate-1/2 border-theme-gray h-[10000px]"></div>
+      <div className="w-1/3 absolute -z-50 border-x-2 left-1/2 -translate-1/2 border-theme-gray h-[10000px]"></div>
+      <div className="w-9/10 absolute -z-50 border-x-2 left-1/2 -translate-1/2 border-theme-gray h-[10000px]"></div>
 
-      <div className="">
+      <div className="flex flex-col gap-15">
         <div
           className="w-full col-span-3"
           ref={(ref) => {
