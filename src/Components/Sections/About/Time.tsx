@@ -1,5 +1,5 @@
 import formatTime from "@/utils/timeCalculator";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const Time = () => {
   const [time, setTime] = useState("");
@@ -21,7 +21,7 @@ const Time = () => {
   }, []);
 
   return (
-    <div className="text-3xl text-theme-gray ">
+    <div className="text-theme-xl md:text-theme-2xl text-theme-gray ">
       {time.split(" ").slice(0, 6).join(" ")}
       <br />
       {time.split(" ").slice(6).join(" ")}

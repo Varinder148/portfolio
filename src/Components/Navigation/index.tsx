@@ -44,7 +44,7 @@ export const animateNavOpeningandClosing = (visible: boolean) => {
         scale: 1,
         duration: 0.3,
         ease: "back.out(1.7)",
-      }),
+      })
     );
   } else {
     animations.push(
@@ -59,7 +59,7 @@ export const animateNavOpeningandClosing = (visible: boolean) => {
         scale: 0,
         duration: 0.3,
         ease: "back.in(1.7)",
-      }),
+      })
     );
   }
 
@@ -75,7 +75,7 @@ const Navigation: React.FC<NavigationProps> = ({ className = "", refs }) => {
   const [activeItem, setActiveItem] = useState(0);
   const [visible, setVisible] = useState(false);
 
-  const angle = 180 / menuItems.length; // Calculate the angle for each item
+  const angle = 180 / menuItems.length;
   const circleSize = 400;
   const initialRotation = 270;
 
@@ -96,21 +96,20 @@ const Navigation: React.FC<NavigationProps> = ({ className = "", refs }) => {
       <button
         onClick={toggleNav}
         className={clsx(
-          "min-h-[100vh] w-[100vw] bg-white opacity-20 z-10 fixed",
+          "min-h-screen w-screen bg-theme-ivory opacity-20 z-10 fixed",
           {
             hidden: !visible,
-          },
+          }
         )}
         id="layout"
       ></button>
       <button
         onClick={toggleNav}
         className={clsx(
-          "fixed top-10 right-10 w-20 h-20 bg-theme-ivory rounded-full shadow-spread-2  shadow-theme-red  grid place-content-center border-2 border-theme-black cursor-pointer z-20",
+          "fixed top-10 right-10 w-20 h-20 bg-theme-ivory rounded-full shadow-theme-spread-lg  shadow-theme-red  grid place-content-center border-2 border-theme-black cursor-pointer z-20",
           {
-            // boxShadow: " 0px 0px 100px 8px ",
             hidden: visible,
-          },
+          }
         )}
       >
         <Image
@@ -149,11 +148,10 @@ const Navigation: React.FC<NavigationProps> = ({ className = "", refs }) => {
             return (
               <li
                 key={index}
-                onClick={() => handleClick(item.anchor as string, index)}
                 className={`absolute top-1/2 left-1/2 cursor-pointer -translate-x-1/2 -translate-y-1/2 transition-all  ${
                   activeItem === index
                     ? "text-theme-red text-2xl"
-                    : "text-black-light hover:text-theme-red"
+                    : "text-theme-black hover:text-theme-red"
                 }`}
                 style={{
                   transform: `rotate(${rotation}deg) translate(${
@@ -161,7 +159,11 @@ const Navigation: React.FC<NavigationProps> = ({ className = "", refs }) => {
                   }px) rotate(${rotation * -1}deg)`,
                 }}
               >
-                <button>{item.name}</button>
+                <button
+                  onClick={() => handleClick(item.anchor as string, index)}
+                >
+                  {item.name}
+                </button>
               </li>
             );
           })}

@@ -36,9 +36,12 @@ export default function Home() {
     <>
       <CustomMousePointer />
       <Navigation refs={anchorRefs} />
-      <div className="loading w-screen h-screen  bg-theme-red absolute z-50" />
-      <div className="w-1/3 absolute -z-50 border-x-2 left-1/2 -translate-1/2 border-theme-gray h-[10000px]"></div>
-      <div className="w-9/10 absolute -z-50 border-x-2 left-1/2 -translate-1/2 border-theme-gray h-[10000px]"></div>
+      <div
+        className={
+          " w-screen h-screen bg-theme-red absolute z-50 " +
+          loading.replace(".", "")
+        }
+      />
 
       <div className="flex flex-col gap-15">
         <div

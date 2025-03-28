@@ -26,16 +26,14 @@ const About: React.FC<AboutProps> = ({ className = "" }) => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.intersectionRatio <= 0.5) {
-          // Kill animations but ensure elements stay visible
           timelineRef.current?.progress(1).kill();
           delayedAnimRef.current?.progress(1).kill();
-          // Ensure neon effect stays visible
           document.querySelectorAll(neonEffect).forEach((element) => {
             element.classList.add("text-neon-subtle");
           });
         }
       },
-      { threshold: [0.5] },
+      { threshold: [0.5] }
     );
 
     if (sectionRef.current) {
@@ -86,7 +84,7 @@ const About: React.FC<AboutProps> = ({ className = "" }) => {
           stagger: 0.5,
           ease: "elastic.inOut",
           repeat: 2,
-        },
+        }
       );
     timelineRef.current = tl;
 
@@ -100,68 +98,75 @@ const About: React.FC<AboutProps> = ({ className = "" }) => {
     <section
       ref={sectionRef}
       className={
-        "w-full min-h-screen relative flex flex-col items-center justify-center px-20 pt-20 " +
+        "w-full min-h-screen relative flex flex-col items-center justify-between pt-40 md:p-20 md:pb-10 " +
         className
       }
       id="about"
     >
-      <div className="flex flex-1 items-center">
-        <h1 className="font-meddon text-8xl justify-self-center pb-15 relative">
-          <div className={"stroke-text absolute -left-2 top-1  "}>Welcome</div>
+      <div className="flex flex-col w-full items-center">
+        <div className="flex items-center">
+          <h1 className="font-meddon text-4xl md:text-7xl justify-self-center pb-15 relative">
+            <div className={"stroke-text absolute -left-2 top-1  "}>
+              Welcome
+            </div>
 
-          <RecursiveWrapper
-            Wrapper={SplitAndId}
-            wrapperProps={{ group: spellingId }}
-          >
-            <span className={neonEffect.replace(".", "")}>Welcome</span>
-          </RecursiveWrapper>
-        </h1>
-      </div>
-
-      <div className="grid grid-cols-1 justify-center items-end ">
-        <div className="text-2xl font-rancho text-center">
-          <div>
             <RecursiveWrapper
               Wrapper={SplitAndId}
               wrapperProps={{ group: spellingId }}
             >
-              My name is
-              <span
-                className={
-                  "font-meddon text-theme-red text-4xl " +
-                  neonEffect.replace(".", "")
-                }
-              >
-                Varinder Singh
-              </span>
+              <span className={neonEffect.replace(".", "")}>Welcome</span>
             </RecursiveWrapper>
-          </div>
-          <div className={delayedText.replace(".", "")}>
-            I have been helping organisations with their UI development needs
-            from the past
-            <Time />
+          </h1>
+        </div>
+
+        <div className="grid grid-cols-1 justify-center items-end ">
+          <div className="text-theme-lg md:text-theme-xl font-rancho text-center">
+            <div>
+              <RecursiveWrapper
+                Wrapper={SplitAndId}
+                wrapperProps={{ group: spellingId }}
+              >
+                My name is
+                <span
+                  className={
+                    "font-meddon text-theme-red pl-2 " +
+                    neonEffect.replace(".", "")
+                  }
+                >
+                  Varinder&nbsp;Singh
+                </span>
+              </RecursiveWrapper>
+            </div>
+            <div className={delayedText.replace(".", "")}>
+              I have been helping organisations with their UI development needs
+              from the past
+              <Time />
+            </div>
           </div>
         </div>
-      </div>
-      <div
-        className={
-          "flex justify-center pt-40  gap-4 " + delayedText.replace(".", "")
-        }
-      >
-        <Button>My resume</Button>
-        <Button variant="secondary">Contact me</Button>
       </div>
 
       <div
         className={
-          "flex flex-col items-center pt-15  flex-1 justify-self-end " +
-          delayedText.replace(".", "")
+          "flex flex-col w-full gap-10 " + delayedText.replace(".", "")
         }
       >
-        <span className="-rotate-10 -translate-x-10 mt-auto ">
-          Let us start
-        </span>
-        <Image src="/pointer.svg" height={120} width={120} alt="pointer" />
+        <div className="flex justify-between">
+          <Button>My resume</Button>
+
+          <Button variant="secondary">Contact me</Button>
+        </div>
+
+        <div
+          className={
+            "flex flex-col items-center " + delayedText.replace(".", "")
+          }
+        >
+          <span className="-rotate-10 -translate-x-10 mt-auto ">
+            Let us start
+          </span>
+          <Image src="/pointer.svg" height={120} width={120} alt="pointer" />
+        </div>
       </div>
     </section>
   );

@@ -41,7 +41,7 @@ const Button = ({
         duration: 0.5,
         ease: "power1.out",
         boxShadow: "0 0 30px rgba(239, 68, 68, 0.6)",
-      },
+      }
     );
 
     gsap.to(buttonRef.current, {
@@ -74,13 +74,13 @@ const Button = ({
     <button
       ref={buttonRef}
       className={clsx(
-        "min-w-[350px] uppercase cursor-pointer px-20 py-10 relative overflow-hidden border-2 border-theme-red font-rancho ",
+        " uppercase cursor-pointer px-15 py-5 relative overflow-hidden border-2 border-theme-red font-rancho ",
         {
           "rounded-bl-full rounded-tr-full rounded-tl-2xl rounded-br-2xl":
             variant === "primary",
           "rounded-bl-2xl rounded-tr-2xl rounded-tl-full rounded-br-full":
             variant === "secondary",
-        },
+        }
       )}
       onClick={onClick}
       onMouseEnter={handleMouseEnter}
