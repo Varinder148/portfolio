@@ -36,13 +36,14 @@ export default function Home() {
   return (
     <>
       <CustomMousePointer />
+      <Skills />
       <Navigation refs={anchorRefs} />
-      <div
+      {/* <div
         className={
           " w-screen h-screen bg-theme-red absolute z-50 " +
           loading.replace(".", "")
         }
-      />
+      /> */}
 
       <div className="flex flex-col gap-15">
         <div
@@ -76,6 +77,12 @@ export default function Home() {
             anchorRefs.current[refs.Skills] = ref;
           }}
         >
+          <div className="h-[300vh]">
+            <SectionHeading
+              text="to what I learned over the years"
+              triggerClass="skills"
+            />
+          </div>
           <Skills />
         </div>
         <div

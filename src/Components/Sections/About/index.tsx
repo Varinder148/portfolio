@@ -32,7 +32,7 @@ const About: React.FC<AboutProps> = ({ className = "" }) => {
           });
         }
       },
-      { threshold: 0.1 },
+      { threshold: 0.1 }
     );
 
     if (sectionRef.current) {
@@ -65,7 +65,7 @@ const About: React.FC<AboutProps> = ({ className = "" }) => {
           stagger: 0.1,
           ease: "none",
           repeat: 2,
-        },
+        }
       )
       .to(delayedText, {
         opacity: 1,
@@ -146,9 +146,9 @@ const About: React.FC<AboutProps> = ({ className = "" }) => {
         }
       >
         <div className="flex justify-evenly">
-          <Button>My resume</Button>
+          <Button className="md:min-w-[300px]">My resume</Button>
 
-          <Button>Contact me</Button>
+          <Button className="md:min-w-[300px]">Contact me</Button>
         </div>
 
         <div

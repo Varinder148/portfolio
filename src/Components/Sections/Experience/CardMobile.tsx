@@ -99,7 +99,12 @@ const CardMobile: React.FC<CardProps> = ({ data, className }) => {
                 {data.name}
               </div>
               <div className="absolute bottom-10 left-1/2 -translate-x-1/2">
-                <Button onClick={() => flipCard(true)}>Know More</Button>
+                <Button
+                  className="min-w-[300px]"
+                  onClick={() => flipCard(true)}
+                >
+                  Know More
+                </Button>
               </div>
               {/* Remove My Duties button */}
             </div>
@@ -117,7 +122,7 @@ const CardMobile: React.FC<CardProps> = ({ data, className }) => {
               )}
               <Button
                 onClick={expanded ? doubleFlip : () => flipCard(expanded)}
-                className="self-center mt-auto"
+                className="self-center mt-auto min-w-[300px]"
               >
                 {expanded ? "My Duties" : "Back"}
               </Button>

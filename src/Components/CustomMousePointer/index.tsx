@@ -6,8 +6,25 @@ const CustomMousePointer: React.FC = () => {
   const pointerRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<GSAPTween | null>(null);
   const [isHovered, setIsHovered] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
 
   useEffect(() => {
+    // Check if device is desktop
+    const checkDevice = () => {
+      const isTouchDevice =
+        "ontouchstart" in window || navigator.maxTouchPoints > 0;
+      const isWideScreen = window.innerWidth >= 1024;
+      setIsDesktop(!isTouchDevice && isWideScreen);
+    };
+
+    checkDevice();
+    window.addEventListener("resize", checkDevice);
+    return () => window.removeEventListener("resize", checkDevice);
+  }, []);
+
+  useEffect(() => {
+    if (!isDesktop) return;
+
     const onMouseMove = (event: MouseEvent) => {
       const { clientX, clientY } = event;
       const { innerWidth, innerHeight } = window;
@@ -42,7 +59,7 @@ const CustomMousePointer: React.FC = () => {
     const onMouseLeave = () => setIsHovered(false);
 
     const clickableElements = document.querySelectorAll(
-      'a, button, [role="button"]',
+      'a, button, [role="button"]'
     );
     clickableElements.forEach((element) => {
       element.addEventListener("mouseenter", onMouseEnter);
@@ -61,7 +78,9 @@ const CustomMousePointer: React.FC = () => {
         animationRef.current.kill();
       }
     };
-  }, [isHovered]);
+  }, [isHovered, isDesktop]);
+
+  if (!isDesktop) return null;
 
   return (
     <div

@@ -31,11 +31,11 @@ const SectionHeading: React.FC<Props> = ({ text, triggerClass }) => {
 
   return (
     <div
-      className={`h-[40vh] overflow-x-auto no-scrollbar w-full flex items-center ${triggerClass}`}
+      className={`h-[100vh] overflow-x-auto no-scrollbar w-full flex items-center ${triggerClass}`}
     >
       <h1
         ref={textRef}
-        className="text-[clamp(4rem,10vw,12rem)] whitespace-nowrap ml-10 font-meddon"
+        className="text-[clamp(4rem,10vw,12rem)] items-center whitespace-nowrap ml-10 font-meddon"
       >
         {text}
       </h1>
