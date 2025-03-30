@@ -10,60 +10,62 @@ export const animateCompass = () => {
   const tl = gsap
     .timeline()
     .to("#compass", {
-      rotate: 120,
-      duration: 0.2,
-      ease: "none",
+      rotate: 45,
+      duration: 0.4,
+      ease: "power2.out",
     })
     .to("#compass", {
-      rotate: 120 * -1,
-      duration: 0.2,
-      ease: "none",
+      rotate: -45,
+      duration: 0.3,
+      ease: "power2.inOut",
     })
     .to("#compass", {
       rotate: 0,
-      duration: 0.6,
-      ease: "elastic",
+      duration: 0.5,
+      ease: "elastic.out(1, 0.3)",
     });
 
   return () => tl.kill();
 };
 
 export const animateNavOpeningandClosing = (visible: boolean) => {
-  const animations: gsap.core.Tween[] = [];
+  const tl = gsap.timeline();
 
   if (!visible) {
-    animations.push(
-      gsap.to("#list", {
-        scale: 1,
-        duration: 0.2,
-        top: 200,
-        ease: "back.out(1.7)",
-        right: 200,
-      }),
-      gsap.to("#circle", {
+    tl.to("#circle", {
+      scale: 1,
+      duration: 0.4,
+      ease: "back.out(1.7)",
+    }).to(
+      "#list",
+      {
         scale: 1,
         duration: 0.3,
+        top: 200,
+        right: 200,
         ease: "back.out(1.7)",
-      })
+      },
+      "-=0.2",
     );
   } else {
-    animations.push(
-      gsap.to("#list", {
-        scale: 0,
-        duration: 0.2,
-        ease: "back.in(1.7)",
-        top: 0,
-        right: 0,
-      }),
-      gsap.to("#circle", {
+    tl.to("#list", {
+      scale: 0,
+      duration: 0.3,
+      ease: "back.in(1.7)",
+      top: 0,
+      right: 0,
+    }).to(
+      "#circle",
+      {
         scale: 0,
         duration: 0.3,
         ease: "back.in(1.7)",
-      })
+      },
+      "-=0.15",
     );
   }
 
-  return () => animations.forEach((anim) => anim.kill());
+  return () => tl.kill();
 };
 
 interface NavigationProps {
@@ -99,7 +101,7 @@ const Navigation: React.FC<NavigationProps> = ({ className = "", refs }) => {
           "min-h-screen w-screen bg-theme-ivory opacity-20 z-10 fixed",
           {
             hidden: !visible,
-          }
+          },
         )}
         id="layout"
       ></button>
@@ -109,7 +111,7 @@ const Navigation: React.FC<NavigationProps> = ({ className = "", refs }) => {
           "fixed top-10 right-10 w-20 h-20 bg-theme-ivory rounded-full shadow-theme-spread-lg  shadow-theme-red  grid place-content-center border-2 border-theme-black cursor-pointer z-20",
           {
             hidden: visible,
-          }
+          },
         )}
       >
         <Image

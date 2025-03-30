@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React, { memo, ReactNode } from "react";
 
 interface RecursiveWrapperProps {
   children: ReactNode;
@@ -6,30 +6,29 @@ interface RecursiveWrapperProps {
   wrapperProps?: React.ComponentProps<any>;
 }
 
-const RecursiveWrapper: React.FC<RecursiveWrapperProps> = ({
-  children,
-  Wrapper,
-  wrapperProps,
-}) => {
-  const wrapChildren = (node: ReactNode): ReactNode => {
-    if (typeof node === "string" || typeof node === "number") {
-      return <Wrapper {...wrapperProps}>{node}</Wrapper>;
-    }
+const RecursiveWrapper: React.FC<RecursiveWrapperProps> = memo(
+  ({ children, Wrapper, wrapperProps }) => {
+    const wrapChildren = (node: ReactNode): ReactNode => {
+      if (typeof node === "string" || typeof node === "number") {
+        return <Wrapper {...wrapperProps}>{node}</Wrapper>;
+      }
 
-    if (React.isValidElement(node)) {
-      return React.cloneElement(node, {
-        // @ts-ignore
-        children: React.Children.map(
-          (node.props as React.PropsWithChildren<any>).children,
-          wrapChildren
-        ),
-      });
-    }
+      if (React.isValidElement(node)) {
+        return React.cloneElement(node, {
+          // @ts-ignore
+          children: React.Children.map(
+            (node.props as React.PropsWithChildren<any>).children,
+            wrapChildren,
+          ),
+        });
+      }
 
-    return node;
-  };
+      return node;
+    };
 
-  return <>{React.Children.map(children, wrapChildren)}</>;
-};
+    return <>{React.Children.map(children, wrapChildren)}</>;
+  },
+);
 
+RecursiveWrapper.displayName = "RecursiveWrapper";
 export default RecursiveWrapper;

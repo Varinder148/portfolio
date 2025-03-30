@@ -7,7 +7,7 @@
 
 @theme {
   --color-theme-black: #0F0F0F;
-  --color-theme-red: #CC2936;
+  --color-theme-red: #BB4430;
   --color-theme-ivory: #F6F7EB;
   --color-theme-olive:#6F7C12;
   --color-theme-sandy:#E28413;
@@ -41,7 +41,7 @@ html, body {margin: 0; padding: 0; overflow-x:hidden;
   font-size: 16px;
 }
 
-.container::-webkit-scrollbar { 
+.no-scrollbar::-webkit-scrollbar { 
   display: none; 
   -ms-overflow-style: none;  
   scrollbar-width: none;  

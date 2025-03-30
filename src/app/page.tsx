@@ -3,6 +3,7 @@
 import CustomMousePointer from "@/Components/CustomMousePointer";
 import Navigation from "@/Components/Navigation";
 import { refs } from "@/Components/Navigation/constants";
+import SectionHeading from "@/Components/SectionHeading";
 import About from "@/Components/Sections/About";
 import Education from "@/Components/Sections/Education";
 import Experience from "@/Components/Sections/Experience";
@@ -58,7 +59,16 @@ export default function Home() {
             anchorRefs.current[refs.Experience] = ref;
           }}
         >
-          <Experience />
+          <div className="h-[300vh]">
+            <SectionHeading
+              text="with the people I have Worked with"
+              triggerClass="experience"
+            />
+          </div>
+
+          <div className="w-full">
+            <Experience />
+          </div>
         </div>
         <div
           className="w-full col-span-3"

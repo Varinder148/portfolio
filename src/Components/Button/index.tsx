@@ -6,14 +6,14 @@ import { ReactNode } from "react";
 
 interface ButtonProps {
   children: ReactNode;
-  variant?: "primary" | "secondary";
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  className?: string;
 }
 
 const Button = ({
   children,
-  variant = "primary",
   onClick = () => {},
+  className = "",
 }: ButtonProps) => {
   const circleRef = useRef(null);
   const buttonRef = useRef(null);
@@ -41,7 +41,7 @@ const Button = ({
         duration: 0.5,
         ease: "power1.out",
         boxShadow: "0 0 30px rgba(239, 68, 68, 0.6)",
-      }
+      },
     );
 
     gsap.to(buttonRef.current, {
@@ -74,13 +74,14 @@ const Button = ({
     <button
       ref={buttonRef}
       className={clsx(
-        " uppercase cursor-pointer px-15 py-5 relative overflow-hidden border-2 border-theme-red font-rancho ",
+        " uppercase cursor-pointer px-15 py-5 relative overflow-hidden border-2 rounded-4xl border-theme-red hover:text-theme-black font-rancho " +
+          className,
         {
-          "rounded-bl-full rounded-tr-full rounded-tl-2xl rounded-br-2xl":
-            variant === "primary",
-          "rounded-bl-2xl rounded-tr-2xl rounded-tl-full rounded-br-full":
-            variant === "secondary",
-        }
+          // "rounded-bl-full rounded-tr-full rounded-tl-2xl rounded-br-2xl":
+          //   variant === "primary",
+          // "rounded-bl-2xl rounded-tr-2xl rounded-tl-full rounded-br-full":
+          //   variant === "secondary",
+        },
       )}
       onClick={onClick}
       onMouseEnter={handleMouseEnter}

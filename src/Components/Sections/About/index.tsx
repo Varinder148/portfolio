@@ -1,5 +1,5 @@
 import { useGSAP } from "@gsap/react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Time from "./Time";
 import gsap from "gsap";
 import Image from "next/image";
@@ -16,83 +16,77 @@ interface AboutProps {
 export const neonEffect = ".neon-effect";
 
 const About: React.FC<AboutProps> = ({ className = "" }) => {
+  const [hasPlayed, setHasPlayed] = useState(false);
   const spellingId = ".spelling-animation";
   const delayedText = ".delayed-text";
   const timelineRef = useRef<gsap.core.Timeline>(null);
-  const delayedAnimRef = useRef<gsap.core.Tween>(null);
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.intersectionRatio <= 0.5) {
+        if (!entry.isIntersecting) {
           timelineRef.current?.progress(1).kill();
-          delayedAnimRef.current?.progress(1).kill();
           document.querySelectorAll(neonEffect).forEach((element) => {
-            element.classList.add("text-neon-subtle");
+            element.classList.remove("text-neon-subtle");
           });
         }
       },
-      { threshold: [0.5] }
+      { threshold: 0.1 },
     );
 
     if (sectionRef.current) {
       observer.observe(sectionRef.current);
     }
 
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      timelineRef.current?.kill();
+    };
   }, []);
 
   useGSAP(() => {
-    const delayedAnim = gsap.from(delayedText, {
-      ease: "back",
-      opacity: 0,
-      duration: 0.5,
-      yPercent: 5,
-      stagger: 0.5,
-      delay: 4,
-    });
-    delayedAnimRef.current = delayedAnim;
+    if (hasPlayed) return;
 
     const tl = gsap
-      .timeline()
+      .timeline({ delay: 1.3 })
       .to(spellingId, {
-        visibility: "visible",
-        stagger: 0.1,
-        duration: 0.1,
-        delay: 1,
-        ease: "back.in",
-        onComplete: function () {
-          document.querySelectorAll(neonEffect).forEach((element) => {
-            element.classList.add("text-neon-subtle");
-          });
-        },
+        className: "+=visible",
+        stagger: 0.05,
+        duration: 0.05,
+        ease: "none",
       })
       .fromTo(
         neonEffect,
-        {
-          textShadow: "none",
-          delay: 1,
-          stagger: 0.5,
-          duration: 0.5,
-          ease: "elastic.inOut",
-        },
+        { textShadow: "none" },
         {
           textShadow: NEON,
-          duration: 0.5,
-          delay: 0.5,
-          stagger: 0.5,
-          ease: "elastic.inOut",
+          duration: 0.3,
+          stagger: 0.1,
+          ease: "none",
           repeat: 2,
-        }
-      );
+        },
+      )
+      .to(delayedText, {
+        opacity: 1,
+        yPercent: 0,
+        duration: 0.3,
+        stagger: 0.2,
+        ease: "back",
+      })
+      .call(() => {
+        document.querySelectorAll(neonEffect).forEach((element) => {
+          element.classList.add("text-neon-subtle");
+        });
+        setHasPlayed(true);
+      });
+
     timelineRef.current = tl;
 
     return () => {
-      delayedAnim.kill();
       tl.kill();
     };
-  });
+  }, [hasPlayed]);
 
   return (
     <section
@@ -105,7 +99,7 @@ const About: React.FC<AboutProps> = ({ className = "" }) => {
     >
       <div className="flex flex-col w-full items-center">
         <div className="flex items-center">
-          <h1 className="font-meddon text-4xl md:text-7xl justify-self-center pb-15 relative">
+          <h1 className="font-meddon text-4xl md:text-[clamp(4rem,10vw,12rem)] justify-self-center pb-15 relative">
             <div className={"stroke-text absolute -left-2 top-1  "}>
               Welcome
             </div>
@@ -151,10 +145,10 @@ const About: React.FC<AboutProps> = ({ className = "" }) => {
           "flex flex-col w-full gap-10 " + delayedText.replace(".", "")
         }
       >
-        <div className="flex justify-between">
+        <div className="flex justify-evenly">
           <Button>My resume</Button>
 
-          <Button variant="secondary">Contact me</Button>
+          <Button>Contact me</Button>
         </div>
 
         <div

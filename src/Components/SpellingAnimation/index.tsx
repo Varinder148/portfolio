@@ -1,29 +1,35 @@
-import React, { ReactNode } from "react";
+import React, { memo, useMemo } from "react";
 
 interface SpellingAnimationProps {
   delimiter?: string;
-  children?: ReactNode;
+  children?: React.ReactNode;
   group: string;
 }
 
-const SplitAndId: React.FC<SpellingAnimationProps> = ({
-  delimiter = "",
-  children = "",
-  group,
-}) => {
-  if (typeof children === "string") {
-    return (
-      <>
-        {children.split(delimiter).map((letter, idx) => (
-          <span key={idx} className={`${group.replace(".", "")} invisible`}>
-            {letter}
-          </span>
-        ))}
-      </>
-    );
-  }
+const SplitAndId: React.FC<SpellingAnimationProps> = memo(
+  ({ delimiter = "", children = "", group }) => {
+    const letters = useMemo(() => {
+      if (typeof children === "string") {
+        return children.split(delimiter);
+      }
+      return null;
+    }, [children, delimiter]);
 
-  return <>{children}</>;
-};
+    if (letters) {
+      return (
+        <>
+          {letters.map((letter, idx) => (
+            <span key={idx} className={`${group.replace(".", "")} invisible`}>
+              {letter}
+            </span>
+          ))}
+        </>
+      );
+    }
 
+    return <>{children}</>;
+  },
+);
+
+SplitAndId.displayName = "SplitAndId";
 export default SplitAndId;

@@ -1,10 +1,9 @@
 import Button from "@/Components/Button";
-import clsx from "clsx";
 import gsap from "gsap";
 import Image from "next/image";
-import { useRef, useState } from "react";
-import { IoLocationOutline } from "react-icons/io5";
-import { MdOutlineAccessTime } from "react-icons/md";
+import { useRef, useState, useEffect } from "react";
+import Responsibilities from "./Responsibilities";
+import Overview from "./Overview";
 
 interface CardProps {
   data: {
@@ -17,95 +16,133 @@ interface CardProps {
     location: string;
     position: string;
   };
+  className?: string; // Add className property
 }
 
-const CardFront: React.FC<{ data: CardProps["data"] }> = ({ data }) => {
-  return (
-    <>
-      <div className="mb-5 text-4xl">{data.position}</div>
-      <hr className="w-full my-5 shadow-theme-gray shadow-theme-spread-lg text-theme-gray bg-theme-gray h-1"></hr>
-      <div className="flex items-center gap-10">
-        <MdOutlineAccessTime className="text-theme-red " />
-        {data.from}&nbsp;-&nbsp;{data.to}
-      </div>
-      <div className="flex items-center gap-10">
-        <IoLocationOutline className="text-theme-red" />
-        {data.location}
-      </div>
-    </>
-  );
-};
+// To be removed before finalising
 
-const CardBack: React.FC<{ data: CardProps["data"] }> = ({ data }) => {
-  return (
-    <ul className="text-biryani text-md with bullets font-biryani">
-      {data.responsibilities.map((responsibilty, index) => (
-        <li key={index}>{responsibilty}</li>
-      ))}
-    </ul>
-  );
-};
-
-const Card: React.FC<CardProps> = ({ data }) => {
+const Card: React.FC<CardProps> = ({ data, className }) => {
   const [expanded, setIsExpanded] = useState(true);
-  const [lights, setLights] = useState(true);
+  const [isContentVisible, setIsContentVisible] = useState(false);
 
   const content = useRef(null);
-  const handleOnClick = () => {
-    const tl = gsap.timeline();
-    tl.to(content.current, {
-      scaleY: 0,
-      duration: 0.3,
-      ease: "power1.in",
-      onComplete: () => {
-        setIsExpanded((prev) => !prev);
-        gsap.to(content.current, {
-          scaleY: 1,
-          duration: 0.3,
-          ease: "power1.out",
-        });
-      },
+  const image = useRef(null);
+
+  useEffect(() => {
+    gsap.set(content.current, {
+      translateX: "-100%",
     });
+  }, []);
+
+  const openMenu = () => {
+    gsap
+      .timeline()
+      .set(image.current, {
+        translateY: "-100px",
+        translateX: "-48%",
+      })
+      .to(image.current, {
+        xPercent: -50,
+        duration: 0.3,
+        ease: "power2.out",
+      })
+      .to(content.current, {
+        translateX: "0%",
+        duration: 0.3,
+        ease: "power2.out",
+      });
+    setIsContentVisible(true);
+  };
+
+  const closeMenu = () => {
+    return gsap
+      .timeline()
+      .set(image.current, {
+        translateY: "-100px",
+        translateX: "-48%",
+      })
+      .to(content.current, {
+        translateX: "-101%",
+        duration: 0.3,
+        ease: "power2.in",
+      })
+      .to(image.current, {
+        xPercent: 50,
+        duration: 0.3,
+        ease: "power2.in",
+      })
+      .then(() => {
+        setIsContentVisible(false);
+      });
+  };
+
+  const handleButtonClick = (overview = false) => {
+    if (isContentVisible) {
+      if (overview === !expanded) {
+        closeMenu();
+        return;
+      }
+      closeMenu().then(() => {
+        setIsExpanded(!overview);
+        openMenu();
+      });
+    } else {
+      setIsExpanded(!overview);
+      openMenu();
+    }
   };
 
   return (
-    <div className="w-screen font-rancho text-2xl flex px-10 gap-10">
-      <Image
-        src={`./office (${data.id}).webp`}
-        width={400}
-        height={600}
-        className="w-[400px] h-[600px] object-cover"
-        alt={`${data.name} office`}
-      />
-      <div className="flex flex-col px-20 items-center flex-1">
-        <h2 className="text-7xl">{data.name}</h2>
-        <div
-          ref={content}
-          className="w-full min-h-[400px] flex justify-between flex-col"
-        >
-          <hr
-            className={clsx("w-full my-5  h-1", {
-              "shadow-theme-red shadow-theme-spread-lg text-theme-red bg-theme-red":
-                lights,
-              "text-theme-ivory bg-theme-ivory": !lights,
-            })}
-          ></hr>
-          {expanded ? <CardFront data={data} /> : <CardBack data={data} />}
-          <hr
-            className={clsx("w-full my-5  h-1", {
-              "shadow-theme-red shadow-theme-spread-lg text-theme-red bg-theme-red":
-                lights,
-              "text-theme-ivory bg-theme-ivory": !lights,
-            })}
-          ></hr>
-        </div>
-        <div className="flex gap-10">
-          <Button onClick={handleOnClick} variant="secondary">
-            {expanded ? "My Duties" : "Overview"}
-          </Button>
-          <Button onClick={() => setLights((prev) => !prev)}>
-            Turn lights {lights ? "off" : "on"}
-          </Button>
+    <div className="w-screen grid place-items-center h-screen">
+      <div
+        className={
+          "max-w-[800px] text-2xl flex px-10 gap-10 font-light relative" +
+          className
+        }
+      >
+        <div className="flex flex-col px-20 items-center flex-1 text-theme-lg">
+          <div
+            ref={image}
+            className="absolute self-start  bg-theme-black -translate-y-[100px] z-20"
+          >
+            <div className="relative cursor-pointer">
+              <Image
+                src={`./office (${data.id}).webp`}
+                width={400}
+                height={600}
+                className="w-[400px] h-[600px] object-cover opacity-50"
+                alt={`${data.name} office`}
+              />
+              <div className="absolute top-1/4 left-1/2 -translate-1/2 text-theme-white text-7xl font-rancho">
+                {data.name}
+              </div>
+              <div className="absolute bottom-30 left-1/2 -translate-x-1/2">
+                <Button onClick={() => handleButtonClick(true)}>
+                  Overview
+                </Button>
+              </div>
+              <div className="absolute bottom-10 left-1/2 -translate-x-1/2">
+                <Button onClick={() => handleButtonClick()}>
+                  My&nbsp;Duties
+                </Button>
+              </div>
+            </div>
+          </div>
+
+          <div className="w-[800px] overflow-hidden  ">
+            <div
+              ref={content}
+              className="w-full  flex justify-between flex-col origin-left"
+            >
+              <div className="  border-2 border-theme-gray h-full flex flex-col gap-5 min-h-[400px] px-20 py-5 rounded-2xl">
+                {expanded ? (
+                  <Responsibilities data={data} />
+                ) : (
+                  <Overview data={data} />
+                )}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
