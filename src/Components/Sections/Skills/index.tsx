@@ -25,6 +25,15 @@ const Skills: React.FC = () => {
   const boxRef = useRef(null);
 
   useEffect(() => {
+    function isTouchDevice() {
+      return (
+        "ontouchstart" in window ||
+        navigator.maxTouchPoints > 0 ||
+        //@ts-ignore
+        navigator.msMaxTouchPoints > 0
+      );
+    }
+
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
 
@@ -99,7 +108,7 @@ const Skills: React.FC = () => {
       viewportWidth / 2,
       viewportHeight - 10,
       viewportWidth,
-      20,
+      10,
       {
         isStatic: true,
         render: { fillStyle: "#000000" },
@@ -109,8 +118,19 @@ const Skills: React.FC = () => {
     const leftWall = Bodies.rectangle(
       0,
       viewportHeight / 2,
-      20,
+      10,
       viewportHeight + 40,
+      {
+        isStatic: true,
+        render: { fillStyle: "#000000" },
+      },
+    );
+
+    const roof = Bodies.rectangle(
+      viewportWidth / 2,
+      0, // Position it at the top of the viewport
+      viewportWidth,
+      10, // Thickness of the top wall (same as ground)
       {
         isStatic: true,
         render: { fillStyle: "#000000" },
@@ -120,7 +140,7 @@ const Skills: React.FC = () => {
     const rightWall = Bodies.rectangle(
       viewportWidth - 20,
       viewportHeight / 2,
-      20,
+      10,
       viewportHeight + 40,
       {
         isStatic: true,
@@ -128,7 +148,7 @@ const Skills: React.FC = () => {
       },
     );
 
-    Composite.add(world, [ground, leftWall, rightWall]);
+    Composite.add(world, [ground, leftWall, rightWall, roof]);
 
     // Load and process the SVG
 
@@ -226,6 +246,25 @@ const Skills: React.FC = () => {
       //@ts-ignore
       mouseConstraint.mouse.mousewheel,
     );
+
+    if (isTouchDevice()) {
+      mouseConstraint.mouse.element.removeEventListener(
+        "touchmove",
+        //@ts-ignore
+        mouseConstraint.mouse.mousemove,
+      );
+
+      mouseConstraint.mouse.element.removeEventListener(
+        "touchstart",
+        //@ts-ignore
+        mouseConstraint.mouse.mousedown,
+      );
+      mouseConstraint.mouse.element.removeEventListener(
+        "touchend",
+        //@ts-ignore
+        mouseConstraint.mouse.mouseup,
+      );
+    }
 
     Composite.add(world, mouseConstraint);
 

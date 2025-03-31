@@ -11,13 +11,15 @@ import Experience from "@/Components/Sections/Experience";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/all";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 const Skills = dynamic(() => import("@/Components/Sections/Skills"));
 
 export default function Home() {
   gsap.registerPlugin(ScrollTrigger);
   gsap.registerPlugin(useGSAP);
+
+  const [loadSkills, setLoadSkills] = useState(false);
 
   const loading = ".loading";
 
@@ -34,6 +36,21 @@ export default function Home() {
       display: "none",
     });
   });
+
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting && !loadSkills) {
+          setLoadSkills(true);
+        }
+      });
+    });
+
+    // Start observing the canvas element
+    if (anchorRefs?.current?.[refs.Skills]) {
+      observer.observe(anchorRefs?.current?.[refs.Skills] as Element);
+    }
+  }, []);
 
   return (
     <>
@@ -85,7 +102,7 @@ export default function Home() {
               triggerClass="skills"
             />
           </div>
-          <Skills />
+          {loadSkills && <Skills />}
         </div>
         <div
           className="col-span-3"
