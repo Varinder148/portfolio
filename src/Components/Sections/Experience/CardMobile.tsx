@@ -77,7 +77,7 @@ const CardMobile: React.FC<CardProps> = ({ data, className }) => {
   };
 
   return (
-    <div className="w-screen grid place-items-center h-screen">
+    <div className="w-screen lg:w-[50vw] grid place-items-center h-screen">
       <div
         className={"w-[400px] h-[600px] mx-auto card-container " + className}
       >

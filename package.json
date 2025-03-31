@@ -26,7 +26,7 @@
     "autoprefixer": "^10.4.21",
     "clsx": "^2.1.1",
     "gsap": "^3.12.7",
-    "matter-js": "^0.18.0",
+    "matter-js": "^0.20.0",
     "next": "15.2.2",
     "path-data-polyfill": "^1.0.7",
     "pathseg": "^1.2.1",

@@ -7,11 +7,13 @@ import SectionHeading from "@/Components/SectionHeading";
 import About from "@/Components/Sections/About";
 import Education from "@/Components/Sections/Education";
 import Experience from "@/Components/Sections/Experience";
-import Skills from "@/Components/Sections/Skills";
+// import Skills from "";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/all";
 import { useRef } from "react";
+import dynamic from "next/dynamic";
+const Skills = dynamic(() => import("@/Components/Sections/Skills"));
 
 export default function Home() {
   gsap.registerPlugin(ScrollTrigger);
@@ -36,14 +38,14 @@ export default function Home() {
   return (
     <>
       <CustomMousePointer />
-      <Skills />
+      {/* <Skills /> */}
       <Navigation refs={anchorRefs} />
-      {/* <div
+      <div
         className={
           " w-screen h-screen bg-theme-red absolute z-50 " +
           loading.replace(".", "")
         }
-      /> */}
+      />
 
       <div className="flex flex-col gap-15">
         <div

@@ -31,38 +31,26 @@ export const animateCompass = () => {
 export const animateNavOpeningandClosing = (visible: boolean) => {
   const tl = gsap.timeline();
 
+  tl.set("#list", {
+    top: 0,
+    right: 0,
+    position: "fixed",
+    zIndex: 30,
+  });
   if (!visible) {
-    tl.to("#circle", {
+    tl.to("#list", {
       scale: 1,
-      duration: 0.4,
-      ease: "back.out(1.7)",
-    }).to(
-      "#list",
-      {
-        scale: 1,
-        duration: 0.3,
-        top: 200,
-        right: 200,
-        ease: "back.out(1.7)",
-      },
-      "-=0.2",
-    );
+      transformOrigin: "top right",
+      duration: 0.3,
+      ease: "back.out",
+    });
   } else {
     tl.to("#list", {
       scale: 0,
+      transformOrigin: "top right",
       duration: 0.3,
-      ease: "back.in(1.7)",
-      top: 0,
-      right: 0,
-    }).to(
-      "#circle",
-      {
-        scale: 0,
-        duration: 0.3,
-        ease: "back.in(1.7)",
-      },
-      "-=0.15",
-    );
+      ease: "back.in",
+    });
   }
 
   return () => tl.kill();
@@ -98,16 +86,6 @@ const Navigation: React.FC<NavigationProps> = ({ className = "", refs }) => {
       <button
         onClick={toggleNav}
         className={clsx(
-          "min-h-screen w-screen bg-theme-ivory opacity-20 z-10 fixed",
-          {
-            hidden: !visible,
-          },
-        )}
-        id="layout"
-      ></button>
-      <button
-        onClick={toggleNav}
-        className={clsx(
           "fixed top-10 right-10 w-20 h-20 bg-theme-ivory rounded-full shadow-theme-spread-lg  shadow-theme-red  grid place-content-center border-2 border-theme-black cursor-pointer z-20",
           {
             hidden: visible,
@@ -122,55 +100,63 @@ const Navigation: React.FC<NavigationProps> = ({ className = "", refs }) => {
           height={50}
         />
       </button>
-      <Circle
-        fill="fill-theme-ivory "
-        className="h-[1500px] w-[1500px]  top-0 right-0 fixed  -translate-y-1/2 translate-x-1/2 scale-0 border-4 border-theme-black  rounded-full shadow-2xl shadow-theme-black z-20"
-        id="circle"
-      />
-
-      <nav
-        id="list"
-        className={
-          "rounded-full fixed flex items-center justify-center scale-0 right-0 top-0 z-20 " +
-          className
-        }
-      >
-        <Image
-          src="/compass.svg"
-          alt="compass"
-          id="compass"
-          width={150}
-          height={150}
-          className="bg-none  "
-        />
-        <ul>
-          {menuItems.map((item, index) => {
-            const rotation =
-              initialRotation + angle * index - activeItem * angle;
-            return (
-              <li
-                key={index}
-                className={`absolute top-1/2 left-1/2 cursor-pointer -translate-x-1/2 -translate-y-1/2 transition-all  ${
-                  activeItem === index
-                    ? "text-theme-red text-2xl"
-                    : "text-theme-black hover:text-theme-red"
-                }`}
-                style={{
-                  transform: `rotate(${rotation}deg) translate(${
-                    circleSize / 2
-                  }px) rotate(${rotation * -1}deg)`,
-                }}
-              >
-                <button
-                  onClick={() => handleClick(item.anchor as string, index)}
-                >
-                  {item.name}
-                </button>
-              </li>
-            );
+      <div id="list" className="fixed top-0 right-0 z-30 scale-0">
+        <button
+          onClick={toggleNav}
+          className={clsx("min-h-screen w-screen  -z-1 fixed top-0 right-0", {
+            hidden: !visible,
           })}
-        </ul>
-      </nav>
+          id="layout"
+        />
+
+        <Circle
+          fill="fill-theme-ivory "
+          className="h-[1500px] w-[1500px]  top-0 right-0   -translate-y-1/2 translate-x-1/2  border-4 border-theme-black  rounded-full shadow-2xl shadow-theme-black "
+        />
+
+        <nav
+          className={
+            "rounded-full absolute flex items-center justify-center  right-[200px] top-[200px] z-40 " +
+            className
+          }
+        >
+          <Image
+            src="/compass.svg"
+            alt="compass"
+            id="compass"
+            width={150}
+            height={150}
+            className="bg-none "
+          />
+          <ul>
+            {menuItems.map((item, index) => {
+              const rotation =
+                initialRotation + angle * index - activeItem * angle;
+              return (
+                <li
+                  key={index}
+                  className={`absolute top-1/2 left-1/2 cursor-pointer -translate-x-1/2 -translate-y-1/2  ${
+                    activeItem === index
+                      ? "text-theme-red text-2xl"
+                      : "text-theme-black hover:text-theme-red"
+                  }`}
+                  style={{
+                    transform: `rotate(${rotation}deg) translate(${
+                      circleSize / 2
+                    }px) rotate(${rotation * -1}deg)`,
+                  }}
+                >
+                  <button
+                    onClick={() => handleClick(item.anchor as string, index)}
+                  >
+                    {item.name}
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
+      </div>
     </>
   );
 };
