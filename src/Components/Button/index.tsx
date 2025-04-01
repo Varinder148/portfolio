@@ -125,7 +125,7 @@ const Button = ({
     <button
       ref={buttonRef}
       className={clsx(
-        "uppercase cursor-pointer relative overflow-hidden border-2 rounded-b-full border-theme-red hover:text-theme-black font-rancho touch-none",
+        "uppercase cursor-pointer relative overflow-hidden border-2 border-theme-red hover:text-theme-black font-rancho touch-none",
         "px-8 py-3 md:px-15 md:py-5", // Responsive padding
         className
       )}

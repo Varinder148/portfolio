@@ -34,7 +34,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={` bg-theme-black bg-theme-grainy font-biryani text-theme-ivory  ${meddon.variable} ${rancho.variable} ${biryani.variable} `}
+        className={`${meddon.variable} ${rancho.variable} ${biryani.variable} bg-theme-ivory bg-theme-grainy text-theme-black`}
       >
         {children}
       </body>

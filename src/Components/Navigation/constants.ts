@@ -3,6 +3,7 @@ export const refs = {
   Experience: "experience",
   Skills: "skills",
   Education: "education",
+  Contact: "contact",
 };
 
 const menuItems = [
@@ -24,6 +25,7 @@ const menuItems = [
   },
   {
     name: "Contact Info",
+    anchor: refs.Contact,
   },
 ];
 

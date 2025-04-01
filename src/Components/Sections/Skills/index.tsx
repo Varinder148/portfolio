@@ -111,8 +111,8 @@ const Skills: React.FC = () => {
       10,
       {
         isStatic: true,
-        render: { fillStyle: "#000000" },
-      },
+        render: { fillStyle: "#0F0F0F" },
+      }
     );
 
     const leftWall = Bodies.rectangle(
@@ -122,8 +122,8 @@ const Skills: React.FC = () => {
       viewportHeight + 40,
       {
         isStatic: true,
-        render: { fillStyle: "#000000" },
-      },
+        render: { fillStyle: "#0F0F0F" },
+      }
     );
 
     const roof = Bodies.rectangle(
@@ -133,8 +133,8 @@ const Skills: React.FC = () => {
       10, // Thickness of the top wall (same as ground)
       {
         isStatic: true,
-        render: { fillStyle: "#000000" },
-      },
+        render: { fillStyle: "#0F0F0F" },
+      }
     );
 
     const rightWall = Bodies.rectangle(
@@ -144,8 +144,8 @@ const Skills: React.FC = () => {
       viewportHeight + 40,
       {
         isStatic: true,
-        render: { fillStyle: "#000000" },
-      },
+        render: { fillStyle: "#0F0F0F" },
+      }
     );
 
     Composite.add(world, [ground, leftWall, rightWall, roof]);
@@ -177,7 +177,7 @@ const Skills: React.FC = () => {
           lineWidth: 0.1,
         },
       },
-      true,
+      true
     );
 
     Composite.add(world, terrain);
@@ -225,8 +225,8 @@ const Skills: React.FC = () => {
 
           return Bodies.circle(x, y, 40, bodyOptions);
           // }
-        },
-      ),
+        }
+      )
     );
 
     // add mouse control
@@ -244,25 +244,25 @@ const Skills: React.FC = () => {
     mouseConstraint.mouse.element.removeEventListener(
       "wheel",
       //@ts-ignore
-      mouseConstraint.mouse.mousewheel,
+      mouseConstraint.mouse.mousewheel
     );
 
     if (isTouchDevice()) {
       mouseConstraint.mouse.element.removeEventListener(
         "touchmove",
         //@ts-ignore
-        mouseConstraint.mouse.mousemove,
+        mouseConstraint.mouse.mousemove
       );
 
       mouseConstraint.mouse.element.removeEventListener(
         "touchstart",
         //@ts-ignore
-        mouseConstraint.mouse.mousedown,
+        mouseConstraint.mouse.mousedown
       );
       mouseConstraint.mouse.element.removeEventListener(
         "touchend",
         //@ts-ignore
-        mouseConstraint.mouse.mouseup,
+        mouseConstraint.mouse.mouseup
       );
     }
 

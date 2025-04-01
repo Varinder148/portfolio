@@ -100,7 +100,9 @@ const About: React.FC<AboutProps> = ({ className = "" }) => {
       <div className="flex flex-col w-full items-center">
         <div className="flex items-center">
           <h1 className="font-meddon text-4xl md:text-[clamp(4rem,10vw,12rem)] justify-self-center pb-15 relative">
-            <div className={"stroke-text absolute -left-2 top-1  "}>
+            <div
+              className={"stroke-text absolute -left-0.5 md:-left-2 top-1  "}
+            >
               Welcome
             </div>
 
@@ -146,7 +148,7 @@ const About: React.FC<AboutProps> = ({ className = "" }) => {
         }
       >
         <div className="flex justify-evenly">
-          <Button className="md:min-w-[300px]">My resume</Button>
+          <Button className="md:min-w-[300px] md:min-h-30">My resume</Button>
 
           <Button className="md:min-w-[300px]">Contact me</Button>
         </div>

@@ -13,6 +13,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/all";
 import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
+import Contact from "@/Components/Sections/Contact";
 const Skills = dynamic(() => import("@/Components/Sections/Skills"));
 
 export default function Home() {
@@ -20,6 +21,7 @@ export default function Home() {
   gsap.registerPlugin(useGSAP);
 
   const [loadSkills, setLoadSkills] = useState(false);
+  const [activeTab, setActiveTab] = useState(refs.About);
 
   const loading = ".loading";
 
@@ -28,6 +30,7 @@ export default function Home() {
     [refs.Experience]: null,
     [refs.Education]: null,
     [refs.Skills]: null,
+    [refs.Contact]: null,
   });
 
   useGSAP(() => {
@@ -52,66 +55,112 @@ export default function Home() {
     }
   }, []);
 
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        // Loop through each entry and check if it's intersecting
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            console.log(entry.target.id);
+            setActiveTab(entry.target.id);
+            // entry.target.dataset.ref
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    // Observe each ref element
+    Object.values(anchorRefs?.current)?.forEach((ref) => observer.observe(ref));
+
+    return () => {
+      // Clean up observer on unmount
+      Object.values(anchorRefs?.current)?.forEach((ref) =>
+        observer.unobserve(ref)
+      );
+    };
+  }, []);
+
   return (
     <>
-      <CustomMousePointer />
-      {/* <Skills /> */}
-      <Navigation refs={anchorRefs} />
       <div
-        className={
-          " w-screen h-screen bg-theme-red absolute z-50 " +
-          loading.replace(".", "")
-        }
-      />
+        className={` bg-theme-black bg-theme-grainy font-biryani text-theme-ivory rounded-b-8xl  `}
+      >
+        <CustomMousePointer />
+        {/* <Skills /> */}
+        <Navigation
+          refs={anchorRefs}
+          setActiveTab={setActiveTab}
+          activeTab={activeTab}
+        />
+        <div
+          className={
+            " w-screen h-screen bg-theme-red absolute z-50 " +
+            loading.replace(".", "")
+          }
+        />
 
-      <div className="flex flex-col gap-15">
-        <div
-          className="w-full col-span-3"
-          ref={(ref) => {
-            anchorRefs.current[refs.About] = ref;
-          }}
-        >
-          <About />
-        </div>
-        <div
-          className="w-full col-span-3"
-          ref={(ref) => {
-            anchorRefs.current[refs.Experience] = ref;
-          }}
-        >
-          <div className="h-[300vh]">
-            <SectionHeading
-              text="with the people I have Worked with"
-              triggerClass="experience"
-            />
+        <div className="flex flex-col gap-15">
+          <div
+            className="w-full col-span-3"
+            ref={(ref) => {
+              anchorRefs.current[refs.About] = ref;
+            }}
+            id={refs.About}
+          >
+            <About />
           </div>
+          <div
+            className="w-full col-span-3"
+            ref={(ref) => {
+              anchorRefs.current[refs.Experience] = ref;
+            }}
+            id={refs.Experience}
+          >
+            <div className="h-[300vh]">
+              <SectionHeading
+                text="with the people I have Worked with"
+                triggerClass="experience"
+              />
+            </div>
 
-          <div className="w-full">
-            <Experience />
+            <div className="w-full">
+              <Experience />
+            </div>
+          </div>
+          <div
+            className="w-full col-span-3"
+            ref={(ref) => {
+              anchorRefs.current[refs.Skills] = ref;
+            }}
+            id={refs.Skills}
+          >
+            <div className="h-[300vh]">
+              <SectionHeading
+                text="to what I learned over the years"
+                triggerClass="skills"
+              />
+            </div>
+            {loadSkills && <Skills />}
+          </div>
+          <div
+            className="col-span-3"
+            id={refs.Education}
+            ref={(ref) => {
+              anchorRefs.current[refs.Education] = ref;
+            }}
+          >
+            <Education />
           </div>
         </div>
-        <div
-          className="w-full col-span-3"
-          ref={(ref) => {
-            anchorRefs.current[refs.Skills] = ref;
-          }}
-        >
-          <div className="h-[300vh]">
-            <SectionHeading
-              text="to what I learned over the years"
-              triggerClass="skills"
-            />
-          </div>
-          {loadSkills && <Skills />}
-        </div>
-        <div
-          className="col-span-3"
-          ref={(ref) => {
-            anchorRefs.current[refs.Education] = ref;
-          }}
-        >
-          <Education />
-        </div>
+      </div>
+      <div
+        ref={(ref) => {
+          anchorRefs.current[refs.Contact] = ref;
+        }}
+        id={refs.Contact}
+      >
+        <Contact></Contact>
       </div>
     </>
   );

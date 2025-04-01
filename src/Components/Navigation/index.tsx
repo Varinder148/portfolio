@@ -61,8 +61,13 @@ interface NavigationProps {
   refs: RefObject<{ [key: string]: HTMLDivElement | null }>;
 }
 
-const Navigation: React.FC<NavigationProps> = ({ className = "", refs }) => {
-  const [activeItem, setActiveItem] = useState(0);
+const Navigation: React.FC<NavigationProps> = ({
+  className = "",
+  refs,
+  setActiveTab,
+  activeTab,
+}) => {
+  const [activeItemIndex, setActiveItemIndex] = useState(0);
   const [visible, setVisible] = useState(false);
 
   const angle = 180 / menuItems.length;
@@ -75,7 +80,8 @@ const Navigation: React.FC<NavigationProps> = ({ className = "", refs }) => {
   };
 
   const handleClick = (anchor: string, index: number) => {
-    setActiveItem(index);
+    setActiveTab(anchor);
+    setActiveItemIndex(index);
     animateCompass();
     refs.current[anchor]?.scrollIntoView({ behavior: "smooth" });
     toggleNav();
@@ -89,7 +95,7 @@ const Navigation: React.FC<NavigationProps> = ({ className = "", refs }) => {
           "fixed top-10 right-10 w-20 h-20 bg-theme-ivory rounded-full shadow-theme-spread-lg  shadow-theme-red  grid place-content-center border-2 border-theme-black cursor-pointer z-20",
           {
             hidden: visible,
-          },
+          }
         )}
       >
         <Image
@@ -131,12 +137,12 @@ const Navigation: React.FC<NavigationProps> = ({ className = "", refs }) => {
           <ul>
             {menuItems.map((item, index) => {
               const rotation =
-                initialRotation + angle * index - activeItem * angle;
+                initialRotation + angle * index - activeItemIndex * angle;
               return (
                 <li
                   key={index}
                   className={`absolute top-1/2 left-1/2 cursor-pointer -translate-x-1/2 -translate-y-1/2  ${
-                    activeItem === index
+                    activeTab === item.anchor
                       ? "text-theme-red text-2xl"
                       : "text-theme-black hover:text-theme-red"
                   }`}
