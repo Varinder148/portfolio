@@ -59,6 +59,8 @@ export const animateNavOpeningandClosing = (visible: boolean) => {
 interface NavigationProps {
   className?: string;
   refs: RefObject<{ [key: string]: HTMLDivElement | null }>;
+  setActiveTab: (item: string) => void;
+  activeTab: string;
 }
 
 const Navigation: React.FC<NavigationProps> = ({
@@ -67,7 +69,6 @@ const Navigation: React.FC<NavigationProps> = ({
   setActiveTab,
   activeTab,
 }) => {
-  const [activeItemIndex, setActiveItemIndex] = useState(0);
   const [visible, setVisible] = useState(false);
 
   const angle = 180 / menuItems.length;
@@ -79,9 +80,8 @@ const Navigation: React.FC<NavigationProps> = ({
     animateNavOpeningandClosing(visible);
   };
 
-  const handleClick = (anchor: string, index: number) => {
+  const handleClick = (anchor: string) => {
     setActiveTab(anchor);
-    setActiveItemIndex(index);
     animateCompass();
     refs.current[anchor]?.scrollIntoView({ behavior: "smooth" });
     toggleNav();
@@ -95,7 +95,7 @@ const Navigation: React.FC<NavigationProps> = ({
           "fixed top-10 right-10 w-20 h-20 bg-theme-ivory rounded-full shadow-theme-spread-lg  shadow-theme-red  grid place-content-center border-2 border-theme-black cursor-pointer z-20",
           {
             hidden: visible,
-          }
+          },
         )}
       >
         <Image
@@ -137,7 +137,11 @@ const Navigation: React.FC<NavigationProps> = ({
           <ul>
             {menuItems.map((item, index) => {
               const rotation =
-                initialRotation + angle * index - activeItemIndex * angle;
+                initialRotation +
+                angle * index -
+                (menuItems.find((item) => item.anchor === activeTab)?.index ||
+                  0) *
+                  angle;
               return (
                 <li
                   key={index}
@@ -152,9 +156,7 @@ const Navigation: React.FC<NavigationProps> = ({
                     }px) rotate(${rotation * -1}deg)`,
                   }}
                 >
-                  <button
-                    onClick={() => handleClick(item.anchor as string, index)}
-                  >
+                  <button onClick={() => handleClick(item.anchor as string)}>
                     {item.name}
                   </button>
                 </li>

@@ -58,25 +58,22 @@ export default function Home() {
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
-        // Loop through each entry and check if it's intersecting
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            console.log(entry.target.id);
             setActiveTab(entry.target.id);
-            // entry.target.dataset.ref
           }
         });
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 },
     );
 
-    // Observe each ref element
-    Object.values(anchorRefs?.current)?.forEach((ref) => observer.observe(ref));
+    Object.values(anchorRefs?.current)?.forEach((ref) =>
+      observer.observe(ref as HTMLElement),
+    );
 
     return () => {
-      // Clean up observer on unmount
       Object.values(anchorRefs?.current)?.forEach((ref) =>
-        observer.unobserve(ref)
+        observer.unobserve(ref as HTMLElement),
       );
     };
   }, []);
@@ -129,7 +126,7 @@ export default function Home() {
             </div>
           </div>
           <div
-            className="w-full col-span-3"
+            className="w-screen"
             ref={(ref) => {
               anchorRefs.current[refs.Skills] = ref;
             }}

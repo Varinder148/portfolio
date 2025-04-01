@@ -16,36 +16,65 @@ import decomp from "poly-decomp";
 import "pathseg";
 import { vertexSets } from "./vertexSets";
 import { getSvgTexture, SKILLS } from "./utils";
+import {
+  getViewportWidth,
+  isTouchDevice,
+  getViewportHeight,
+} from "@/utils/screen";
+
+function getScaleFactor(viewportWidth: number) {
+  const maxWidth = 1200;
+  const minWidth = 600;
+
+  if (viewportWidth >= maxWidth) {
+    return 1.5;
+  }
+
+  if (viewportWidth <= minWidth) {
+    return 0.5;
+  }
+
+  const scaleFactor =
+    1.5 - (1.0 * (viewportWidth - minWidth)) / (maxWidth - minWidth);
+
+  return scaleFactor;
+}
+
+const getScaledVertices = (vertexSets: any[]) => {
+  const scaleFactor = getScaleFactor(getViewportWidth());
+  console.log(scaleFactor, getViewportWidth());
+
+  const scaledVertices: any[][] = [];
+  vertexSets.forEach((vertexSet) => {
+    let scaledVertexSetRow: any[] = [];
+    vertexSet.forEach((vertex: { x: number; y: number }) => {
+      const scaledVertex = { x: 0, y: 0 };
+      scaledVertex.x = vertex.x * scaleFactor;
+      scaledVertex.y = vertex.y * scaleFactor;
+      scaledVertexSetRow.push(scaledVertex);
+    });
+    scaledVertices.push(scaledVertexSetRow);
+    scaledVertexSetRow = [];
+  });
+  return scaledVertices;
+};
 
 const Skills: React.FC = () => {
   const canvasRef = useRef<HTMLDivElement>(null);
   const engineRef = useRef<Matter.Engine>(null);
   const renderRef = useRef<Matter.Render>(null);
   const runnerRef = useRef<Matter.Runner>(null);
-  const boxRef = useRef(null);
 
   useEffect(() => {
-    function isTouchDevice() {
-      return (
-        "ontouchstart" in window ||
-        navigator.maxTouchPoints > 0 ||
-        //@ts-ignore
-        navigator.msMaxTouchPoints > 0
-      );
-    }
+    const viewportWidth = getViewportWidth();
+    const viewportHeight = getViewportHeight();
 
-    const viewportWidth = window.innerWidth;
-    const viewportHeight = window.innerHeight;
-
-    // provide concave decomposition support
     Common.setDecomp(decomp);
 
-    // create engine
     const engine = Engine.create();
     engineRef.current = engine;
     const { world } = engine;
 
-    // create renderer with updated options
     const render = Render.create({
       element: canvasRef.current!,
       engine: engine,
@@ -61,7 +90,6 @@ const Skills: React.FC = () => {
 
     Render.run(render);
 
-    // create runner
     const runner = Runner.create();
     runnerRef.current = runner;
     Runner.run(runner, engine);
@@ -102,17 +130,15 @@ const Skills: React.FC = () => {
     //   }
     // };
 
-    // Add ground while waiting for SVG
-
     const ground = Bodies.rectangle(
       viewportWidth / 2,
       viewportHeight - 10,
       viewportWidth,
-      10,
+      100,
       {
         isStatic: true,
         render: { fillStyle: "#0F0F0F" },
-      }
+      },
     );
 
     const leftWall = Bodies.rectangle(
@@ -123,19 +149,13 @@ const Skills: React.FC = () => {
       {
         isStatic: true,
         render: { fillStyle: "#0F0F0F" },
-      }
+      },
     );
 
-    const roof = Bodies.rectangle(
-      viewportWidth / 2,
-      0, // Position it at the top of the viewport
-      viewportWidth,
-      10, // Thickness of the top wall (same as ground)
-      {
-        isStatic: true,
-        render: { fillStyle: "#0F0F0F" },
-      }
-    );
+    const roof = Bodies.rectangle(viewportWidth / 2, 0, viewportWidth, 10, {
+      isStatic: true,
+      render: { fillStyle: "#0F0F0F" },
+    });
 
     const rightWall = Bodies.rectangle(
       viewportWidth - 20,
@@ -145,18 +165,17 @@ const Skills: React.FC = () => {
       {
         isStatic: true,
         render: { fillStyle: "#0F0F0F" },
-      }
+      },
     );
 
     Composite.add(world, [ground, leftWall, rightWall, roof]);
-
-    // Load and process the SVG
 
     const bounds = {
       min: { x: Infinity, y: Infinity },
       max: { x: -Infinity, y: -Infinity },
     };
 
+    const scaledVertices = getScaledVertices(vertexSets);
     vertexSets.forEach((vertices) => {
       vertices.forEach((vertex) => {
         bounds.min.x = Math.min(bounds.min.x, vertex.x);
@@ -169,15 +188,15 @@ const Skills: React.FC = () => {
     const terrain = Bodies.fromVertices(
       viewportWidth / 2, // Center horizontally based on viewport
       viewportHeight / 2, // Center vertically
-      vertexSets,
+      scaledVertices,
       {
         isStatic: true,
         render: {
           strokeStyle: "#F6F7EB",
-          lineWidth: 0.1,
+          lineWidth: 1,
         },
       },
-      true
+      true,
     );
 
     Composite.add(world, terrain);
@@ -206,7 +225,6 @@ const Skills: React.FC = () => {
         ballArea.spacing,
         ballArea.spacing,
         (x: any, y: any, col: any, row: any) => {
-          console.log(col, row);
           // if (Query.point([terrain], { x, y }).length === 0) {
           const bodyOptions = {
             frictionAir: 0.001,
@@ -225,8 +243,8 @@ const Skills: React.FC = () => {
 
           return Bodies.circle(x, y, 40, bodyOptions);
           // }
-        }
-      )
+        },
+      ),
     );
 
     // add mouse control
@@ -244,44 +262,31 @@ const Skills: React.FC = () => {
     mouseConstraint.mouse.element.removeEventListener(
       "wheel",
       //@ts-ignore
-      mouseConstraint.mouse.mousewheel
+      mouseConstraint.mouse.mousewheel,
     );
 
     if (isTouchDevice()) {
       mouseConstraint.mouse.element.removeEventListener(
         "touchmove",
         //@ts-ignore
-        mouseConstraint.mouse.mousemove
+        mouseConstraint.mouse.mousemove,
       );
 
       mouseConstraint.mouse.element.removeEventListener(
         "touchstart",
         //@ts-ignore
-        mouseConstraint.mouse.mousedown
+        mouseConstraint.mouse.mousedown,
       );
       mouseConstraint.mouse.element.removeEventListener(
         "touchend",
         //@ts-ignore
-        mouseConstraint.mouse.mouseup
+        mouseConstraint.mouse.mouseup,
       );
     }
 
     Composite.add(world, mouseConstraint);
 
-    // keep the mouse in sync with rendering
     render.mouse = mouse;
-
-    // var mouseC = Matter.MouseConstraint;
-    // var canvmouse = Matter.Mouse.create(render.canvas);
-    // Matter.Mouse.setScale(canvmouse, { x: 10, y: 10 });
-
-    // const mouseControl = mouseC.create(engine, {
-    //   mouse: canvmouse,
-    // });
-
-    // Composite.add(world, mouseControl);
-
-    // render.mouse = canvmouse;
 
     // fit the render viewport to the scene
     Render.lookAt(render, {
@@ -299,14 +304,13 @@ const Skills: React.FC = () => {
 
   return (
     <>
-      <div id="box" ref={boxRef}></div>
       <div
         ref={canvasRef}
         style={{
           width: "100vw",
           height: "100vh",
           position: "relative",
-          margin: "0 auto", // Center the canvas
+          margin: "0 auto",
         }}
       />
     </>
