@@ -19,7 +19,10 @@ const SplitAndId: React.FC<SpellingAnimationProps> = memo(
       return (
         <>
           {letters.map((letter, idx) => (
-            <span key={idx} className={`${group.replace(".", "")} invisible`}>
+            <span
+              key={idx}
+              className={`${group.replace(".", "")} opacity-100 translate-y-10 rotate-10`}
+            >
               {letter}
             </span>
           ))}

@@ -1,6 +1,8 @@
 import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
+// import RecursiveWrapper from "../SpellingAnimation/RecursiveWrapper";
+// import SplitAndId from "../SpellingAnimation";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -11,6 +13,7 @@ interface Props {
 
 const SectionHeading: React.FC<Props> = ({ text, triggerClass }) => {
   const textRef = useRef<HTMLHeadingElement>(null);
+  // const splitTextId = "." + triggerClass + "-split";
 
   useEffect(() => {
     if (textRef.current) {

@@ -81,7 +81,7 @@ export default function Home() {
   return (
     <>
       <div
-        className={` bg-theme-black bg-theme-grainy font-biryani text-theme-ivory rounded-b-8xl  `}
+        className={` bg-theme-black bg-theme-grainy font-biryani text-theme-ivory rounded-b-8xl relative z-20 `}
       >
         <CustomMousePointer />
         {/* <Skills /> */}
@@ -151,11 +151,13 @@ export default function Home() {
           </div>
         </div>
       </div>
+
       <div
         ref={(ref) => {
           anchorRefs.current[refs.Contact] = ref;
         }}
         id={refs.Contact}
+        className="w-screen h-screen z-10"
       >
         <Contact></Contact>
       </div>
