@@ -11,7 +11,7 @@
 }
 
 .stroke-text {
-  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-width: 4px;
   -webkit-text-fill-color: transparent;
   -webkit-background-clip: text;
 }

@@ -1,21 +1,32 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import "./neon.css";
-import { Meddon, Biryani, Rancho } from "next/font/google";
+import {
+  Luckiest_Guy,
+  Noto_Color_Emoji,
+  Work_Sans,
+  Open_Sans,
+} from "next/font/google";
 import React from "react";
 
-const meddon = Meddon({
+const meddon = Luckiest_Guy({
   weight: ["400"],
-  subsets: ["latin", "latin-ext"],
+  subsets: ["latin"],
   variable: "--font-meddon",
 });
 
-const rancho = Rancho({
+const colorEmoji = Noto_Color_Emoji({
+  weight: ["400"],
+  subsets: ["emoji"],
+  variable: "--font-noto-color-emoji",
+});
+
+const rancho = Open_Sans({
   weight: ["400"],
   subsets: ["latin"],
   variable: "--font-rancho",
 });
-const biryani = Biryani({
+const biryani = Work_Sans({
   weight: ["200", "400", "600"],
   subsets: ["latin", "latin-ext"],
   variable: "--font-biryani",
@@ -34,7 +45,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${meddon.variable} ${rancho.variable} ${biryani.variable} bg-theme-ivory bg-theme-grainy text-theme-black`}
+        className={`${meddon.variable} ${colorEmoji.variable} ${rancho.variable} ${biryani.variable} bg-theme-ivory bg-theme-grainy text-theme-black`}
       >
         {children}
       </body>

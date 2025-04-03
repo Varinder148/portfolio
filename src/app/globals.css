@@ -26,6 +26,7 @@
   --font-meddon: var(--font-meddon);
   --font-rancho: var(--font-rancho);
   --font-biryani: var(--font-biryani);
+  --font-noto-color-emoji : var(--font-noto-color-emoji);
 
   --radius-8xl: 100px
 }
@@ -49,9 +50,30 @@ html, body {margin: 0; padding: 0; overflow-x:hidden;
   scrollbar-width: none;  
 }
 
+.inset-shadow{
+  box-shadow: 0px -200px 63px 9px #0F0F0F inset;
+}
+
+
+.outset-shadow{
+  box-shadow: 200px 0px 63px 9px #0F0F0F ;
+}
 .with-bullets li {
   list-style: none;
   position: relative;
+}
+
+.bg-mountain {
+  background-image: url('../../public/keyboard.avif');
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-bottom-right-radius: 100%;
+  
+  border-bottom-left-radius: 100%;
+  box-shadow: 0px -100px 63px 9px #0F0F0F inset; 
+  /* background-position-x: -100%; */
+  /* background */
+ 
 }
 
 .with-bullets li:before {

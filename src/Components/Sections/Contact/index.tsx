@@ -21,7 +21,6 @@ const Contact: React.FC = () => {
     });
 
     tl.to(`.${REVEAL}`, {
-      opacity: 1,
       position: "fixed",
       top: 0,
       left: 0,
@@ -49,16 +48,13 @@ const Contact: React.FC = () => {
   };
 
   return (
-    <div className={"w-screen h-screen " + TRIGGER} id="education">
+    <div className={`w-screen h-screen ${TRIGGER}`} id="education">
       <div
-        className={
-          "relative items-center flex-col  w-screen h-screen opacity-0   " +
-          REVEAL
-        }
+        className={`relative items-center flex-col  w-screen h-screen   ${REVEAL}`}
       >
         <div className={"flex items-center flex-col pt-15 w-screen h-screen  "}>
           <h1 className={"text-8xl text-theme-red font-meddon mb-25  "}>
-            Contact me
+            Let's connect
           </h1>
           <div className={"grid grid-cols-2 w-1/2 gap-5  "}>
             <TextField
@@ -84,7 +80,7 @@ const Contact: React.FC = () => {
               className="col-span-2 w-[400px] mx-auto"
               onClick={handleSubmit}
             >
-              Submit
+              Send <span className="font-noto-color-emoji text-2xl">🦅</span>
             </Button>
           </div>
           <div className={"grid grid-cols-2 gap-5 mt-auto mb-5   "}>

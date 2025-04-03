@@ -20,6 +20,7 @@ import {
   getViewportWidth,
   isTouchDevice,
   getViewportHeight,
+  isMobile,
 } from "@/utils/screen";
 
 function getScaleFactor(viewportWidth: number) {
@@ -134,7 +135,7 @@ const Skills: React.FC = () => {
       viewportWidth / 2,
       viewportHeight - 10,
       viewportWidth,
-      100,
+      10,
       {
         isStatic: true,
         render: { fillStyle: "#0F0F0F" },
@@ -199,7 +200,7 @@ const Skills: React.FC = () => {
       true,
     );
 
-    Composite.add(world, terrain);
+    if (!isMobile) Composite.add(world, terrain);
 
     // Generate balls within SVG bounds
     const svgCenter = {
@@ -210,8 +211,8 @@ const Skills: React.FC = () => {
     const ballArea = {
       x: svgCenter.x - (bounds.max.x - bounds.min.x) * 0.3,
       y: svgCenter.y - (bounds.max.y - bounds.min.y) * 0.3,
-      cols: 8,
-      rows: 2,
+      cols: 4,
+      rows: 4,
       spacing: 2,
     };
 
@@ -224,17 +225,18 @@ const Skills: React.FC = () => {
         ballArea.rows,
         ballArea.spacing,
         ballArea.spacing,
-        (x: any, y: any, col: any, row: any) => {
+        (x: any, y: any, i: any, j: any, k: any, index: number) => {
+          // console.log(row, col, row * 1 + col, o, i, n);
           // if (Query.point([terrain], { x, y }).length === 0) {
           const bodyOptions = {
-            frictionAir: 0.001,
+            frictionAir: 0.01,
             friction: 0.1,
             restitution: 0.8,
-            density: 0.001,
+            density: 1,
             render: {
               fillStyle: "#4285f4",
               sprite: {
-                texture: getSvgTexture(SKILLS[row * 1 + col]),
+                texture: getSvgTexture(SKILLS[index]),
                 xScale: 1,
                 yScale: 1,
               },
@@ -246,6 +248,8 @@ const Skills: React.FC = () => {
         },
       ),
     );
+
+    engine.world.gravity.y = 0.5;
 
     // add mouse control
     const mouse = Mouse.create(canvasRef.current as HTMLElement);

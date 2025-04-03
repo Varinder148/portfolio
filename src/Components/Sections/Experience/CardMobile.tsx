@@ -79,7 +79,7 @@ const CardMobile: React.FC<CardProps> = ({ data, className }) => {
   return (
     <div className="w-screen lg:w-[50vw] grid place-items-center h-screen">
       <div
-        className={"w-[400px] h-[600px] mx-auto card-container " + className}
+        className={`w-[400px] h-[600px] mx-auto card-container ${className}`}
       >
         <div ref={cardRef} className="card relative w-full h-full">
           <div
@@ -95,7 +95,7 @@ const CardMobile: React.FC<CardProps> = ({ data, className }) => {
                   className="object-cover opacity-50"
                 />
               </div>
-              <div className="absolute top-1/8 left-1/2 -translate-x-1/2 text-theme-white text-7xl font-rancho text-center">
+              <div className="absolute top-1/8 left-1/2 -translate-x-1/2 text-theme-white text-5xl font-rancho text-center">
                 {data.name}
               </div>
               <div className="absolute bottom-10 left-1/2 -translate-x-1/2">

@@ -9,3 +9,5 @@ export const isTouchDevice = () => {
     navigator.msMaxTouchPoints > 0
   );
 };
+
+export const isMobile = getViewportWidth() < 768;

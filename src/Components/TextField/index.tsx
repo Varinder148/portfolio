@@ -52,7 +52,7 @@ const TextField = ({
   };
 
   return (
-    <div className={"mb-4 " + className}>
+    <div className={`mb-4 ${className}`}>
       {/* Label */}
       <label
         htmlFor={label}

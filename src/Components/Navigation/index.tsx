@@ -121,10 +121,9 @@ const Navigation: React.FC<NavigationProps> = ({
         />
 
         <nav
-          className={
-            "rounded-full absolute flex items-center justify-center  right-[200px] top-[200px] z-40 " +
+          className={`rounded-full absolute flex items-center justify-center  right-[200px] top-[200px] z-40 ${
             className
-          }
+          }`}
         >
           <Image
             src="/compass.svg"

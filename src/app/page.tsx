@@ -7,7 +7,6 @@ import SectionHeading from "@/Components/SectionHeading";
 import About from "@/Components/Sections/About";
 import Education from "@/Components/Sections/Education";
 import Experience from "@/Components/Sections/Experience";
-// import Skills from "";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/all";
@@ -91,10 +90,10 @@ export default function Home() {
           activeTab={activeTab}
         />
         <div
-          className={
-            " w-screen h-screen bg-theme-red absolute z-50 " +
-            loading.replace(".", "")
-          }
+          className={` w-screen h-screen bg-theme-red absolute z-50 ${loading.replace(
+            ".",
+            "",
+          )}`}
         />
 
         <div className="flex flex-col gap-15">
@@ -105,7 +104,13 @@ export default function Home() {
             }}
             id={refs.About}
           >
-            <About />
+            <About
+              scrollToContact={() =>
+                anchorRefs.current?.[refs.Contact]?.scrollIntoView({
+                  behavior: "smooth",
+                })
+              }
+            />
           </div>
           <div
             className="w-full col-span-3"
@@ -116,7 +121,7 @@ export default function Home() {
           >
             <div className="h-[300vh]">
               <SectionHeading
-                text="with the people I have Worked with"
+                text="Let's begin with the people 🧑‍💻🧑🏻‍💻 I have Worked 🏢 with"
                 triggerClass="experience"
               />
             </div>

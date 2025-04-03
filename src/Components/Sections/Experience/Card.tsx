@@ -95,10 +95,9 @@ const Card: React.FC<CardProps> = ({ data, className }) => {
   return (
     <div className="w-screen grid place-items-center h-screen">
       <div
-        className={
-          "max-w-[800px] text-2xl flex px-10 gap-10 font-light relative" +
+        className={`max-w-[800px] text-2xl flex px-10 gap-10 font-light relative${
           className
-        }
+        }`}
       >
         <div className="flex flex-col px-20 items-center flex-1 text-theme-lg">
           <div
