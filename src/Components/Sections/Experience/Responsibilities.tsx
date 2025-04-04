@@ -1,7 +1,7 @@
 interface CardProps {
   data: {
     id: number;
-    logo: string;
+    image: string;
     name: string;
     from: string;
     to: string;

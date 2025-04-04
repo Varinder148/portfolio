@@ -57,19 +57,6 @@ const About: React.FC<AboutProps> = ({ className = "", scrollToContact }) => {
         duration: 0.05,
         ease: "none",
       })
-
-      // .fromTo(
-      //   neonEffect,
-      //   { textShadow: "none" },
-      //   {
-      //     textShadow: NEON,
-      //     duration: 0.2,
-      //     stagger: 0.1,
-      //     ease: "none",
-      //     repeat: 2,
-      //     repeatDelay: 0.2,
-      //   }
-      // )
       .to(neonEffect, {
         textShadow: NEON,
       })
@@ -96,6 +83,7 @@ const About: React.FC<AboutProps> = ({ className = "", scrollToContact }) => {
         delay: 0.1,
         opacity: 0,
       })
+
       .to(delayedText, {
         opacity: 1,
         yPercent: 0,
@@ -123,20 +111,25 @@ const About: React.FC<AboutProps> = ({ className = "", scrollToContact }) => {
       <div className="absolute w-full h-screen inset opacity-80 bg-theme-black -z-40 "></div>
 
       <div
-        className={`h-full relative flex flex-col items-center justify-between pt-40 md:p-20 md:pb-10  ${
+        className={`bg-theme-grainy h-screen relative flex flex-col items-center justify-between pt-40 md:p-20 md:pb-10  ${
           className
         }`}
       >
         <div className="flex flex-col w-full items-center">
           <div className="flex items-center">
-            <h1 className="font-meddon text-4xl md:text-[clamp(4rem,10vw,12rem)] justify-self-center pb-15 relative">
-              <div className={"stroke-text absolute   "}>Hello</div>
+            <h1 className="font-meddon text-4xl tracking-widest md:text-[clamp(4rem,10vw,12rem)] justify-self-center pb-15 relative">
+              <div className={"stroke-text absolute   "}>
+                <span className="flex items-center">
+                  HEY!
+                  {/* <span className="font-noto-color-emoji">👋</span> */}
+                </span>
+              </div>
               <div id="welcome">
                 <RecursiveWrapper
                   Wrapper={SplitAndId}
                   wrapperProps={{ group: spellingId }}
                 >
-                  <span className={neonEffect.replace(".", "")}>Hello</span>
+                  <span className={neonEffect.replace(".", "")}>HEY!</span>
                 </RecursiveWrapper>
               </div>
             </h1>
@@ -186,17 +179,6 @@ const About: React.FC<AboutProps> = ({ className = "", scrollToContact }) => {
               Contact me <span className="font-noto-color-emoji">🤙</span>
             </Button>
           </div>
-          {/* 
-        <div
-          className={
-            "flex flex-col items-center " + delayedText.replace(".", "")
-          }
-        >
-          <span className="-rotate-10 -translate-x-10 mt-auto ">
-            Let us start
-          </span>
-          <Image src="/pointer.svg" height={120} width={120} alt="pointer" />
-        </div> */}
         </div>
       </div>
     </section>

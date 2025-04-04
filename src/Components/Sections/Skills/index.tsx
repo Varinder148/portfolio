@@ -16,12 +16,8 @@ import decomp from "poly-decomp";
 import "pathseg";
 import { vertexSets } from "./vertexSets";
 import { getSvgTexture, SKILLS } from "./utils";
-import {
-  getViewportWidth,
-  isTouchDevice,
-  getViewportHeight,
-  isMobile,
-} from "@/utils/screen";
+import { isTouchDevice } from "@/utils/screen";
+import { useViewport } from "@/Providers/ViewportProvider";
 
 function getScaleFactor(viewportWidth: number) {
   const maxWidth = 1200;
@@ -41,9 +37,9 @@ function getScaleFactor(viewportWidth: number) {
   return scaleFactor;
 }
 
-const getScaledVertices = (vertexSets: any[]) => {
-  const scaleFactor = getScaleFactor(getViewportWidth());
-  console.log(scaleFactor, getViewportWidth());
+const getScaledVertices = (vertexSets: any[], viewportWidth: number) => {
+  const scaleFactor = getScaleFactor(viewportWidth);
+  console.log(scaleFactor, viewportWidth);
 
   const scaledVertices: any[][] = [];
   vertexSets.forEach((vertexSet) => {
@@ -66,10 +62,9 @@ const Skills: React.FC = () => {
   const renderRef = useRef<Matter.Render>(null);
   const runnerRef = useRef<Matter.Runner>(null);
 
-  useEffect(() => {
-    const viewportWidth = getViewportWidth();
-    const viewportHeight = getViewportHeight();
+  const { viewportWidth, viewportHeight, isMobile } = useViewport();
 
+  useEffect(() => {
     Common.setDecomp(decomp);
 
     const engine = Engine.create();
@@ -176,7 +171,7 @@ const Skills: React.FC = () => {
       max: { x: -Infinity, y: -Infinity },
     };
 
-    const scaledVertices = getScaledVertices(vertexSets);
+    const scaledVertices = getScaledVertices(vertexSets, viewportWidth);
     vertexSets.forEach((vertices) => {
       vertices.forEach((vertex) => {
         bounds.min.x = Math.min(bounds.min.x, vertex.x);

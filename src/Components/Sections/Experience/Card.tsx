@@ -4,11 +4,14 @@ import Image from "next/image";
 import { useRef, useState, useEffect } from "react";
 import Responsibilities from "./Responsibilities";
 import Overview from "./Overview";
+import "./Card.css";
+import clsx from "clsx";
+import { useViewport } from "@/Providers/ViewportProvider";
 
 interface CardProps {
   data: {
     id: number;
-    logo: string;
+    image: string;
     name: string;
     from: string;
     to: string;
@@ -16,130 +19,145 @@ interface CardProps {
     location: string;
     position: string;
   };
-  className?: string; // Add className property
+  className?: string;
 }
 
-// To be removed before finalising
-
 const Card: React.FC<CardProps> = ({ data, className }) => {
-  const [expanded, setIsExpanded] = useState(true);
-  const [isContentVisible, setIsContentVisible] = useState(false);
+  const [expanded, setIsExpanded] = useState(false);
+  const [isFlipped, setIsFlipped] = useState(false);
 
-  const content = useRef(null);
-  const image = useRef(null);
+  const cardRef = useRef(null);
+  const frontRef = useRef(null);
+  const backRef = useRef(null);
+
+  const { isMobile } = useViewport();
 
   useEffect(() => {
-    gsap.set(content.current, {
-      translateX: "-100%",
+    gsap.set([frontRef.current, backRef.current], {
+      backfaceVisibility: "hidden",
     });
   }, []);
 
-  const openMenu = () => {
-    gsap
-      .timeline()
-      .set(image.current, {
-        translateY: "-100px",
-        translateX: "-48%",
-      })
-      .to(image.current, {
-        xPercent: -50,
-        duration: 0.3,
-        ease: "power2.out",
-      })
-      .to(content.current, {
-        translateX: "0%",
-        duration: 0.3,
-        ease: "power2.out",
+  const flipCard = (overview = false) => {
+    const duration = 0.6;
+    if (!isFlipped) {
+      setIsExpanded(overview);
+      gsap.to(cardRef.current, {
+        rotationY: 180,
+        duration,
+        ease: "power2.inOut",
       });
-    setIsContentVisible(true);
-  };
-
-  const closeMenu = () => {
-    return gsap
-      .timeline()
-      .set(image.current, {
-        translateY: "-100px",
-        translateX: "-48%",
-      })
-      .to(content.current, {
-        translateX: "-101%",
-        duration: 0.3,
-        ease: "power2.in",
-      })
-      .to(image.current, {
-        xPercent: 50,
-        duration: 0.3,
-        ease: "power2.in",
-      })
-      .then(() => {
-        setIsContentVisible(false);
-      });
-  };
-
-  const handleButtonClick = (overview = false) => {
-    if (isContentVisible) {
-      if (overview === !expanded) {
-        closeMenu();
-        return;
-      }
-      closeMenu().then(() => {
-        setIsExpanded(!overview);
-        openMenu();
-      });
+      setIsFlipped(true);
     } else {
-      setIsExpanded(!overview);
-      openMenu();
+      gsap.to(cardRef.current, {
+        rotationY: 0,
+        duration,
+        ease: "power2.inOut",
+        onComplete: () => {
+          setIsExpanded(!expanded);
+        },
+      });
+      setIsFlipped(false);
     }
   };
 
+  const doubleFlip = () => {
+    const duration = 0.6;
+    // First flip (to front)
+    gsap.to(cardRef.current, {
+      rotationY: 0,
+      duration,
+      ease: "power2.inOut",
+      onComplete: () => {
+        setIsExpanded(false);
+        // Second flip (back to back) in opposite direction
+        gsap.to(cardRef.current, {
+          rotationY: -180,
+          duration,
+          ease: "power2.inOut",
+        });
+      },
+    });
+  };
+
   return (
-    <div className="w-screen grid place-items-center h-screen">
-      <div
-        className={`max-w-[800px] text-2xl flex px-10 gap-10 font-light relative${
-          className
-        }`}
-      >
-        <div className="flex flex-col px-20 items-center flex-1 text-theme-lg">
+    <div className="w-screen grid place-items-center p-5 stackingcard pt-25 lg:p-25 h-screen">
+      <div className={`w-full lg:w-6/7 card-container  h-full ${className}`}>
+        <div ref={cardRef} className=" relative card w-full h-full">
           <div
-            ref={image}
-            className="absolute self-start  bg-theme-black -translate-y-[100px] z-20"
+            ref={frontRef}
+            className="card-front bg-theme-black absolute bg-theme w-full h-full rounded-2xl overflow-hidden flex"
           >
-            <div className="relative cursor-pointer">
-              <Image
-                src={`./office (${data.id}).webp`}
-                width={400}
-                height={600}
-                className="w-[400px] h-[600px] object-cover opacity-50"
-                alt={`${data.name} office`}
-              />
-              <div className="absolute top-1/4 left-1/2 -translate-1/2 text-theme-white text-7xl font-rancho">
+            <div
+              className={clsx("relative h-full", {
+                "w-1/2": !isMobile,
+                "w-full": isMobile,
+              })}
+            >
+              <div className="relative w-full h-full">
+                <Image
+                  src={data.image}
+                  alt={`${data.name} office`}
+                  fill
+                  className="object-cover object-center  opacity-50"
+                  style={{
+                    filter: "grayscale(50%)",
+                  }}
+                />
+              </div>
+              <div
+                className={clsx(
+                  "absolute  left-1/2 -translate-1/2 text-theme-white text-6xl font-rancho text-center",
+                  {
+                    "top-1/2": !isMobile,
+                    "top-1/6": isMobile,
+                  },
+                )}
+              >
                 {data.name}
               </div>
-              <div className="absolute bottom-30 left-1/2 -translate-x-1/2">
-                <Button onClick={() => handleButtonClick(true)}>
-                  Overview
-                </Button>
-              </div>
-              <div className="absolute bottom-10 left-1/2 -translate-x-1/2">
-                <Button onClick={() => handleButtonClick()}>
-                  My&nbsp;Duties
-                </Button>
-              </div>
+
+              {/* Remove My Duties button */}
             </div>
+            {isMobile && (
+              <div className="absolute bottom-10 left-1/2 -translate-x-1/2">
+                <Button
+                  className="min-w-[300px]"
+                  onClick={() => flipCard(true)}
+                >
+                  Know More
+                </Button>
+              </div>
+            )}
+
+            {!isMobile && (
+              <div className="w-1/2 h-full relative z-1 bg-theme-ivory text-theme-black p-15 flex flex-col justify-between">
+                <div>
+                  <Overview data={data}></Overview>
+                </div>
+                <Button className="min-w-[300px]" onClick={() => flipCard()}>
+                  My Duties
+                </Button>
+              </div>
+            )}
           </div>
 
-          <div className="w-[800px] overflow-hidden  ">
-            <div
-              ref={content}
-              className="w-full  flex justify-between flex-col origin-left"
-            >
-              <div className="  border-2 border-theme-gray h-full flex flex-col gap-5 min-h-[400px] px-20 py-5 rounded-2xl">
-                {expanded ? (
-                  <Responsibilities data={data} />
-                ) : (
-                  <Overview data={data} />
-                )}
-              </div>
+          <div
+            ref={backRef}
+            className="card-back absolute w-full h-full bg-theme-ivory text-theme-black rounded-2xl overflow-hidden"
+          >
+            <div className="h-full flex flex-col gap-5 p-10">
+              {expanded ? (
+                <Overview data={data} />
+              ) : (
+                <Responsibilities data={data} />
+              )}
+              <Button
+                onClick={expanded ? doubleFlip : () => flipCard()}
+                className="self-center mt-auto min-w-[300px]"
+              >
+                {expanded ? "My Duties" : "Back"}
+              </Button>
             </div>
           </div>
         </div>

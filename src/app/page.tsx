@@ -9,15 +9,17 @@ import Education from "@/Components/Sections/Education";
 import Experience from "@/Components/Sections/Experience";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/all";
+import { ScrollTrigger, TextPlugin } from "gsap/all";
 import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import Contact from "@/Components/Sections/Contact";
+import { ViewportProvider } from "@/Providers/ViewportProvider";
 const Skills = dynamic(() => import("@/Components/Sections/Skills"));
 
 export default function Home() {
   gsap.registerPlugin(ScrollTrigger);
   gsap.registerPlugin(useGSAP);
+  gsap.registerPlugin(TextPlugin);
 
   const [loadSkills, setLoadSkills] = useState(false);
   const [activeTab, setActiveTab] = useState(refs.About);
@@ -78,7 +80,7 @@ export default function Home() {
   }, []);
 
   return (
-    <>
+    <ViewportProvider>
       <div
         className={` bg-theme-black bg-theme-grainy font-biryani text-theme-ivory rounded-b-8xl relative z-20 `}
       >
@@ -90,11 +92,13 @@ export default function Home() {
           activeTab={activeTab}
         />
         <div
-          className={` w-screen h-screen bg-theme-red absolute z-50 ${loading.replace(
+          className={` w-screen h-screen bg-theme-red grid place-items-center absolute z-50 ${loading.replace(
             ".",
             "",
           )}`}
-        />
+        >
+          Loading...
+        </div>
 
         <div className="flex flex-col gap-15">
           <div
@@ -120,10 +124,12 @@ export default function Home() {
             id={refs.Experience}
           >
             <div className="h-[300vh]">
-              <SectionHeading
-                text="Let's begin with the people 🧑‍💻🧑🏻‍💻 I have Worked 🏢 with"
-                triggerClass="experience"
-              />
+              <SectionHeading triggerClass="experience">
+                Let's begin with the{" "}
+                <span className="italic text-theme-sandy">people</span> 🧑‍💻🧑🏻‍💻 I
+                have <span className="semibold text-theme-gray">Worked</span>
+                🏢 with
+              </SectionHeading>
             </div>
 
             <div className="w-full">
@@ -138,12 +144,13 @@ export default function Home() {
             id={refs.Skills}
           >
             <div className="h-[300vh]">
-              <SectionHeading
-                text="to what I learned over the years"
-                triggerClass="skills"
-              />
+              <SectionHeading triggerClass="skills">
+                And, <span className="text-theme-sandy">'The Skills' </span> I
+                gathered over the years
+                <span className="text-theme-gray">ƪ(˘⌣˘)ʃ</span>
+              </SectionHeading>
             </div>
-            {loadSkills && <Skills />}
+            <div className="w-screen h-screen">{loadSkills && <Skills />}</div>
           </div>
           <div
             className="col-span-3"
@@ -152,6 +159,9 @@ export default function Home() {
               anchorRefs.current[refs.Education] = ref;
             }}
           >
+            <SectionHeading triggerClass="education">
+              My Education
+            </SectionHeading>
             <Education />
           </div>
         </div>
@@ -166,6 +176,6 @@ export default function Home() {
       >
         <Contact></Contact>
       </div>
-    </>
+    </ViewportProvider>
   );
 }

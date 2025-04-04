@@ -1,19 +1,16 @@
-import React, { useEffect, useRef } from "react";
+import React, { ReactNode, useEffect, useRef } from "react";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
-// import RecursiveWrapper from "../SpellingAnimation/RecursiveWrapper";
-// import SplitAndId from "../SpellingAnimation";
 
 gsap.registerPlugin(ScrollTrigger);
 
 interface Props {
-  text: string;
+  children: ReactNode;
   triggerClass: string;
 }
 
-const SectionHeading: React.FC<Props> = ({ text, triggerClass }) => {
+const SectionHeading: React.FC<Props> = ({ triggerClass, children }) => {
   const textRef = useRef<HTMLHeadingElement>(null);
-  // const splitTextId = "." + triggerClass + "-split";
 
   useEffect(() => {
     if (textRef.current) {
@@ -40,7 +37,7 @@ const SectionHeading: React.FC<Props> = ({ text, triggerClass }) => {
         ref={textRef}
         className="text-[clamp(4rem,10vw,12rem)] items-center whitespace-nowrap ml-10 font-meddon"
       >
-        {text}
+        {children}
       </h1>
     </div>
   );

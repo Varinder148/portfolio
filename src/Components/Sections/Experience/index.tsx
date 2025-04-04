@@ -1,57 +1,56 @@
+"use client";
+
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/all";
 import React, { useRef } from "react";
 import { CARDS } from "./constants";
-import CardMobile from "./CardMobile";
+import Card from "./Card";
 
 const Experience: React.FC = () => {
   const triggerRef = useRef(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
-    gsap.registerPlugin(ScrollTrigger);
+    if (typeof window === "undefined") return;
+    const cards = gsap.utils.toArray(".stackingcard");
 
-    const totalScroll = containerRef.current!.scrollWidth - window.innerWidth;
-    const snapPoints = Array.from(
-      { length: CARDS.length },
-      (_, i) => i / (CARDS.length - 1),
-    );
+    cards.forEach((card: any, i) => {
+      const angleMultiplier = i % 2 === 1 ? -1 : 1;
+      gsap.to(card, {
+        scale: () => 0.8 + i * 0.035, // Smooth scaling based on index
+        rotate: () => 2 * angleMultiplier, // Rotate based on index
+        ease: "power2.inOut", // Smooth easing for scaling
+        scrollTrigger: {
+          trigger: card,
+          start: `top-=${40 * i} 0`, // Adjust starting point based on card index
+          end: "top 20%", // End when card reaches 20% from top
+          scrub: 1, // Smoothly scrub the animation based on scroll position
+        },
+      });
 
-    const timeline = gsap.timeline({
-      scrollTrigger: {
-        trigger: triggerRef.current,
-        start: "top top",
-        end: () => `+=${totalScroll}`,
-
-        pin: true,
-        invalidateOnRefresh: true,
-        scrub: 0.5,
-        snap: snapPoints,
-      },
+      // Create a ScrollTrigger to pin the card during scroll
+      ScrollTrigger.create({
+        trigger: card,
+        start: `top-=${0 * i} 0`, // Start position based on card index
+        end: "top center", // End position when the card reaches the center
+        endTrigger: ".end-element", // Use a specific end trigger
+        pin: true, // Pin the card while scrolling
+        pinSpacing: false, // Disable pin spacing
+        markers: false, // Set to true for debugging to see the scroll trigger markers
+        id: `card-${i}`, // Unique ID for each card
+      });
     });
-
-    timeline.to(containerRef.current, {
-      translateX: -totalScroll,
-      ease: "none",
-    });
-
-    return () => {
-      timeline.kill();
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
-    };
-  }, []);
+  });
 
   return (
-    <div
-      ref={triggerRef}
-      className="overflow-x-auto w-full h-screen grid place-items-center no-scrollbar "
-    >
-      <div ref={containerRef} className="flex">
-        {CARDS.map((card) => (
-          <CardMobile data={card} key={card.id} />
-        ))}
+    <div ref={triggerRef} className="h-[500vh]">
+      <div ref={containerRef} className="relative">
+        {CARDS.map((card) => {
+          return <Card key={card.id} data={card} />;
+        })}
       </div>
+      <div className="end-element"></div>
     </div>
   );
 };

@@ -9,7 +9,7 @@ interface ButtonProps {
   onClick?: (
     event:
       | React.MouseEvent<HTMLButtonElement>
-      | React.TouchEvent<HTMLButtonElement>
+      | React.TouchEvent<HTMLButtonElement>,
   ) => void;
   className?: string;
 }
@@ -45,7 +45,7 @@ const Button = ({
         duration: 0.5,
         ease: "power1.out",
         boxShadow: "0 0 30px rgba(239, 68, 68, 0.6)",
-      }
+      },
     );
 
     gsap.to(buttonRef.current, {
@@ -98,7 +98,7 @@ const Button = ({
         duration: 0.3,
         ease: "power1.out",
         boxShadow: "0 0 20px rgba(239, 68, 68, 0.6)", // Reduced shadow for mobile
-      }
+      },
     );
 
     gsap.to(buttonRef.current, {
@@ -127,7 +127,7 @@ const Button = ({
       className={clsx(
         "uppercase cursor-pointer relative overflow-hidden border-2 border-theme-red hover:text-theme-black font-rancho touch-none",
         "px-8 py-3 md:px-15 md:py-5", // Responsive padding
-        className
+        className,
       )}
       onClick={onClick}
       onMouseEnter={handleMouseEnter}
@@ -137,10 +137,10 @@ const Button = ({
     >
       <div
         ref={circleRef}
-        className="bg-theme-red -z-10 absolute rounded-full"
+        className="bg-theme-red -z-1 absolute rounded-full"
         style={{
-          width: `1000px`,
-          height: `1000px`,
+          width: `1500px`,
+          height: `1500px`,
           transform: "translate(-50%, -50%)",
           opacity: 0,
         }}
