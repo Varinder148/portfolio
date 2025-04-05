@@ -49,6 +49,19 @@ const About: React.FC<AboutProps> = ({ className = "", scrollToContact }) => {
   useGSAP(() => {
     if (hasPlayed) return;
 
+    gsap.from("#name", {
+      text: {
+        value: "Software Engineer",
+        newClass: "",
+        type: "spread",
+      },
+      delay: 3,
+      duration: 4,
+      yPercent: -100,
+      ease: "back",
+      stagger: 0.2,
+    });
+
     const tl = gsap
       .timeline({ delay: 1.3 })
       .from(spellingId, {
@@ -107,8 +120,8 @@ const About: React.FC<AboutProps> = ({ className = "", scrollToContact }) => {
 
   return (
     <section ref={sectionRef} id="about">
-      <div className="absolute w-full h-screen inset rounded-b-full bg-mountain -z-50 inset-shadow"></div>
-      <div className="absolute w-full h-screen inset opacity-80 bg-theme-black -z-40 "></div>
+      <div className="absolute w-full h-screen inset rounded-b-full bg-mountain -z-50 inset-shadow" />
+      <div className="absolute w-full h-screen inset opacity-80 bg-theme-black -z-40 " />
 
       <div
         className={`bg-theme-grainy h-screen relative flex flex-col items-center justify-between pt-40 md:p-20 md:pb-10  ${
@@ -139,20 +152,10 @@ const About: React.FC<AboutProps> = ({ className = "", scrollToContact }) => {
           <div className="grid grid-cols-1 justify-center items-end ">
             <div className="text-theme-lg md:text-theme-xl font-rancho text-center">
               <div>
-                <RecursiveWrapper
-                  Wrapper={SplitAndId}
-                  wrapperProps={{ group: spellingId }}
-                >
-                  <span
-                    className={` text-theme-red pl-2 font-meddon ${neonEffect.replace(
-                      ".",
-                      "",
-                    )}`}
-                  >
-                    Varinder&nbsp;Singh&nbsp;
-                  </span>
-                  <span className="font-meddon">- Software Engineer </span>
-                </RecursiveWrapper>
+                <span className={` text-theme-red pl-2 font-meddon `} id="name">
+                  Varinder&nbsp;Singh&nbsp;
+                </span>
+
                 <span className="font-noto-color-emoji">👋</span>
               </div>
               <div className={delayedText.replace(".", "")}>
@@ -168,7 +171,7 @@ const About: React.FC<AboutProps> = ({ className = "", scrollToContact }) => {
           className={`flex flex-col w-full gap-10 mt-30 ${delayedText.replace(".", "")}`}
         >
           <div className="flex justify-center gap-1">
-            <Button className="md:min-w-[300px] font-noto-color-emoji ">
+            <Button className="md:min-w-[300px] font-noto-color-emoji py-5  ">
               My resume <span className="font-noto-color-emoji">👔</span>
             </Button>
 

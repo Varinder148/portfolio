@@ -50,7 +50,7 @@ const Experience: React.FC = () => {
           return <Card key={card.id} data={card} />;
         })}
       </div>
-      <div className="end-element"></div>
+      <div className="end-element" />
     </div>
   );
 };

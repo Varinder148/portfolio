@@ -1,6 +1,5 @@
 import { useRef } from "react";
 import { gsap } from "gsap";
-import clsx from "clsx";
 
 import { ReactNode } from "react";
 
@@ -124,11 +123,9 @@ const Button = ({
   return (
     <button
       ref={buttonRef}
-      className={clsx(
-        "uppercase cursor-pointer relative overflow-hidden border-2 border-theme-red hover:text-theme-black font-rancho touch-none",
-        "px-8 py-3 md:px-15 md:py-5", // Responsive padding
-        className,
-      )}
+      className={`
+        uppercase cursor-pointer rounded-8xl relative overflow-hidden border-2 border-theme-red hover:text-theme-black font-rancho touch-none px-8 py-2 md:px-15 md:py-5 ${className}
+      `}
       onClick={onClick}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
@@ -144,7 +141,7 @@ const Button = ({
           transform: "translate(-50%, -50%)",
           opacity: 0,
         }}
-      ></div>
+      />
       <span className="relative z-10 text-sm md:text-base">{children}</span>
     </button>
   );

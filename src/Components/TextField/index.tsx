@@ -5,7 +5,7 @@ interface Props {
   value: string;
   onChange: (value: string) => void;
   className?: string;
-  type?: "text" | "number";
+  type?: "text" | "number" | "email" | "password";
   placeholder?: string;
   validate?: (value: string) => string | undefined;
   multiline?: boolean;
@@ -56,7 +56,7 @@ const TextField = ({
       {/* Label */}
       <label
         htmlFor={label}
-        className="block text-sm font-medium text-gray-700"
+        className="block text-sm font-medium text-theme-black"
       >
         {label}
       </label>

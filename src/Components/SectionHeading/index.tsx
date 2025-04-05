@@ -15,12 +15,12 @@ const SectionHeading: React.FC<Props> = ({ triggerClass, children }) => {
   useEffect(() => {
     if (textRef.current) {
       gsap.to(textRef.current, {
-        xPercent: -75,
+        xPercent: -100,
         ease: "none",
         scrollTrigger: {
           trigger: `.${triggerClass}`,
           start: "top top",
-          end: "+=200%",
+          end: "+=100%",
           pin: true,
           pinSpacing: true,
           scrub: 0.2,
@@ -35,7 +35,7 @@ const SectionHeading: React.FC<Props> = ({ triggerClass, children }) => {
     >
       <h1
         ref={textRef}
-        className="text-[clamp(4rem,10vw,12rem)] items-center whitespace-nowrap ml-10 font-meddon"
+        className="text-[clamp(6rem,10vw,12rem)] items-center whitespace-nowrap  font-meddon"
       >
         {children}
       </h1>

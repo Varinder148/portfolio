@@ -4,8 +4,8 @@ import "./neon.css";
 import {
   Luckiest_Guy,
   Noto_Color_Emoji,
-  Work_Sans,
-  Open_Sans,
+  Montserrat_Alternates,
+  Overpass,
 } from "next/font/google";
 import React from "react";
 
@@ -21,13 +21,13 @@ const colorEmoji = Noto_Color_Emoji({
   variable: "--font-noto-color-emoji",
 });
 
-const rancho = Open_Sans({
-  weight: ["400"],
+const rancho = Montserrat_Alternates({
+  weight: ["300"],
   subsets: ["latin"],
   variable: "--font-rancho",
 });
-const biryani = Work_Sans({
-  weight: ["200", "400", "600"],
+const biryani = Overpass({
+  weight: ["300"],
   subsets: ["latin", "latin-ext"],
   variable: "--font-biryani",
 });

@@ -5,6 +5,7 @@ import menuItems from "./constants";
 import clsx from "clsx";
 import gsap from "gsap";
 import React from "react";
+import { useViewport } from "@/Providers/ViewportProvider";
 
 export const animateCompass = () => {
   const tl = gsap
@@ -70,6 +71,7 @@ const Navigation: React.FC<NavigationProps> = ({
   activeTab,
 }) => {
   const [visible, setVisible] = useState(false);
+  const { isMobile } = useViewport();
 
   const angle = 180 / menuItems.length;
   const circleSize = 400;
@@ -92,7 +94,7 @@ const Navigation: React.FC<NavigationProps> = ({
       <button
         onClick={toggleNav}
         className={clsx(
-          "fixed top-10 right-10 w-20 h-20 bg-theme-ivory rounded-full shadow-theme-spread-lg  shadow-theme-red  grid place-content-center border-2 border-theme-black cursor-pointer z-20",
+          "fixed top-5 right-5 md:top-10 md:right-10 w-15 h-15 md:w-20 md:h-20 bg-theme-ivory rounded-full shadow-theme-spread-lg  shadow-theme-red  grid place-content-center border-2 border-theme-black cursor-pointer z-20",
           {
             hidden: visible,
           },
@@ -102,8 +104,8 @@ const Navigation: React.FC<NavigationProps> = ({
           src="/compass.svg"
           alt="compass"
           id="compass"
-          width={50}
-          height={50}
+          width={isMobile ? 25 : 50}
+          height={isMobile ? 25 : 50}
         />
       </button>
       <div id="list" className="fixed top-0 right-0 z-30 scale-0">
@@ -117,11 +119,11 @@ const Navigation: React.FC<NavigationProps> = ({
 
         <Circle
           fill="fill-theme-ivory "
-          className="h-[1500px] w-[1500px]  top-0 right-0   -translate-y-1/2 translate-x-1/2  border-4 border-theme-black  rounded-full shadow-2xl shadow-theme-black "
+          className="h-[1000px] w-[1000px] md:h-[1500px] md:w-[1500px]  top-0 right-0   -translate-y-1/2 translate-x-1/2  border-4 border-theme-black  rounded-full shadow-2xl shadow-theme-black "
         />
 
         <nav
-          className={`rounded-full absolute flex items-center justify-center  right-[200px] top-[200px] z-40 ${
+          className={`rounded-full absolute flex items-center justify-center right-[100px] top-[100px]  md:right-[200px] md:top-[200px] z-40 scale-70 md:scale-100 ${
             className
           }`}
         >

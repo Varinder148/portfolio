@@ -91,6 +91,7 @@ export default function Home() {
           setActiveTab={setActiveTab}
           activeTab={activeTab}
         />
+
         <div
           className={` w-screen h-screen bg-theme-red grid place-items-center absolute z-50 ${loading.replace(
             ".",
@@ -123,7 +124,7 @@ export default function Home() {
             }}
             id={refs.Experience}
           >
-            <div className="h-[300vh]">
+            <div className="h-[200vh]">
               <SectionHeading triggerClass="experience">
                 Let's begin with the{" "}
                 <span className="italic text-theme-sandy">people</span> 🧑‍💻🧑🏻‍💻 I
@@ -143,7 +144,7 @@ export default function Home() {
             }}
             id={refs.Skills}
           >
-            <div className="h-[300vh]">
+            <div className="h-[200vh]">
               <SectionHeading triggerClass="skills">
                 And, <span className="text-theme-sandy">'The Skills' </span> I
                 gathered over the years
@@ -174,7 +175,7 @@ export default function Home() {
         id={refs.Contact}
         className="w-screen h-screen z-10"
       >
-        <Contact></Contact>
+        <Contact />
       </div>
     </ViewportProvider>
   );

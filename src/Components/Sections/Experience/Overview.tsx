@@ -16,7 +16,7 @@ const Overview: React.FC<{ data: CardProps["data"] }> = ({ data }) => {
     <>
       <div className="flex flex-col items-center">
         <div className="text-theme-2xl">{data.position}</div>
-        <hr className="w-full my-5 shadow-theme-gray shadow-theme-spread-lg text-theme-gray bg-theme-gray h-0.5"></hr>
+        <hr className="w-full my-5 shadow-theme-gray shadow-theme-spread-lg text-theme-gray bg-theme-gray h-0.5" />
       </div>
       <div className="flex items-center  gap-10">
         <MdOutlineAccessTime className="text-theme-gray " />

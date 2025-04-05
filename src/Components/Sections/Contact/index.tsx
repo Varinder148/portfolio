@@ -2,7 +2,11 @@ import Button from "@/Components/Button";
 import TextField from "@/Components/TextField";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import Link from "next/link";
 import React, { useState } from "react";
+import { FaLinkedin } from "react-icons/fa";
+import { FaSquarePhone } from "react-icons/fa6";
+import { MdEmail } from "react-icons/md";
 
 const Contact: React.FC = () => {
   const REVEAL = "reveal";
@@ -48,23 +52,32 @@ const Contact: React.FC = () => {
   };
 
   return (
-    <div className={`w-screen h-screen ${TRIGGER}`} id="education">
+    <div
+      className={`w-screen h-screen font-biryani  ${TRIGGER}`}
+      id="education"
+    >
       <div
-        className={`relative items-center flex-col  w-screen h-screen   ${REVEAL}`}
+        className={`relative h-full items-center gap-20 my-10 px-10 md:gap-10 w-screen flex-col flex lg:flex-row justify-start md:justify-evenly  ${REVEAL}`}
       >
-        <div className={"flex items-center flex-col pt-15 w-screen h-screen  "}>
-          <h1 className={"text-8xl text-theme-red font-meddon mb-25  "}>
-            Let's connect
+        <div className={"flex items-center flex-col pt-15  "}>
+          <h1
+            className={
+              "text-xl md:text-3xl text-theme-red font-meddon mb-5 md:mb-15 "
+            }
+          >
+            Let's build awesome things together!
           </h1>
-          <div className={"grid grid-cols-2 w-1/2 gap-5  "}>
+
+          <div className={"grid grid-cols-2 gap-5  "}>
             <TextField
-              label={"Your Email"}
+              label={"Email address:"}
               value={email}
+              type="email"
               onChange={(value: string) => setEmail(value)}
               validate={validateEmail}
             />
             <TextField
-              label={"Your Name"}
+              label={"Name:"}
               value={name}
               onChange={(value: string) => setName(value)}
               validate={validateEmpty}
@@ -77,24 +90,43 @@ const Contact: React.FC = () => {
               multiline
             />
             <Button
-              className="col-span-2 w-[400px] mx-auto"
+              className="col-span-2 py-2 px-10 font-semibold mx-auto"
               onClick={handleSubmit}
             >
-              Send <span className="font-noto-color-emoji text-2xl">🦅</span>
+              Send
             </Button>
           </div>
-          <div className={"grid grid-cols-2 gap-5 mt-auto mb-5   "}>
-            <div className="text-theme-2xl text-theme-red col-span-2 text-center font-meddon">
-              or, Contact me directly
-            </div>
-            <div>M: +91 7696134521</div>
-
-            <a
-              className="text-theme-sandy hover:text-theme-red font-semibold"
+        </div>
+        <div className="">
+          <h1
+            className={
+              "text-xl md:text-3xl text-theme-red font-meddon mb-5 md:mb-15 "
+            }
+          >
+            Get in touch with me!
+          </h1>
+          <div className="flex lg:gap-5 mb-5 text-5xl justify-self-center ">
+            <Link
               href="mailto:varindersingh14.vs@gmail.com"
+              target="_blank"
+              rel="noopener noreferrer"
             >
-              Email: varindersingh14.vs@gmail.com
-            </a>
+              <MdEmail className="text-theme-black hover:text-theme-red" />
+            </Link>
+            <Link
+              href="https://in.linkedin.com/in/varinder-singh-2317b8150"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FaLinkedin className="text-theme-black hover:text-theme-red" />
+            </Link>
+            <Link
+              href="tel:+917696134521"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FaSquarePhone className="text-theme-black hover:text-theme-red" />
+            </Link>
           </div>
         </div>
       </div>
