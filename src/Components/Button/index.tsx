@@ -124,7 +124,7 @@ const Button = ({
     <button
       ref={buttonRef}
       className={`
-        uppercase cursor-pointer rounded-8xl relative overflow-hidden border-2 border-theme-red hover:text-theme-black font-rancho touch-none px-8 py-2 md:px-15 md:py-5 ${className}
+        uppercase cursor-pointer rounded-8xl relative overflow-hidden border-2 border-theme-red hover:text-theme-black font-montserrat touch-none px-8 py-2 md:px-15 md:py-5 ${className}
       `}
       onClick={onClick}
       onMouseEnter={handleMouseEnter}

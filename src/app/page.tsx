@@ -5,7 +5,6 @@ import Navigation from "@/Components/Navigation";
 import { refs } from "@/Components/Navigation/constants";
 import SectionHeading from "@/Components/SectionHeading";
 import About from "@/Components/Sections/About";
-import Education from "@/Components/Sections/Education";
 import Experience from "@/Components/Sections/Experience";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
@@ -20,6 +19,7 @@ export default function Home() {
   gsap.registerPlugin(ScrollTrigger);
   gsap.registerPlugin(useGSAP);
   gsap.registerPlugin(TextPlugin);
+  const pinTriggerContact = "pinTrigger";
 
   const [loadSkills, setLoadSkills] = useState(false);
   const [activeTab, setActiveTab] = useState(refs.About);
@@ -29,7 +29,6 @@ export default function Home() {
   const anchorRefs = useRef<{ [key: string]: HTMLDivElement | null }>({
     [refs.About]: null,
     [refs.Experience]: null,
-    [refs.Education]: null,
     [refs.Skills]: null,
     [refs.Contact]: null,
   });
@@ -38,6 +37,7 @@ export default function Home() {
     gsap.to(loading, {
       yPercent: -100,
       display: "none",
+      delay: 0.2,
     });
   });
 
@@ -82,10 +82,9 @@ export default function Home() {
   return (
     <ViewportProvider>
       <div
-        className={` bg-theme-black bg-theme-grainy font-biryani text-theme-ivory rounded-b-8xl relative z-20 `}
+        className={` bg-theme-black bg-theme-grainy font-overpass text-theme-ivory rounded-b-4xl md:rounded-b-8xl relative z-20 `}
       >
         <CustomMousePointer />
-        {/* <Skills /> */}
         <Navigation
           refs={anchorRefs}
           setActiveTab={setActiveTab}
@@ -138,7 +137,7 @@ export default function Home() {
             </div>
           </div>
           <div
-            className="w-screen"
+            className={`w-screen  ${pinTriggerContact}`}
             ref={(ref) => {
               anchorRefs.current[refs.Skills] = ref;
             }}
@@ -151,19 +150,7 @@ export default function Home() {
                 <span className="text-theme-gray">ƪ(˘⌣˘)ʃ</span>
               </SectionHeading>
             </div>
-            <div className="w-screen h-screen">{loadSkills && <Skills />}</div>
-          </div>
-          <div
-            className="col-span-3"
-            id={refs.Education}
-            ref={(ref) => {
-              anchorRefs.current[refs.Education] = ref;
-            }}
-          >
-            <SectionHeading triggerClass="education">
-              My Education
-            </SectionHeading>
-            <Education />
+            <div className="w-screen h-[120vh]">{loadSkills && <Skills />}</div>
           </div>
         </div>
       </div>
@@ -173,9 +160,9 @@ export default function Home() {
           anchorRefs.current[refs.Contact] = ref;
         }}
         id={refs.Contact}
-        className="w-screen h-screen z-10"
+        className="w-screen h-screen"
       >
-        <Contact />
+        <Contact pinTriggerContact={pinTriggerContact} />
       </div>
     </ViewportProvider>
   );

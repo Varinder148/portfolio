@@ -35,7 +35,7 @@ const SectionHeading: React.FC<Props> = ({ triggerClass, children }) => {
     >
       <h1
         ref={textRef}
-        className="text-[clamp(6rem,10vw,12rem)] items-center whitespace-nowrap  font-meddon"
+        className="text-[clamp(6rem,10vw,12rem)] items-center whitespace-nowrap  font-luckiest-guy"
       >
         {children}
       </h1>

@@ -8,19 +8,18 @@ import { FaLinkedin } from "react-icons/fa";
 import { FaSquarePhone } from "react-icons/fa6";
 import { MdEmail } from "react-icons/md";
 
-const Contact: React.FC = () => {
+const Contact = ({ pinTriggerContact }: { pinTriggerContact: string }) => {
   const REVEAL = "reveal";
-  const TRIGGER = "trigger";
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
 
   useGSAP(() => {
     const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: `.${TRIGGER}`, // Element that triggers the animation
-        start: "top", // Animation starts when the top of '.content' reaches 80% of the viewport height
-        scrub: true, // Smooth scrubbing
+      scrollbindTrigger: {
+        bindTrigger: `.${pinTriggerContact}`,
+        start: "top",
+        markers: true,
       },
     });
 
@@ -28,8 +27,6 @@ const Contact: React.FC = () => {
       position: "fixed",
       top: 0,
       left: 0,
-      duration: 1,
-      stagger: 0.2, // Delay between animations of each item
       ease: "power2.out",
     });
   });
@@ -52,17 +49,14 @@ const Contact: React.FC = () => {
   };
 
   return (
-    <div
-      className={`w-screen h-screen font-biryani  ${TRIGGER}`}
-      id="education"
-    >
+    <div className={`w-screen h-screen font-overpass`} id="education">
       <div
         className={`relative h-full items-center gap-20 my-10 px-10 md:gap-10 w-screen flex-col flex lg:flex-row justify-start md:justify-evenly  ${REVEAL}`}
       >
         <div className={"flex items-center flex-col pt-15  "}>
           <h1
             className={
-              "text-xl md:text-3xl text-theme-red font-meddon mb-5 md:mb-15 "
+              "text-xl md:text-3xl text-theme-red font-luckiest-guy mb-5 md:mb-15 "
             }
           >
             Let's build awesome things together!
@@ -100,7 +94,7 @@ const Contact: React.FC = () => {
         <div className="">
           <h1
             className={
-              "text-xl md:text-3xl text-theme-red font-meddon mb-5 md:mb-15 "
+              "text-xl md:text-3xl text-theme-red font-luckiest-guy mb-5 md:mb-15 "
             }
           >
             Get in touch with me!

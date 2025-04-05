@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import "./neon.css";
+
 import {
   Luckiest_Guy,
   Noto_Color_Emoji,
@@ -9,10 +9,10 @@ import {
 } from "next/font/google";
 import React from "react";
 
-const meddon = Luckiest_Guy({
+const luckiestGuy = Luckiest_Guy({
   weight: ["400"],
   subsets: ["latin"],
-  variable: "--font-meddon",
+  variable: "--font-luckiest-guy",
 });
 
 const colorEmoji = Noto_Color_Emoji({
@@ -21,15 +21,15 @@ const colorEmoji = Noto_Color_Emoji({
   variable: "--font-noto-color-emoji",
 });
 
-const rancho = Montserrat_Alternates({
+const montserrat = Montserrat_Alternates({
   weight: ["300"],
   subsets: ["latin"],
-  variable: "--font-rancho",
+  variable: "--font-montserrat",
 });
-const biryani = Overpass({
+const overpass = Overpass({
   weight: ["300"],
   subsets: ["latin", "latin-ext"],
-  variable: "--font-biryani",
+  variable: "--font-overpass",
 });
 
 export const metadata: Metadata = {
@@ -45,7 +45,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${meddon.variable} ${colorEmoji.variable} ${rancho.variable} ${biryani.variable} bg-theme-ivory bg-theme-grainy text-theme-black`}
+        className={`${luckiestGuy.variable} ${colorEmoji.variable} ${montserrat.variable} ${overpass.variable} bg-theme-ivory bg-theme-grainy text-theme-black`}
       >
         {children}
       </body>

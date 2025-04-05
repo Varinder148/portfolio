@@ -8,6 +8,7 @@ import RecursiveWrapper from "@/Components/SpellingAnimation/RecursiveWrapper";
 import SplitAndId from "@/Components/SpellingAnimation";
 import Button from "@/Components/Button";
 import { NEON } from "@/utils/constants";
+import Link from "next/link";
 
 interface AboutProps {
   className?: string;
@@ -130,12 +131,9 @@ const About: React.FC<AboutProps> = ({ className = "", scrollToContact }) => {
       >
         <div className="flex flex-col w-full items-center">
           <div className="flex items-center">
-            <h1 className="font-meddon text-4xl tracking-widest md:text-[clamp(4rem,10vw,12rem)] justify-self-center pb-15 relative">
+            <h1 className="font-luckiest-guy text-4xl tracking-widest md:text-[clamp(4rem,10vw,12rem)] justify-self-center pb-15 relative">
               <div className={"stroke-text absolute   "}>
-                <span className="flex items-center">
-                  HEY!
-                  {/* <span className="font-noto-color-emoji">👋</span> */}
-                </span>
+                <span className="flex items-center">HEY!</span>
               </div>
               <div id="welcome">
                 <RecursiveWrapper
@@ -148,11 +146,13 @@ const About: React.FC<AboutProps> = ({ className = "", scrollToContact }) => {
             </h1>
           </div>
 
-          {/* <hr className="w-full h-0.5 bg-theme-gray text-theme-gray my-15"></hr> */}
           <div className="grid grid-cols-1 justify-center items-end ">
-            <div className="text-theme-lg md:text-theme-xl font-rancho text-center">
+            <div className="text-theme-lg md:text-theme-xl font-montserrat text-center">
               <div>
-                <span className={` text-theme-red pl-2 font-meddon `} id="name">
+                <span
+                  className={` text-theme-red pl-2 font-luckiest-guy `}
+                  id="name"
+                >
                   Varinder&nbsp;Singh&nbsp;
                 </span>
 
@@ -171,9 +171,11 @@ const About: React.FC<AboutProps> = ({ className = "", scrollToContact }) => {
           className={`flex flex-col w-full gap-10 mt-30 ${delayedText.replace(".", "")}`}
         >
           <div className="flex justify-center gap-1">
-            <Button className="md:min-w-[300px] font-noto-color-emoji py-5  ">
-              My resume <span className="font-noto-color-emoji">👔</span>
-            </Button>
+            <Link href="./resume.pdf" target="_blank" download>
+              <Button className="md:min-w-[300px] py-5  ">
+                My resume <span className="font-noto-color-emoji">👔</span>
+              </Button>
+            </Link>
 
             <Button
               className="md:min-w-[300px]"

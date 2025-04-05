@@ -107,7 +107,7 @@ const Card: React.FC<CardProps> = ({ data, className }) => {
               </div>
               <div
                 className={clsx(
-                  "absolute  left-1/2 -translate-1/2 text-theme-white text-6xl font-rancho text-center",
+                  "absolute  left-1/2 -translate-1/2 text-theme-white text-6xl font-montserrat text-center",
                   {
                     "top-1/2": !isMobile,
                     "top-1/6": isMobile,
