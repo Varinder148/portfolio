@@ -2,7 +2,7 @@ export const CARDS = [
   {
     id: 1,
     color: "#000000",
-    image: "./infosys.png",
+    image: "./infosys.webp",
     name: "Infosys",
     from: "5 Aug, 2019",
     to: "6 Sep, 2021",
@@ -16,7 +16,7 @@ export const CARDS = [
   {
     id: 2,
     color: "#66ff66",
-    image: "./geektrust.jpg",
+    image: "./geektrust.webp",
     name: "Geektrust",
     from: "8 Sep, 2021",
     to: "22 Apr, 2022",
@@ -32,7 +32,7 @@ export const CARDS = [
   {
     id: 3,
     color: "#6666ff",
-    image: "./thoughtworks.jpg",
+    image: "./thoughtworks.webp",
     name: "Thoughtworks",
     from: "25 Apr, 2022",
     to: "09 Jun, 2023",
@@ -48,7 +48,7 @@ export const CARDS = [
   {
     id: 4,
     color: "#ffff66",
-    image: "./gartner.jpg",
+    image: "./gartner.webp",
     name: "Gartner",
     from: "12 Jun, 2023",
     to: "present",

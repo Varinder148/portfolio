@@ -93,10 +93,10 @@ const Button = ({
         boxShadow: "0 0 0 rgba(239, 68, 68, 0)",
       },
       {
-        scale: 0.8, // Slightly smaller scale for mobile
+        scale: 0.8,
         duration: 0.3,
         ease: "power1.out",
-        boxShadow: "0 0 20px rgba(239, 68, 68, 0.6)", // Reduced shadow for mobile
+        boxShadow: "0 0 20px rgba(239, 68, 68, 0.6)",
       },
     );
 

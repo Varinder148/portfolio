@@ -1,5 +1,5 @@
 import { useState, RefObject } from "react";
-import Circle from "../BackgroundLayout.tsx/Circle";
+import Circle from "../Circle";
 import Image from "next/image";
 import menuItems from "./constants";
 import clsx from "clsx";

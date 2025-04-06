@@ -1,6 +1,3 @@
-import { IoLocationOutline } from "react-icons/io5";
-import { MdOutlineAccessTime } from "react-icons/md";
-
 // Define or import CardProps
 interface CardProps {
   data: {
@@ -19,11 +16,11 @@ const Overview: React.FC<{ data: CardProps["data"] }> = ({ data }) => {
         <hr className="w-full my-5 shadow-theme-gray shadow-theme-spread-lg text-theme-gray bg-theme-gray h-0.5" />
       </div>
       <div className="flex items-center  gap-10">
-        <MdOutlineAccessTime className="text-theme-gray " />
+        {/* <MdOutlineAccessTime className="text-theme-gray " /> */}
         {data.from}&nbsp;-&nbsp;{data.to}
       </div>
       <div className="flex items-center  gap-10">
-        <IoLocationOutline className="text-theme-gray" />
+        {/* <IoLocationOutline className="text-theme-gray" /> */}
         {data.location}
       </div>
     </>

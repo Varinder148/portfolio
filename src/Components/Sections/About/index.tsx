@@ -2,10 +2,7 @@ import { useGSAP } from "@gsap/react";
 import { useEffect, useRef, useState } from "react";
 import Time from "./Time";
 import gsap from "gsap";
-// import Image from "next/image";
 import React from "react";
-import RecursiveWrapper from "@/Components/SpellingAnimation/RecursiveWrapper";
-import SplitAndId from "@/Components/SpellingAnimation";
 import Button from "@/Components/Button";
 import { NEON } from "@/utils/constants";
 import Link from "next/link";
@@ -49,19 +46,6 @@ const About: React.FC<AboutProps> = ({ className = "", scrollToContact }) => {
 
   useGSAP(() => {
     if (hasPlayed) return;
-
-    gsap.from("#name", {
-      text: {
-        value: "Software Engineer",
-        newClass: "",
-        type: "spread",
-      },
-      delay: 3,
-      duration: 4,
-      yPercent: -100,
-      ease: "back",
-      stagger: 0.2,
-    });
 
     const tl = gsap
       .timeline({ delay: 1.3 })
@@ -136,12 +120,12 @@ const About: React.FC<AboutProps> = ({ className = "", scrollToContact }) => {
                 <span className="flex items-center">HEY!</span>
               </div>
               <div id="welcome">
-                <RecursiveWrapper
+                {/* <RecursiveWrapper
                   Wrapper={SplitAndId}
                   wrapperProps={{ group: spellingId }}
-                >
-                  <span className={neonEffect.replace(".", "")}>HEY!</span>
-                </RecursiveWrapper>
+                > */}
+                <span id="hey">HEY!</span>
+                {/* </RecursiveWrapper> */}
               </div>
             </h1>
           </div>
@@ -150,18 +134,40 @@ const About: React.FC<AboutProps> = ({ className = "", scrollToContact }) => {
             <div className="text-theme-lg md:text-theme-xl font-montserrat text-center">
               <div>
                 <span
-                  className={` text-theme-red pl-2 font-luckiest-guy `}
+                  className={` text-theme-red pl-2 text-4xl font-luckiest-guy `}
                   id="name"
+                  onMouseEnter={() => {
+                    gsap.to("#name", {
+                      text: {
+                        value: "Software Engineer",
+                        // padSpace: true,
+                        // newClass: "text-theme-ivory ",
+                        // type: "spread",
+                      },
+                      // delay: 3,
+                    });
+                  }}
+                  onMouseLeave={() => {
+                    gsap.to("#name", {
+                      text: {
+                        value: "Varinder&nbsp;Singh",
+                        padSpace: true,
+
+                        newClass: "text-theme-ivory ",
+                        // type: "spread",
+                      },
+                      // delay: 3,
+                    });
+                  }}
                 >
                   Varinder&nbsp;Singh&nbsp;
                 </span>
 
                 <span className="font-noto-color-emoji">👋</span>
               </div>
-              <div className={delayedText.replace(".", "")}>
+              <div>
                 I have been helping organisations with their{" "}
-                <i>UI development</i> needs from the past ⌛
-                <Time />
+                <i>UI development</i> needs from the past ⌛<Time></Time>
               </div>
             </div>
           </div>

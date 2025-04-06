@@ -9,6 +9,7 @@ import React, {
 // Define the context and its types
 interface ViewportContextType {
   isMobile: boolean;
+  isTouchDevice: boolean;
   viewportWidth: number;
   viewportHeight: number;
 }
@@ -21,6 +22,7 @@ const ViewportProvider = ({ children }: { children: ReactNode }) => {
   const [viewportWidth, setViewportWidth] = useState<number>(0);
   const [viewportHeight, setViewportHeight] = useState<number>(0);
   const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [isTouchDevice, setIsTouchDevice] = useState<boolean>(false);
 
   // Handle resizing and viewport changes
   useEffect(() => {
@@ -29,6 +31,18 @@ const ViewportProvider = ({ children }: { children: ReactNode }) => {
       setViewportHeight(window.innerHeight);
       setIsMobile(window.innerWidth < 768); // Define mobile based on width
     };
+
+    // Check if the device is a touch device
+    const checkTouchDevice = () => {
+      return (
+        "ontouchstart" in window ||
+        navigator.maxTouchPoints > 0 ||
+        //@ts-ignore
+        navigator.msMaxTouchPoints > 0
+      );
+    };
+
+    setIsTouchDevice(checkTouchDevice());
 
     // Add resize listener on mount
     window.addEventListener("resize", handleResize);
@@ -42,7 +56,7 @@ const ViewportProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <ViewportContext.Provider
-      value={{ isMobile, viewportWidth, viewportHeight }}
+      value={{ isMobile, isTouchDevice, viewportWidth, viewportHeight }}
     >
       {children}
     </ViewportContext.Provider>

@@ -13,4 +13,8 @@ const nextConfig: NextConfig = {
   output: "export",
 };
 
+// const withBundleAnalyzer = require("@next/bundle-analyzer")({
+//   enabled: "false",
+// });
+
 export default nextConfig;

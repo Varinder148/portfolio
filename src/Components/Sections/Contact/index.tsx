@@ -1,12 +1,12 @@
+import Linkedin from "@/app/Svgs/Linkedin";
+import Mail from "@/app/Svgs/Mail";
+import Phone from "@/app/Svgs/Phone";
 import Button from "@/Components/Button";
 import TextField from "@/Components/TextField";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import Link from "next/link";
 import React, { useState } from "react";
-import { FaLinkedin } from "react-icons/fa";
-import { FaSquarePhone } from "react-icons/fa6";
-import { MdEmail } from "react-icons/md";
 
 const Contact = ({ pinTriggerContact }: { pinTriggerContact: string }) => {
   const REVEAL = "reveal";
@@ -51,7 +51,7 @@ const Contact = ({ pinTriggerContact }: { pinTriggerContact: string }) => {
   return (
     <div className={`w-screen h-screen font-overpass`} id="education">
       <div
-        className={`relative h-full items-center gap-20 my-10 px-10 md:gap-10 w-screen flex-col flex lg:flex-row justify-start md:justify-evenly  ${REVEAL}`}
+        className={`relative h-full items-center gap-20 mb-10 px-10 md:gap-10 w-screen flex-col flex lg:flex-row justify-start md:justify-evenly  ${REVEAL}`}
       >
         <div className={"flex items-center flex-col pt-15  "}>
           <h1
@@ -94,32 +94,44 @@ const Contact = ({ pinTriggerContact }: { pinTriggerContact: string }) => {
         <div className="">
           <h1
             className={
-              "text-xl md:text-3xl text-theme-red font-luckiest-guy mb-5 md:mb-15 "
+              "text-xl md:text-3xl text-theme-red font-luckiest-guy  lg:mb-15 "
             }
           >
             Get in touch with me!
           </h1>
-          <div className="flex lg:gap-5 mb-5 text-5xl justify-self-center ">
+          <div className="flex gap-5  justify-self-center py-5 ">
             <Link
               href="mailto:varindersingh14.vs@gmail.com"
               target="_blank"
               rel="noopener noreferrer"
             >
-              <MdEmail className="text-theme-black hover:text-theme-red" />
+              <Mail
+                width={60}
+                height={60}
+                className="hover:text-theme-red border-2 border-theme-gray text-theme-gray p-2 rounded-lg hover:border-theme-red"
+              />
             </Link>
             <Link
               href="https://in.linkedin.com/in/varinder-singh-2317b8150"
               target="_blank"
               rel="noopener noreferrer"
             >
-              <FaLinkedin className="text-theme-black hover:text-theme-red" />
+              <Linkedin
+                height={60}
+                width={60}
+                className="hover:text-theme-red border-2 border-theme-gray text-theme-gray p-2 rounded-lg hover:border-theme-red"
+              />
             </Link>
             <Link
               href="tel:+917696134521"
               target="_blank"
               rel="noopener noreferrer"
             >
-              <FaSquarePhone className="text-theme-black hover:text-theme-red" />
+              <Phone
+                height={60}
+                width={60}
+                className="hover:text-theme-red border-2 border-theme-gray text-theme-gray p-2 rounded-lg hover:border-theme-red"
+              ></Phone>
             </Link>
           </div>
         </div>
@@ -128,4 +140,4 @@ const Contact = ({ pinTriggerContact }: { pinTriggerContact: string }) => {
   );
 };
 
-export default Contact;
+export default React.memo(Contact);

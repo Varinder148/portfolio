@@ -27,10 +27,6 @@ function getScaleFactor(viewportWidth: number) {
     return 1.5;
   }
 
-  if (viewportWidth <= minWidth) {
-    return 0.5;
-  }
-
   const scaleFactor =
     1.5 - (1.0 * (viewportWidth - minWidth)) / (maxWidth - minWidth);
 
@@ -316,4 +312,4 @@ const Skills: React.FC = () => {
   );
 };
 
-export default Skills;
+export default React.memo(Skills);

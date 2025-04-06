@@ -1,7 +1,7 @@
 import Button from "@/Components/Button";
 import gsap from "gsap";
 import Image from "next/image";
-import { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import Responsibilities from "./Responsibilities";
 import Overview from "./Overview";
 import "./Card.css";
@@ -107,7 +107,7 @@ const Card: React.FC<CardProps> = ({ data, className }) => {
               </div>
               <div
                 className={clsx(
-                  "absolute  left-1/2 -translate-1/2 text-theme-white text-6xl font-montserrat text-center",
+                  "absolute  left-1/2 -translate-1/2 text-theme-white text-4xl md:text-6xl font-montserrat text-center",
                   {
                     "top-1/2": !isMobile,
                     "top-1/6": isMobile,
@@ -166,4 +166,4 @@ const Card: React.FC<CardProps> = ({ data, className }) => {
   );
 };
 
-export default Card;
+export default React.memo(Card);

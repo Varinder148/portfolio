@@ -1,5 +1,7 @@
+"use client";
+
 import formatTime from "@/utils/timeCalculator";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, memo } from "react";
 
 const Time = () => {
   const [time, setTime] = useState("");
@@ -13,6 +15,7 @@ const Time = () => {
       setTime(formatTime(totalTime));
     };
 
+    console.log("Time updated");
     updateTime();
 
     const id = setInterval(updateTime, 1000);
@@ -29,4 +32,4 @@ const Time = () => {
   );
 };
 
-export default Time;
+export default memo(Time);

@@ -2,32 +2,19 @@ import React, { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { THEME } from "@/utils/constants";
 import clsx from "clsx";
+import { useViewport } from "@/Providers/ViewportProvider";
 
 const CustomMousePointer: React.FC = () => {
   const pointerRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<GSAPTween | null>(null);
   const secondaryPointerRef = useRef<HTMLDivElement>(null);
   const secondaryAnimationRef = useRef<GSAPTween | null>(null);
+  const { isTouchDevice } = useViewport();
 
   const [isHovered, setIsHovered] = useState(false);
-  const [isDesktop, setIsDesktop] = useState(false);
 
   useEffect(() => {
-    // Check if device is desktop
-    const checkDevice = () => {
-      const isTouchDevice =
-        "ontouchstart" in window || navigator.maxTouchPoints > 0;
-      const isWideScreen = window.innerWidth >= 1024;
-      setIsDesktop(!isTouchDevice && isWideScreen);
-    };
-
-    checkDevice();
-    window.addEventListener("resize", checkDevice);
-    return () => window.removeEventListener("resize", checkDevice);
-  }, []);
-
-  useEffect(() => {
-    if (!isDesktop) return;
+    if (isTouchDevice) return;
 
     const onMouseMove = (event: MouseEvent) => {
       const { clientX, clientY } = event;
@@ -109,9 +96,9 @@ const CustomMousePointer: React.FC = () => {
         animationRef.current.kill();
       }
     };
-  }, [isHovered, isDesktop]);
+  }, [isHovered, isTouchDevice]);
 
-  if (!isDesktop) return null;
+  if (isTouchDevice) return null;
 
   return (
     <>
