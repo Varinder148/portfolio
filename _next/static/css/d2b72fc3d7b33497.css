@@ -1,0 +1,1 @@
+.card{transform-style:preserve-3d;perspective:2000px}.card-back,.card-front{backface-visibility:hidden}.card-back{transform:rotateY(180deg)}
