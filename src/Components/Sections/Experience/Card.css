@@ -1,9 +1,8 @@
-.card-container {
-  perspective: 1000px;
-}
+
 
 .card {
   transform-style: preserve-3d;
+  perspective: 2000px;
 }
 
 .card-front,
@@ -14,3 +13,4 @@
 .card-back {
   transform: rotateY(180deg);
 }
+

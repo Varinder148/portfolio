@@ -145,9 +145,12 @@ export default function Home() {
           >
             <div className="h-[200vh]">
               <SectionHeading triggerClass="skills">
-                And, <span className="text-theme-sandy">'The Skills' </span> I
-                gathered over the years
-                <span className="text-theme-gray">ƪ(˘⌣˘)ʃ</span>
+                And,{" "}
+                <span className="text-theme-sandy">
+                  'The Technical Skills'{" "}
+                </span>{" "}
+                I gathered over the years
+                <span className="text-theme-gray"></span>
               </SectionHeading>
             </div>
             <div className="w-screen h-[120vh]">{loadSkills && <Skills />}</div>

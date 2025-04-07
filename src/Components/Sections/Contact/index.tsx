@@ -3,6 +3,7 @@ import Mail from "@/app/Svgs/Mail";
 import Phone from "@/app/Svgs/Phone";
 import Button from "@/Components/Button";
 import TextField from "@/Components/TextField";
+import { useViewport } from "@/Providers/ViewportProvider";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import Link from "next/link";
@@ -13,6 +14,7 @@ const Contact = ({ pinTriggerContact }: { pinTriggerContact: string }) => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
+  const { isMobile } = useViewport();
 
   useGSAP(() => {
     const tl = gsap.timeline({
@@ -51,12 +53,12 @@ const Contact = ({ pinTriggerContact }: { pinTriggerContact: string }) => {
   return (
     <div className={`w-screen h-screen font-overpass`} id="education">
       <div
-        className={`relative h-full items-center gap-20 mb-10 px-10 md:gap-10 w-screen flex-col flex lg:flex-row justify-start md:justify-evenly  ${REVEAL}`}
+        className={`relative h-full items-center gap-20 mb-10 px-10 md:gap-10 w-screen flex-col flex lg:flex-row justify-evenly  ${REVEAL}`}
       >
-        <div className={"flex items-center flex-col pt-15  "}>
+        <div className={"flex items-center  flex-col pt-15  "}>
           <h1
             className={
-              "text-xl md:text-3xl text-theme-red font-luckiest-guy mb-5 md:mb-15 "
+              "text-2xl md:text-3xl text-center text-theme-red font-luckiest-guy mb-5 md:mb-15 "
             }
           >
             Let's build awesome things together!
@@ -94,7 +96,7 @@ const Contact = ({ pinTriggerContact }: { pinTriggerContact: string }) => {
         <div className="">
           <h1
             className={
-              "text-xl md:text-3xl text-theme-red font-luckiest-guy  lg:mb-15 "
+              "text-2xl md:text-3xl text-theme-red font-luckiest-guy  lg:mb-15 "
             }
           >
             Get in touch with me!
@@ -106,8 +108,8 @@ const Contact = ({ pinTriggerContact }: { pinTriggerContact: string }) => {
               rel="noopener noreferrer"
             >
               <Mail
-                width={60}
-                height={60}
+                width={isMobile ? 36 : 60}
+                height={isMobile ? 36 : 60}
                 className="hover:text-theme-red border-2 border-theme-gray text-theme-gray p-2 rounded-lg hover:border-theme-red"
               />
             </Link>
@@ -117,8 +119,8 @@ const Contact = ({ pinTriggerContact }: { pinTriggerContact: string }) => {
               rel="noopener noreferrer"
             >
               <Linkedin
-                height={60}
-                width={60}
+                height={isMobile ? 36 : 60}
+                width={isMobile ? 36 : 60}
                 className="hover:text-theme-red border-2 border-theme-gray text-theme-gray p-2 rounded-lg hover:border-theme-red"
               />
             </Link>
@@ -128,8 +130,8 @@ const Contact = ({ pinTriggerContact }: { pinTriggerContact: string }) => {
               rel="noopener noreferrer"
             >
               <Phone
-                height={60}
-                width={60}
+                height={isMobile ? 36 : 60}
+                width={isMobile ? 36 : 60}
                 className="hover:text-theme-red border-2 border-theme-gray text-theme-gray p-2 rounded-lg hover:border-theme-red"
               ></Phone>
             </Link>

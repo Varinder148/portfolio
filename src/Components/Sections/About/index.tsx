@@ -4,7 +4,6 @@ import Time from "./Time";
 import gsap from "gsap";
 import React from "react";
 import Button from "@/Components/Button";
-import { NEON } from "@/utils/constants";
 import Link from "next/link";
 
 interface AboutProps {
@@ -55,11 +54,9 @@ const About: React.FC<AboutProps> = ({ className = "", scrollToContact }) => {
         duration: 0.05,
         ease: "none",
       })
-      .to(neonEffect, {
-        textShadow: NEON,
-      })
       .to("#welcome", {
         delay: 2,
+
         textShadow: "none",
         rotate: -10,
         duration: 0.5,
@@ -109,23 +106,18 @@ const About: React.FC<AboutProps> = ({ className = "", scrollToContact }) => {
       <div className="absolute w-full h-screen inset opacity-80 bg-theme-black -z-40 " />
 
       <div
-        className={`bg-theme-grainy h-screen relative flex flex-col items-center justify-between pt-40 md:p-20 md:pb-10  ${
+        className={`bg-theme-grainy h-screen relative flex flex-col items-center justify-between pt-10  md:p-20 md:pb-10  ${
           className
         }`}
       >
         <div className="flex flex-col w-full items-center">
           <div className="flex items-center">
-            <h1 className="font-luckiest-guy text-4xl tracking-widest md:text-[clamp(4rem,10vw,12rem)] justify-self-center pb-15 relative">
+            <h1 className="font-luckiest-guy  tracking-widest text-[clamp(5rem,10vw,12rem)] justify-self-center pb-15 relative">
               <div className={"stroke-text absolute   "}>
                 <span className="flex items-center">HEY!</span>
               </div>
               <div id="welcome">
-                {/* <RecursiveWrapper
-                  Wrapper={SplitAndId}
-                  wrapperProps={{ group: spellingId }}
-                > */}
                 <span id="hey">HEY!</span>
-                {/* </RecursiveWrapper> */}
               </div>
             </h1>
           </div>
@@ -133,6 +125,7 @@ const About: React.FC<AboutProps> = ({ className = "", scrollToContact }) => {
           <div className="grid grid-cols-1 justify-center items-end ">
             <div className="text-theme-lg md:text-theme-xl font-montserrat text-center">
               <div>
+                I'm
                 <span
                   className={` text-theme-red pl-2 text-4xl font-luckiest-guy `}
                   id="name"
@@ -140,11 +133,7 @@ const About: React.FC<AboutProps> = ({ className = "", scrollToContact }) => {
                     gsap.to("#name", {
                       text: {
                         value: "Software Engineer",
-                        // padSpace: true,
-                        // newClass: "text-theme-ivory ",
-                        // type: "spread",
                       },
-                      // delay: 3,
                     });
                   }}
                   onMouseLeave={() => {
@@ -154,16 +143,13 @@ const About: React.FC<AboutProps> = ({ className = "", scrollToContact }) => {
                         padSpace: true,
 
                         newClass: "text-theme-ivory ",
-                        // type: "spread",
                       },
-                      // delay: 3,
                     });
                   }}
                 >
                   Varinder&nbsp;Singh&nbsp;
                 </span>
-
-                <span className="font-noto-color-emoji">👋</span>
+                <span className="font-noto-color-emoji text-4xl">👋</span>
               </div>
               <div>
                 I have been helping organisations with their{" "}
@@ -176,15 +162,15 @@ const About: React.FC<AboutProps> = ({ className = "", scrollToContact }) => {
         <div
           className={`flex flex-col w-full gap-10 mt-30 ${delayedText.replace(".", "")}`}
         >
-          <div className="flex justify-center gap-1">
+          <div className="flex flex-col md:flex-row justify-center gap-5 px-10">
             <Link href="./resume.pdf" target="_blank" download>
-              <Button className="md:min-w-[300px] py-5  ">
+              <Button className="md:min-w-[300px] py-5 w-full ">
                 My resume <span className="font-noto-color-emoji">👔</span>
               </Button>
             </Link>
 
             <Button
-              className="md:min-w-[300px]"
+              className="md:min-w-[300px] py-5"
               onClick={() => scrollToContact?.()}
             >
               Contact me <span className="font-noto-color-emoji">🤙</span>

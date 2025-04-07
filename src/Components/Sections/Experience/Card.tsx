@@ -131,11 +131,14 @@ const Card: React.FC<CardProps> = ({ data, className }) => {
             )}
 
             {!isMobile && (
-              <div className="w-1/2 h-full relative z-1 bg-theme-ivory text-theme-black p-15 flex flex-col justify-between">
+              <div className="w-1/2 h-full  bg-theme-ivory text-theme-black p-15 flex flex-col justify-between">
                 <div>
                   <Overview data={data} />
                 </div>
-                <Button className="min-w-[300px]" onClick={() => flipCard()}>
+                <Button
+                  className="max-w-[300px] self-center relative"
+                  onClick={() => flipCard()}
+                >
                   My Duties
                 </Button>
               </div>

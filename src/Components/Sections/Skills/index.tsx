@@ -16,7 +16,6 @@ import decomp from "poly-decomp";
 import "pathseg";
 import { vertexSets } from "./vertexSets";
 import { getSvgTexture, SKILLS } from "./utils";
-import { isTouchDevice } from "@/utils/screen";
 import { useViewport } from "@/Providers/ViewportProvider";
 
 function getScaleFactor(viewportWidth: number) {
@@ -58,7 +57,8 @@ const Skills: React.FC = () => {
   const renderRef = useRef<Matter.Render>(null);
   const runnerRef = useRef<Matter.Runner>(null);
 
-  const { viewportWidth, viewportHeight, isMobile } = useViewport();
+  const { viewportWidth, viewportHeight, isMobile, isTouchDevice } =
+    useViewport();
 
   useEffect(() => {
     Common.setDecomp(decomp);
@@ -86,41 +86,29 @@ const Skills: React.FC = () => {
     runnerRef.current = runner;
     Runner.run(runner, engine);
 
-    // add bodies
-    // const select = (root: Document, selector: string) => {
-    //   return Array.prototype.slice.call(root.querySelectorAll(selector));
-    // };
+    if (typeof window !== "undefined" && isTouchDevice) {
+      const updateGravity = function (event: any) {
+        const orientation =
+            typeof window.orientation !== "undefined" ? window.orientation : 0,
+          gravity = engine.gravity;
 
-    // const loadSvg = async (url: string) => {
-    //   try {
-    //     const response = await fetch(url);
-    //     const text = await response.text();
-    //     const parser = new DOMParser();
-    //     const doc = parser.parseFromString(text, "image/svg+xml");
-    //     const paths = select(doc, "path");
+        if (orientation === 0) {
+          gravity.x = Common.clamp(event.gamma, -90, 90) / 90;
+          gravity.y = Common.clamp(event.beta, -90, 90) / 90;
+        } else if (orientation === 180) {
+          gravity.x = Common.clamp(event.gamma, -90, 90) / 90;
+          gravity.y = Common.clamp(-event.beta, -90, 90) / 90;
+        } else if (orientation === 90) {
+          gravity.x = Common.clamp(event.beta, -90, 90) / 90;
+          gravity.y = Common.clamp(-event.gamma, -90, 90) / 90;
+        } else if (orientation === -90) {
+          gravity.x = Common.clamp(-event.beta, -90, 90) / 90;
+          gravity.y = Common.clamp(event.gamma, -90, 90) / 90;
+        }
+      };
 
-    //     const vertexSets = paths.map((path) => {
-    //       // Get the total length of the path
-    //       const length = path.getTotalLength();
-    //       const sampleLength = 40;
-    //       const points = [];
-
-    //       // Sample points along the path
-    //       for (let i = 0; i <= length; i += sampleLength) {
-    //         const point = path.getPointAtLength(i);
-    //         points.push({ x: point.x * 0.8, y: point.y * 0.8 });
-    //       }
-
-    //       console.log(points);
-    //       return points;
-    //     });
-
-    //     return vertexSets;
-    //   } catch (error) {
-    //     console.error("SVG loading error:", error);
-    //     throw error;
-    //   }
-    // };
+      window.addEventListener("deviceorientation", updateGravity);
+    }
 
     const ground = Bodies.rectangle(
       viewportWidth / 2,
@@ -260,7 +248,7 @@ const Skills: React.FC = () => {
       mouseConstraint.mouse.mousewheel,
     );
 
-    if (isTouchDevice()) {
+    if (isTouchDevice) {
       mouseConstraint.mouse.element.removeEventListener(
         "touchmove",
         //@ts-ignore

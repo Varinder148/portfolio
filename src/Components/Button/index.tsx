@@ -142,7 +142,7 @@ const Button = ({
           opacity: 0,
         }}
       />
-      <span className="relative z-10 text-sm md:text-base">{children}</span>
+      <span className="relative text-sm md:text-base">{children}</span>
     </button>
   );
 };

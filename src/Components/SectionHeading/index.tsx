@@ -31,7 +31,7 @@ const SectionHeading: React.FC<Props> = ({ triggerClass, children }) => {
 
   return (
     <div
-      className={`h-screen overflow-x-auto no-scrollbar w-full flex items-center ${triggerClass}`}
+      className={`h-screen overflow-x-hidden no-scrollbar w-full flex items-center ${triggerClass}`}
     >
       <h1
         ref={textRef}
