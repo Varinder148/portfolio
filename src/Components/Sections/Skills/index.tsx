@@ -20,14 +20,14 @@ import { useViewport } from "@/Providers/ViewportProvider";
 
 function getScaleFactor(viewportWidth: number) {
   const maxWidth = 1200;
-  const minWidth = 600;
+  const minWidth = 100;
 
   if (viewportWidth >= maxWidth) {
     return 1.5;
   }
 
   const scaleFactor =
-    1.5 - (1.0 * (viewportWidth - minWidth)) / (maxWidth - minWidth);
+    1.8 - (1.0 * (viewportWidth - minWidth)) / (maxWidth - minWidth);
 
   return scaleFactor;
 }
@@ -287,6 +287,11 @@ const Skills: React.FC = () => {
 
   return (
     <>
+      {isTouchDevice && (
+        <div className="text-2xl relative  top-50 w-full text-center">
+          Try tilting your device
+        </div>
+      )}
       <div
         ref={canvasRef}
         style={{

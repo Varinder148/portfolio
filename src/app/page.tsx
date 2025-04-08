@@ -92,7 +92,7 @@ export default function Home() {
         />
 
         <div
-          className={` w-screen h-screen bg-theme-red grid place-items-center absolute z-50 ${loading.replace(
+          className={` w-screen h-screen bg-theme-red grid place-items-center fixed z-50 overflow-hidden rounded-b-4xl ${loading.replace(
             ".",
             "",
           )}`}
@@ -100,7 +100,7 @@ export default function Home() {
           Loading...
         </div>
 
-        <div className="flex flex-col gap-15">
+        <div className="flex flex-col gap-40">
           <div
             className="w-full col-span-3"
             ref={(ref) => {
@@ -117,43 +117,37 @@ export default function Home() {
             />
           </div>
           <div
-            className="w-full col-span-3"
+            className="w-full flex gap-40 flex-col"
             ref={(ref) => {
               anchorRefs.current[refs.Experience] = ref;
             }}
             id={refs.Experience}
           >
-            <div className="h-[200vh]">
-              <SectionHeading triggerClass="experience">
-                Let's begin with the{" "}
-                <span className="italic text-theme-sandy">people</span> 🧑‍💻🧑🏻‍💻 I
-                have <span className="semibold text-theme-gray">Worked</span>
-                🏢 with
-              </SectionHeading>
-            </div>
+            <SectionHeading triggerClass="experience">
+              Let's begin with the{" "}
+              <span className="italic text-theme-green">people</span> 🧑‍💻🧑🏻‍💻 I
+              have <span className="semibold text-theme-red-wood">Worked</span>
+              🏢 with
+            </SectionHeading>
 
-            <div className="w-full">
-              <Experience />
-            </div>
+            <Experience />
           </div>
           <div
-            className={`w-screen  ${pinTriggerContact}`}
+            className={`w-screen flex gap-40 flex-col `}
             ref={(ref) => {
               anchorRefs.current[refs.Skills] = ref;
             }}
             id={refs.Skills}
           >
-            <div className="h-[200vh]">
-              <SectionHeading triggerClass="skills">
-                And,{" "}
-                <span className="text-theme-sandy">
-                  'The Technical Skills'{" "}
-                </span>{" "}
-                I gathered over the years
-                <span className="text-theme-gray"></span>
-              </SectionHeading>
+            <SectionHeading triggerClass="skills">
+              <span className="text-theme-sandy"> 'The Skills' </span> I
+              collected over the years
+              <span className="text-theme-gray"></span>
+            </SectionHeading>
+
+            <div className={`w-screen h-[120vh]  ${pinTriggerContact}`}>
+              {loadSkills && <Skills />}
             </div>
-            <div className="w-screen h-[120vh]">{loadSkills && <Skills />}</div>
           </div>
         </div>
       </div>

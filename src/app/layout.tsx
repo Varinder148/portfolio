@@ -5,7 +5,7 @@ import {
   Luckiest_Guy,
   Noto_Color_Emoji,
   Montserrat_Alternates,
-  Overpass,
+  Josefin_Sans,
 } from "next/font/google";
 import React from "react";
 
@@ -22,12 +22,12 @@ const colorEmoji = Noto_Color_Emoji({
 });
 
 const montserrat = Montserrat_Alternates({
-  weight: ["300"],
+  weight: ["400", "600"],
   subsets: ["latin"],
   variable: "--font-montserrat",
 });
-const overpass = Overpass({
-  weight: ["300"],
+const overpass = Josefin_Sans({
+  weight: ["300", "600"],
   subsets: ["latin", "latin-ext"],
   variable: "--font-overpass",
 });

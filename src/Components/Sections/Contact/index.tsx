@@ -18,10 +18,9 @@ const Contact = ({ pinTriggerContact }: { pinTriggerContact: string }) => {
 
   useGSAP(() => {
     const tl = gsap.timeline({
-      scrollbindTrigger: {
-        bindTrigger: `.${pinTriggerContact}`,
-        start: "top",
-        markers: true,
+      scrollTrigger: {
+        trigger: `.${pinTriggerContact}`,
+        start: "top top",
       },
     });
 
@@ -101,7 +100,7 @@ const Contact = ({ pinTriggerContact }: { pinTriggerContact: string }) => {
           >
             Get in touch with me!
           </h1>
-          <div className="flex gap-5  justify-self-center py-5 ">
+          <div className="flex gap-5 justify-center justify-self-center py-5 ">
             <Link
               href="mailto:varindersingh14.vs@gmail.com"
               target="_blank"

@@ -11,12 +11,16 @@ interface ButtonProps {
       | React.TouchEvent<HTMLButtonElement>,
   ) => void;
   className?: string;
+  bgColor?: string;
+  borderColor?: string;
 }
 
 const Button = ({
   children,
   onClick = () => {},
   className = "",
+  bgColor = "bg-theme-red",
+  borderColor = "border-theme-red",
 }: ButtonProps) => {
   const circleRef = useRef(null);
   const buttonRef = useRef(null);
@@ -37,20 +41,13 @@ const Button = ({
         scale: 0,
         top: y,
         left: x,
-        boxShadow: "0 0 0 rgba(239, 68, 68, 0)",
       },
       {
         scale: 1,
         duration: 0.5,
         ease: "power1.out",
-        boxShadow: "0 0 30px rgba(239, 68, 68, 0.6)",
       },
     );
-
-    gsap.to(buttonRef.current, {
-      boxShadow: "0 0 15px rgba(239, 68, 68, 0.8)",
-      duration: 0.2,
-    });
   };
 
   const handleMouseLeave = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -62,13 +59,11 @@ const Button = ({
       scale: 0,
       top: y,
       left: x,
-      boxShadow: "0 0 0 rgba(239, 68, 68, 0)",
       duration: 0.5,
       ease: "power1.out",
     });
 
     gsap.to(buttonRef.current, {
-      boxShadow: "0 0 0 rgba(239, 68, 68, 0)",
       duration: 0.2,
     });
   };
@@ -90,20 +85,13 @@ const Button = ({
         scale: 0,
         top: y,
         left: x,
-        boxShadow: "0 0 0 rgba(239, 68, 68, 0)",
       },
       {
         scale: 0.8,
         duration: 0.3,
         ease: "power1.out",
-        boxShadow: "0 0 20px rgba(239, 68, 68, 0.6)",
       },
     );
-
-    gsap.to(buttonRef.current, {
-      boxShadow: "0 0 15px rgba(239, 68, 68, 0.8)",
-      duration: 0.2,
-    });
   };
 
   const handleTouchEnd = () => {
@@ -124,7 +112,7 @@ const Button = ({
     <button
       ref={buttonRef}
       className={`
-        uppercase cursor-pointer rounded-8xl relative overflow-hidden border-2 border-theme-red hover:text-theme-black font-montserrat touch-none px-8 py-2 md:px-15 md:py-5 ${className}
+        uppercase cursor-pointer rounded-8xl relative overflow-hidden border-2 ${borderColor} hover:text-theme-black font-montserrat touch-none px-8 py-2 md:px-15 md:py-5 ${className}
       `}
       onClick={onClick}
       onMouseEnter={handleMouseEnter}
@@ -134,7 +122,7 @@ const Button = ({
     >
       <div
         ref={circleRef}
-        className="bg-theme-red -z-1 absolute rounded-full"
+        className={` -z-1 absolute rounded-full ${bgColor}`}
         style={{
           width: `1500px`,
           height: `1500px`,
@@ -142,7 +130,7 @@ const Button = ({
           opacity: 0,
         }}
       />
-      <span className="relative text-sm md:text-base">{children}</span>
+      <span className="relative text-lg md:text-base">{children}</span>
     </button>
   );
 };

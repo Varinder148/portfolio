@@ -22,7 +22,7 @@ interface CardProps {
   className?: string;
 }
 
-const Card: React.FC<CardProps> = ({ data, className }) => {
+const Card: React.FC<CardProps> = ({ data }) => {
   const [expanded, setIsExpanded] = useState(false);
   const [isFlipped, setIsFlipped] = useState(false);
 
@@ -81,87 +81,71 @@ const Card: React.FC<CardProps> = ({ data, className }) => {
   };
 
   return (
-    <div className="w-screen grid place-items-center p-5 stackingcard pt-25 lg:p-25 h-screen">
-      <div className={`w-full lg:w-6/7 card-container  h-full ${className}`}>
-        <div ref={cardRef} className=" relative card w-full h-full">
+    <div className="w-screen grid place-items-center p-5  pt-25 lg:p-25 h-screen">
+      <div
+        ref={cardRef}
+        className=" relative card w-full md:w-6/7 h-full stackingcard"
+      >
+        <div
+          ref={frontRef}
+          className="card-front bg-theme-black absolute bg-theme w-full h-full rounded-2xl overflow-hidden flex"
+        >
           <div
-            ref={frontRef}
-            className="card-front bg-theme-black absolute bg-theme w-full h-full rounded-2xl overflow-hidden flex"
+            className={clsx("relative h-full w-full", {
+              // "w-1/2": !isMobile,
+              // "w-full": isMobile,
+            })}
           >
-            <div
-              className={clsx("relative h-full", {
-                "w-1/2": !isMobile,
-                "w-full": isMobile,
-              })}
-            >
-              <div className="relative w-full h-full">
-                <Image
-                  src={data.image}
-                  alt={`${data.name} office`}
-                  fill
-                  className="object-cover object-center  opacity-50"
-                  style={{
-                    filter: "grayscale(50%)",
-                  }}
-                />
-              </div>
-              <div
-                className={clsx(
-                  "absolute  left-1/2 -translate-1/2 text-theme-white text-4xl md:text-6xl font-montserrat text-center",
-                  {
-                    "top-1/2": !isMobile,
-                    "top-1/6": isMobile,
-                  },
-                )}
-              >
-                {data.name}
-              </div>
-
-              {/* Remove My Duties button */}
+            <div className="relative w-full h-full">
+              <Image
+                src={data.image}
+                alt={`${data.name} office`}
+                fill
+                className="object-cover object-center  opacity-50"
+                style={{
+                  filter: "grayscale(50%)",
+                }}
+              />
             </div>
-            {isMobile && (
-              <div className="absolute bottom-10 left-1/2 -translate-x-1/2">
-                <Button
-                  className="min-w-[300px]"
-                  onClick={() => flipCard(true)}
-                >
-                  Know More
-                </Button>
-              </div>
-            )}
-
-            {!isMobile && (
-              <div className="w-1/2 h-full  bg-theme-ivory text-theme-black p-15 flex flex-col justify-between">
-                <div>
-                  <Overview data={data} />
-                </div>
-                <Button
-                  className="max-w-[300px] self-center relative"
-                  onClick={() => flipCard()}
-                >
-                  My Duties
-                </Button>
-              </div>
-            )}
-          </div>
-
-          <div
-            ref={backRef}
-            className="card-back absolute w-full h-full bg-theme-ivory text-theme-black rounded-2xl overflow-hidden"
-          >
-            <div className="h-full flex flex-col gap-5 p-10">
-              {expanded ? (
-                <Overview data={data} />
-              ) : (
-                <Responsibilities data={data} />
+            <div
+              className={clsx(
+                "absolute  left-1/2 -translate-1/2 text-theme-white text-4xl md:text-6xl font-montserrat text-center",
+                {
+                  "top-1/2": !isMobile,
+                  "top-1/6": isMobile,
+                },
               )}
-              <Button
-                onClick={expanded ? doubleFlip : () => flipCard()}
-                className="self-center mt-auto min-w-[300px]"
-              >
-                {expanded ? "My Duties" : "Back"}
+            >
+              {data.name}
+            </div>
+
+            {/* Remove My Duties button */}
+          </div>
+          {
+            <div className="absolute bottom-10 left-1/2 -translate-x-1/2">
+              <Button className="min-w-[300px]" onClick={() => flipCard(true)}>
+                Know More
               </Button>
             </div>
+          }
+        </div>
+
+        <div
+          ref={backRef}
+          className="card-back absolute w-full h-full bg-theme-ivory text-theme-black rounded-2xl overflow-hidden"
+        >
+          <div className="h-full flex flex-col gap-5 p-10">
+            {expanded ? (
+              <Overview data={data} />
+            ) : (
+              <Responsibilities data={data} />
+            )}
+            <Button
+              onClick={expanded && isMobile ? doubleFlip : () => flipCard()}
+              className="self-center mt-auto min-w-[300px]"
+            >
+              {expanded && isMobile ? "My Duties" : "Back"}
+            </Button>
           </div>
         </div>
       </div>

@@ -24,7 +24,7 @@ const Time = () => {
   }, []);
 
   return (
-    <div className="text-theme-xl md:text-theme-2xl text-theme-gray ">
+    <div className="text-3xl text-theme-ivory ">
       {time.split(" ").slice(0, 6).join(" ")}
       <br />
       {time.split(" ").slice(6).join(" ")}

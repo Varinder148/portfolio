@@ -16,14 +16,13 @@ const SectionHeading: React.FC<Props> = ({ triggerClass, children }) => {
     if (textRef.current) {
       gsap.to(textRef.current, {
         xPercent: -100,
-        ease: "none",
+        ease: "power2",
         scrollTrigger: {
           trigger: `.${triggerClass}`,
-          start: "top top",
-          end: "+=100%",
-          pin: true,
-          pinSpacing: true,
-          scrub: 0.2,
+          start: "top 50%",
+          end: "+=150%",
+          // pin: true,
+          scrub: 1,
         },
       });
     }
@@ -31,7 +30,7 @@ const SectionHeading: React.FC<Props> = ({ triggerClass, children }) => {
 
   return (
     <div
-      className={`h-screen overflow-x-hidden no-scrollbar w-full flex items-center ${triggerClass}`}
+      className={` px-10 overflow-x-auto no-scrollbar w-full flex items-end ${triggerClass}`}
     >
       <h1
         ref={textRef}

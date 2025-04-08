@@ -146,7 +146,7 @@ const Navigation: React.FC<NavigationProps> = ({
               return (
                 <li
                   key={index}
-                  className={`absolute top-1/2 left-1/2 cursor-pointer -translate-x-1/2 -translate-y-1/2  ${
+                  className={`absolute font-montserrat text-xl top-1/2 left-1/2 cursor-pointer -translate-x-1/2 -translate-y-1/2  ${
                     activeTab === item.anchor
                       ? "text-theme-red text-2xl"
                       : "text-theme-black hover:text-theme-red"
