@@ -15,8 +15,7 @@ const Experience: React.FC = () => {
     cards.forEach((card: any, i) => {
       const angleMultiplier = i % 2 === 1 ? -1 : 1;
       gsap.to(card, {
-        scale: () => 0.9 + i * 0.035, // Smooth scaling based on index
-        rotate: () => 2 * angleMultiplier, // Rotate based on index
+        rotate: () => 5 * angleMultiplier, // Rotate based on index
         ease: "power2.inOut", // Smooth easing for scaling
         scrollTrigger: {
           trigger: card,

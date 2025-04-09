@@ -104,14 +104,14 @@ const CustomMousePointer: React.FC = () => {
     <>
       <div
         ref={pointerRef}
-        className={`fixed top-0 left-0 w-5 h-5 opacity-50 rounded-full pointer-events-none z-1000 hidden ${
+        className={`fixed top-0 left-0 w-5 h-5 opacity-50 rounded-full pointer-events-none z-[1000] hidden ${
           isHovered ? "bg-theme-red" : "bg-theme-white"
         }`}
       />
       <div
         ref={secondaryPointerRef}
         className={clsx(
-          `fixed top-0 left-0 w-15 h-15 border-2 border-theme-gray rounded-full pointer-events-none z-1000 hidden `,
+          `fixed top-0 left-0 w-15 h-15 border-2 border-theme-gray rounded-full pointer-events-none z-[1000] hidden `,
           {
             invisible: isHovered,
           },

@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { gsap } from "gsap";
 
 import { ReactNode } from "react";
+import { THEME } from "@/utils/constants";
 
 interface ButtonProps {
   children: ReactNode;
@@ -11,16 +12,14 @@ interface ButtonProps {
       | React.TouchEvent<HTMLButtonElement>,
   ) => void;
   className?: string;
-  bgColor?: string;
-  borderColor?: string;
+  color?: string;
 }
 
 const Button = ({
   children,
   onClick = () => {},
   className = "",
-  bgColor = "bg-theme-red",
-  borderColor = "border-theme-red",
+  color = THEME.RED,
 }: ButtonProps) => {
   const circleRef = useRef(null);
   const buttonRef = useRef(null);
@@ -97,13 +96,11 @@ const Button = ({
   const handleTouchEnd = () => {
     gsap.to(circleRef.current, {
       scale: 0,
-      boxShadow: "0 0 0 rgba(239, 68, 68, 0)",
       duration: 0.3, // Faster animation for mobile
       ease: "power1.out",
     });
 
     gsap.to(buttonRef.current, {
-      boxShadow: "0 0 0 rgba(239, 68, 68, 0)",
       duration: 0.2,
     });
   };
@@ -112,8 +109,12 @@ const Button = ({
     <button
       ref={buttonRef}
       className={`
-        uppercase cursor-pointer rounded-8xl relative overflow-hidden border-2 ${borderColor} hover:text-theme-black font-montserrat touch-none px-8 py-2 md:px-15 md:py-5 ${className}
+        uppercase group hover:shadow-theme-spread-md  cursor-pointer rounded-8xl relative overflow-hidden border-2   font-montserrat touch-none px-8 py-2 md:px-15 md:py-5 ${className}
       `}
+      style={{
+        borderColor: color,
+        color,
+      }}
       onClick={onClick}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
@@ -122,15 +123,18 @@ const Button = ({
     >
       <div
         ref={circleRef}
-        className={` -z-1 absolute rounded-full ${bgColor}`}
+        className={` -z-1 absolute rounded-full `}
         style={{
+          background: color,
           width: `1500px`,
           height: `1500px`,
           transform: "translate(-50%, -50%)",
           opacity: 0,
         }}
       />
-      <span className="relative text-lg md:text-base">{children}</span>
+      <span className="relative text-lg md:text-base  group-hover:text-theme-black">
+        {children}
+      </span>
     </button>
   );
 };

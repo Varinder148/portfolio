@@ -5,6 +5,7 @@ import gsap from "gsap";
 import React from "react";
 import Button from "@/Components/Button";
 import Link from "next/link";
+import { THEME } from "@/utils/constants";
 
 interface AboutProps {
   className?: string;
@@ -57,14 +58,20 @@ const About: React.FC<AboutProps> = ({ className = "", scrollToContact }) => {
         opacity: 0,
         duration: 0.2,
         ease: "back.in",
-        stagger: 0.2,
+        stagger: {
+          amount: 0.2,
+          from: "random",
+        },
       })
       .from(`${highlightedValues}:nth-child(2n+1)`, {
         y: 20,
         opacity: 0,
         duration: 0.2,
         ease: "back.in",
-        stagger: 0.2,
+        stagger: {
+          amount: 0.2,
+          from: "random",
+        },
       })
       .to("#name", {
         text: {
@@ -148,7 +155,7 @@ const About: React.FC<AboutProps> = ({ className = "", scrollToContact }) => {
                 </span>
                 working with others. I’m always eager to learn
                 <span
-                  className={`inline-block  ${highlightedValues.replace(".", "")} font-thin mx-2 text-theme-violet text-2xl capitalize italic font-luckiest-guy`}
+                  className={`inline-block underline ${highlightedValues.replace(".", "")} font-thin mx-2 text-theme-violet text-2xl capitalize italic font-luckiest-guy`}
                 >
                   new
                 </span>
@@ -160,7 +167,7 @@ const About: React.FC<AboutProps> = ({ className = "", scrollToContact }) => {
                 </span>
                 and ready to take on any{" "}
                 <span
-                  className={`inline-block  ${highlightedValues.replace(".", "")} p-1 mt-2 rounded-b-2xl font-bold bg-theme-ivory mx-1 text-theme-gray text-2xl font-montserrat`}
+                  className={`inline-block capitalize ${highlightedValues.replace(".", "")} p-1 mt-2 rounded-b-2xl font-bold bg-theme-ivory mx-1 text-theme-gray text-2xl font-montserrat`}
                 >
                   challenge
                 </span>
@@ -184,18 +191,16 @@ const About: React.FC<AboutProps> = ({ className = "", scrollToContact }) => {
             <Link href="./resume.pdf" target="_blank" download>
               <Button
                 className="md:min-w-[300px] py-5 w-full "
-                borderColor="border-theme-sandy hover:shadow-theme-spread-md shadow-theme-sandy"
-                bgColor="bg-theme-sandy"
+                color={THEME.SANDY}
               >
                 My resume <span className="font-noto-color-emoji">👔</span>
               </Button>
             </Link>
 
             <Button
-              className="md:min-w-[300px] py-5 hover:shadow-theme-spread-md shadow-theme-olive"
+              className="md:min-w-[300px] py-5 "
               onClick={() => scrollToContact?.()}
-              borderColor="border-theme-olive"
-              bgColor="bg-theme-olive"
+              color={THEME.REDWOOD}
             >
               Contact me <span className="font-noto-color-emoji">🤙</span>
             </Button>

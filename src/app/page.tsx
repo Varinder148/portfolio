@@ -84,7 +84,6 @@ export default function Home() {
       <div
         className={` bg-theme-black bg-theme-grainy font-overpass text-theme-ivory rounded-b-4xl md:rounded-b-8xl relative z-20 `}
       >
-        <CustomMousePointer />
         <Navigation
           refs={anchorRefs}
           setActiveTab={setActiveTab}
@@ -161,6 +160,7 @@ export default function Home() {
       >
         <Contact pinTriggerContact={pinTriggerContact} />
       </div>
+      <CustomMousePointer />
     </ViewportProvider>
   );
 }

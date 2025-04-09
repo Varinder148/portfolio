@@ -2,11 +2,9 @@ import Button from "@/Components/Button";
 import gsap from "gsap";
 import Image from "next/image";
 import React, { useRef, useState, useEffect } from "react";
-import Responsibilities from "./Responsibilities";
 import Overview from "./Overview";
 import "./Card.css";
-import clsx from "clsx";
-import { useViewport } from "@/Providers/ViewportProvider";
+import { Draggable, InertiaPlugin } from "gsap/all";
 
 interface CardProps {
   data: {
@@ -23,111 +21,102 @@ interface CardProps {
 }
 
 const Card: React.FC<CardProps> = ({ data }) => {
-  const [expanded, setIsExpanded] = useState(false);
   const [isFlipped, setIsFlipped] = useState(false);
 
   const cardRef = useRef(null);
   const frontRef = useRef(null);
   const backRef = useRef(null);
 
-  const { isMobile } = useViewport();
-
   useEffect(() => {
+    gsap.registerPlugin(Draggable, InertiaPlugin);
+
+    Draggable.create(".card", {
+      type: "x",
+      inertia: true,
+    });
+
     gsap.set([frontRef.current, backRef.current], {
       backfaceVisibility: "hidden",
     });
   }, []);
 
-  const flipCard = (overview = false) => {
+  const flipCard = () => {
     const duration = 0.6;
     if (!isFlipped) {
-      setIsExpanded(overview);
+      // setIsExpanded(true);
       gsap.to(cardRef.current, {
         rotationY: 180,
         duration,
         ease: "power2.inOut",
+        onStart: () => {
+          setIsFlipped(true);
+        },
       });
-      setIsFlipped(true);
     } else {
       gsap.to(cardRef.current, {
         rotationY: 0,
         duration,
         ease: "power2.inOut",
         onComplete: () => {
-          setIsExpanded(!expanded);
+          setIsFlipped(false);
         },
       });
-      setIsFlipped(false);
     }
   };
 
-  const doubleFlip = () => {
-    const duration = 0.6;
-    // First flip (to front)
-    gsap.to(cardRef.current, {
-      rotationY: 0,
-      duration,
-      ease: "power2.inOut",
-      onComplete: () => {
-        setIsExpanded(false);
-        // Second flip (back to back) in opposite direction
-        gsap.to(cardRef.current, {
-          rotationY: -180,
-          duration,
-          ease: "power2.inOut",
-        });
-      },
-    });
-  };
+  // const doubleFlip = () => {
+  //   const duration = 0.6;
+  //   // First flip (to front)
+  //   gsap.to(cardRef.current, {
+  //     rotationY: 0,
+  //     duration,
+  //     ease: "power2.inOut",
+  //     onComplete: () => {
+  //       // Second flip (back to back) in opposite direction
+  //       gsap.to(cardRef.current, {
+  //         rotationY: -180,
+  //         duration,
+  //         ease: "power2.inOut",
+  //       });
+  //     },
+  //   });
+  // };
 
   return (
-    <div className="w-screen grid place-items-center p-5  pt-25 lg:p-25 h-screen">
+    <div className="w-screen grid place-items-center p-5   pt-25 lg:p-25 h-screen">
       <div
         ref={cardRef}
-        className=" relative card w-full md:w-6/7 h-full stackingcard"
+        className="relative card border-2 border-theme-black bg-theme-ivory  w-[600px] h-[700px]  stackingcard rounded-2xl "
       >
         <div
           ref={frontRef}
-          className="card-front bg-theme-black absolute bg-theme w-full h-full rounded-2xl overflow-hidden flex"
+          className="absolute card-front mt-10 flex flex-col h-full w-full items-center justify-self-center px-10"
         >
-          <div
-            className={clsx("relative h-full w-full", {
-              // "w-1/2": !isMobile,
-              // "w-full": isMobile,
-            })}
-          >
-            <div className="relative w-full h-full">
-              <Image
-                src={data.image}
-                alt={`${data.name} office`}
-                fill
-                className="object-cover object-center  opacity-50"
-                style={{
-                  filter: "grayscale(50%)",
-                }}
-              />
-            </div>
+          <div className="relative  h-2/3 ">
+            <Image
+              src={data.image}
+              alt={`${data.name} office`}
+              className="object-cover object-center w-full h-full "
+              width={-1}
+              height={-1}
+              style={{
+                filter: "grayscale(50%)",
+              }}
+            />
             <div
-              className={clsx(
-                "absolute  left-1/2 -translate-1/2 text-theme-white text-4xl md:text-6xl font-montserrat text-center",
-                {
-                  "top-1/2": !isMobile,
-                  "top-1/6": isMobile,
-                },
-              )}
-            >
+              id="overlay"
+              className="absolute top-0 left-0 w-full h-full bg-theme-black opacity-50 bg-theme-grainy"
+            ></div>
+            <span className="absolute top-1/2 left-1/2 -translate-1/2 text-5xl  font-bold font-montserrat">
               {data.name}
-            </div>
-
-            {/* Remove My Duties button */}
+            </span>
           </div>
-          {
-            <div className="absolute bottom-10 left-1/2 -translate-x-1/2">
-              <Button className="min-w-[300px]" onClick={() => flipCard(true)}>
-                Know More
-              </Button>
-            </div>
-          }
+
+          <div className="flex-1 items-center flex">
+            <Button className="min-w-[300px] " onClick={() => flipCard()}>
+              Know More
+            </Button>
+          </div>
         </div>
 
         <div
@@ -135,17 +124,21 @@ const Card: React.FC<CardProps> = ({ data }) => {
           className="card-back absolute w-full h-full bg-theme-ivory text-theme-black rounded-2xl overflow-hidden"
         >
           <div className="h-full flex flex-col gap-5 p-10">
-            {expanded ? (
-              <Overview data={data} />
-            ) : (
-              <Responsibilities data={data} />
+            {isFlipped && (
+              <>
+                <Overview data={data} />
+                <Button onClick={() => flipCard()} className="max-w-[300px]">
+                  Flip
+                </Button>
+              </>
             )}
-            <Button
+
+            {/* <Button
               onClick={expanded && isMobile ? doubleFlip : () => flipCard()}
               className="self-center mt-auto min-w-[300px]"
             >
               {expanded && isMobile ? "My Duties" : "Back"}
-            </Button>
+            </Button> */}
           </div>
         </div>
       </div>

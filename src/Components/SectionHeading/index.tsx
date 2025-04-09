@@ -19,9 +19,8 @@ const SectionHeading: React.FC<Props> = ({ triggerClass, children }) => {
         ease: "power2",
         scrollTrigger: {
           trigger: `.${triggerClass}`,
-          start: "top 50%",
+          start: "top 65%",
           end: "+=150%",
-          // pin: true,
           scrub: 1,
         },
       });
