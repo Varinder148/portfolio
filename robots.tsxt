@@ -1,7 +1,7 @@
 User-agent: *
 Disallow:
 
-Sitemap: https://varinder148.github.io/portfolio/
+Sitemap: https://varinder148.github.io/portfolio/sitemap.xml
 
 # Allow all bots to crawl specific assets (images, CSS, JavaScript)
 Allow: /images/
