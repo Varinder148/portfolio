@@ -1,9 +1,3 @@
-export const NEON = `0 0 2px ,
-      0 0 4px ,
-      0 0 8px ,
-      0 0 16px ,
-      0 0 32px `;
-
 export enum ThemeColors {
   RED = "RED",
   IVORY = "IVORY",
@@ -28,9 +22,40 @@ export const THEME: { [key in ThemeColors]: string } = {
   [ThemeColors.GREEN]: "#31572C",
 };
 
-export function getRandomColor(): string {
-  const colorKeys = Object.values(ThemeColors);
-  const randomIndex = Math.floor(Math.random() * colorKeys.length);
-  const randomColorKey = colorKeys[randomIndex];
+// Helper function to calculate luminance and determine if a color is light or dark
+function isLightColor(hex: string): boolean {
+  // Remove '#' if present
+  hex = hex.replace("#", "");
+
+  // Convert hex to RGB
+  const r = parseInt(hex.substring(0, 2), 16);
+  const g = parseInt(hex.substring(2, 4), 16);
+  const b = parseInt(hex.substring(4, 6), 16);
+
+  // Calculate luminance (relative brightness)
+  const luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+
+  // If luminance > 128, it's light; otherwise, it's dark
+  return luminance > 128;
+}
+
+export function getRandomColor(type?: "light" | "dark"): string {
+  let filteredColors: ThemeColors[];
+
+  // If no type is provided, use all colors
+  if (!type) {
+    filteredColors = Object.keys(THEME) as ThemeColors[];
+  } else {
+    // Filter the colors based on the type (light or dark)
+    filteredColors = Object.keys(THEME).filter((key) => {
+      const color = THEME[key as keyof typeof THEME];
+      return type === "light" ? isLightColor(color) : !isLightColor(color);
+    }) as ThemeColors[];
+  }
+
+  // Pick a random color from the filtered list
+  const randomIndex = Math.floor(Math.random() * filteredColors.length);
+  const randomColorKey = filteredColors[randomIndex];
+
   return THEME[randomColorKey];
 }

@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import "./globals.css";
 
 import {
@@ -32,10 +31,32 @@ const overpass = Josefin_Sans({
   variable: "--font-overpass",
 });
 
-export const metadata: Metadata = {
-  title: "Portfolio: Varinder Singh",
-  description: "Portfolio of Varinder Singh Software Engineer",
-};
+export async function generateMetadata() {
+  const metadata = {
+    title: "Varinder Singh - Software Engineer",
+    description:
+      "Portfolio of Varinder Singh who is a Software engineer currently working at Gartner",
+    openGraph: {
+      title: "Varinder Singh - Software Engineer",
+      description:
+        "Portfolio of Varinder Singh who is a Software engineer currently working at Gartner",
+      siteName: "Portfolio",
+      type: "website",
+      url: "https://varinder148.github.io/portfolio",
+    },
+    referrer: "origin-when-cross-origin",
+    appleWebApp: {
+      title: "Varinder Singh - Software Engineer",
+    },
+    twitter: {
+      title: "Varinder Singh - Software Engineer",
+      description:
+        "Portfolio of Varinder Singh who is a Software engineer currently working at Gartner",
+    },
+  };
+
+  return metadata;
+}
 
 export default function RootLayout({
   children,
