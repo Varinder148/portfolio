@@ -5,6 +5,7 @@ import React, { useRef, useState, useEffect } from "react";
 import Overview from "./Overview";
 import "./Card.css";
 import { Draggable, InertiaPlugin } from "gsap/all";
+import { useViewport } from "@/Providers/ViewportProvider";
 
 interface CardProps {
   data: {
@@ -27,13 +28,17 @@ const Card: React.FC<CardProps> = ({ data }) => {
   const frontRef = useRef(null);
   const backRef = useRef(null);
 
-  useEffect(() => {
-    gsap.registerPlugin(Draggable, InertiaPlugin);
+  const { isMobile } = useViewport();
 
-    Draggable.create(".card", {
-      type: "x",
-      inertia: true,
-    });
+  useEffect(() => {
+    if (!isMobile) {
+      gsap.registerPlugin(Draggable, InertiaPlugin);
+
+      Draggable.create(".card", {
+        type: "x",
+        inertia: true,
+      });
+    }
 
     gsap.set([frontRef.current, backRef.current], {
       backfaceVisibility: "hidden",
@@ -48,7 +53,7 @@ const Card: React.FC<CardProps> = ({ data }) => {
         rotationY: 180,
         duration,
         ease: "power2.inOut",
-        onStart: () => {
+        onComplete: () => {
           setIsFlipped(true);
         },
       });
@@ -64,29 +69,11 @@ const Card: React.FC<CardProps> = ({ data }) => {
     }
   };
 
-  // const doubleFlip = () => {
-  //   const duration = 0.6;
-  //   // First flip (to front)
-  //   gsap.to(cardRef.current, {
-  //     rotationY: 0,
-  //     duration,
-  //     ease: "power2.inOut",
-  //     onComplete: () => {
-  //       // Second flip (back to back) in opposite direction
-  //       gsap.to(cardRef.current, {
-  //         rotationY: -180,
-  //         duration,
-  //         ease: "power2.inOut",
-  //       });
-  //     },
-  //   });
-  // };
-
   return (
     <div className="w-screen grid place-items-center p-5   pt-25 lg:p-25 h-screen">
       <div
         ref={cardRef}
-        className="relative card border-2 border-theme-black bg-theme-ivory  w-[600px] h-[700px]  stackingcard rounded-2xl "
+        className="relative card border-2 border-theme-black bg-theme-ivory w-full h-[500px] md:w-[600px] md:h-[700px]  stackingcard rounded-2xl "
       >
         <div
           ref={frontRef}
@@ -107,7 +94,7 @@ const Card: React.FC<CardProps> = ({ data }) => {
               id="overlay"
               className="absolute top-0 left-0 w-full h-full bg-theme-black opacity-50 bg-theme-grainy"
             ></div>
-            <span className="absolute top-1/2 left-1/2 -translate-1/2 text-5xl  font-bold font-montserrat">
+            <span className="absolute top-1/2 left-1/2 -translate-1/2 text-2xl md:text-5xl  font-bold font-montserrat">
               {data.name}
             </span>
           </div>
@@ -123,22 +110,13 @@ const Card: React.FC<CardProps> = ({ data }) => {
           ref={backRef}
           className="card-back absolute w-full h-full bg-theme-ivory text-theme-black rounded-2xl overflow-hidden"
         >
-          <div className="h-full flex flex-col gap-5 p-10">
-            {isFlipped && (
-              <>
-                <Overview data={data} />
-                <Button onClick={() => flipCard()} className="max-w-[300px]">
-                  Flip
-                </Button>
-              </>
-            )}
-
-            {/* <Button
-              onClick={expanded && isMobile ? doubleFlip : () => flipCard()}
-              className="self-center mt-auto min-w-[300px]"
-            >
-              {expanded && isMobile ? "My Duties" : "Back"}
-            </Button> */}
+          <div className="h-full flex flex-col gap-1 p-2 md:gap-5 md:p-10">
+            <>
+              <Overview data={data} />
+              <Button onClick={() => flipCard()} className="max-w-[300px]">
+                Flip
+              </Button>
+            </>
           </div>
         </div>
       </div>

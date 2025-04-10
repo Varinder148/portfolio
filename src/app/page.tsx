@@ -13,6 +13,7 @@ import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import Contact from "@/Components/Sections/Contact";
 import { ViewportProvider } from "@/Providers/ViewportProvider";
+import Education from "@/Components/Sections/Education";
 const Skills = dynamic(() => import("@/Components/Sections/Skills"));
 
 export default function Home() {
@@ -144,9 +145,13 @@ export default function Home() {
               <span className="text-theme-gray"></span>
             </SectionHeading>
 
-            <div className={`w-screen h-[120vh]  ${pinTriggerContact}`}>
+            <div className={`w-screen h-screen  ${pinTriggerContact}`}>
               {loadSkills && <Skills />}
             </div>
+          </div>
+
+          <div>
+            <Education></Education>
           </div>
         </div>
       </div>

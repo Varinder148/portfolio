@@ -13,7 +13,7 @@ interface CardProps {
 
 const Responsibilities: React.FC<{ data: CardProps["data"] }> = ({ data }) => {
   return (
-    <ul className="text-overpass text-lg with-bullets font-overpass">
+    <ul className="text-overpass ml-5 md:ml-0 text-sm md:text-lg with-bullets font-overpass">
       {data.responsibilities.map((responsibilty, index) => (
         <li key={index}>{responsibilty}</li>
       ))}

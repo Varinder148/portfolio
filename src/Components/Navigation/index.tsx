@@ -106,6 +106,7 @@ const Navigation: React.FC<NavigationProps> = ({
           id="compass"
           width={isMobile ? 25 : 50}
           height={isMobile ? 25 : 50}
+          priority
         />
       </button>
       <div id="list" className="fixed top-0 right-0 z-30 scale-0">
@@ -134,6 +135,7 @@ const Navigation: React.FC<NavigationProps> = ({
             width={150}
             height={150}
             className="bg-none "
+            priority
           />
           <ul>
             {menuItems.map((item, index) => {

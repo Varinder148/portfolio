@@ -99,17 +99,14 @@ const About: React.FC<AboutProps> = ({ className = "", scrollToContact }) => {
       >
         <div className="flex flex-col w-full items-center">
           <h1 className="flex items-center font-luckiest-guy  tracking-widest text-[clamp(6rem,10vw,8rem)] justify-self-center  relative -z-1">
-            {/* <span id="hey" className="flex items-center stroke-text absolute">
-              HEY!
-            </span> */}
             <span id="hey">.</span>
           </h1>
 
-          <div className="text-lg md:text-xl font-montserrat text-center">
+          <div className="text-md md:text-xl font-montserrat text-center">
             <div>
               I'm
               <button
-                className={`text-theme-red pl-2 text-3xl font-luckiest-guy pb-5`}
+                className={`text-theme-red pl-2 text-2xl md:text-3xl font-luckiest-guy pb-5`}
                 id="name"
                 onMouseEnter={() => {
                   gsap.to("#name", {
@@ -132,30 +129,30 @@ const About: React.FC<AboutProps> = ({ className = "", scrollToContact }) => {
             </div>
             <div
               id="about-block"
-              className="text-xl p-5 md:w-3/4 mx-auto flex gap-5 flex-col tracking-normal font-overpass "
+              className="text-md md:text-xl p-5 md:w-3/4 mx-auto flex gap-5 flex-col tracking-normal font-overpass "
             >
               <p>
                 I’m a{" "}
                 <span
-                  className={`inline-block  ${highlightedValues.replace(".", "")} translate-0 bg-theme-red-wood rounded-sm p-1 pt-2  font-bold text-theme-ivory font-overpass text-2xl uppercase italic`}
+                  className={`inline-block  ${highlightedValues.replace(".", "")} translate-0 bg-theme-red-wood rounded-sm p-1 pt-2  font-bold text-theme-ivory font-overpass text-lg md:text-2xl uppercase italic`}
                 >
                   dedicated
                 </span>
                 ,{" "}
                 <span
-                  className={`inline-block  ${highlightedValues.replace(".", "")} font-bold font-montserrat mx-1 text-theme-sandy border-2 border-theme-sandy p-1 text-2xl uppercase `}
+                  className={`inline-block  ${highlightedValues.replace(".", "")} font-bold font-montserrat mx-1 text-theme-sandy border-2 border-theme-sandy p-1 text-lg md:text-2xl uppercase `}
                 >
                   hardworking
                 </span>
                 professional who
                 <span
-                  className={`inline-block  ${highlightedValues.replace(".", "")} p-2 m-2 text-theme-black font-bold text-2xl bg-theme-sandy rounded-full`}
+                  className={`inline-block  ${highlightedValues.replace(".", "")} p-2 m-2 text-theme-black font-bold text-lg md:text-2xl bg-theme-sandy rounded-full`}
                 >
                   loves
                 </span>
                 working with others. I’m always eager to learn
                 <span
-                  className={`inline-block underline ${highlightedValues.replace(".", "")} font-thin mx-2 text-theme-violet text-2xl capitalize italic font-luckiest-guy`}
+                  className={`inline-block underline ${highlightedValues.replace(".", "")} font-thin mx-2 text-theme-violet text-lg md:text-2xl capitalize italic font-luckiest-guy`}
                 >
                   new
                 </span>
@@ -167,7 +164,7 @@ const About: React.FC<AboutProps> = ({ className = "", scrollToContact }) => {
                 </span>
                 and ready to take on any{" "}
                 <span
-                  className={`inline-block capitalize ${highlightedValues.replace(".", "")} p-1 mt-2 rounded-b-2xl font-bold bg-theme-ivory mx-1 text-theme-gray text-2xl font-montserrat`}
+                  className={`inline-block capitalize ${highlightedValues.replace(".", "")} p-1 mt-2 rounded-b-2xl font-bold bg-theme-ivory mx-1 text-theme-gray text-lg md:text-2xl font-montserrat`}
                 >
                   challenge
                 </span>
@@ -189,16 +186,13 @@ const About: React.FC<AboutProps> = ({ className = "", scrollToContact }) => {
         <div className={`flex flex-col w-full gap-10 `}>
           <div className="flex flex-col md:flex-row justify-center gap-5 p-10">
             <Link href="./resume.pdf" target="_blank" download>
-              <Button
-                className="md:min-w-[300px] py-5 w-full "
-                color={THEME.SANDY}
-              >
+              <Button className=" md:min-w-[300px]  w-full " color={THEME.ROSE}>
                 My resume <span className="font-noto-color-emoji">👔</span>
               </Button>
             </Link>
 
             <Button
-              className="md:min-w-[300px] py-5 "
+              className=" md:min-w-[300px]  "
               onClick={() => scrollToContact?.()}
               color={THEME.REDWOOD}
             >

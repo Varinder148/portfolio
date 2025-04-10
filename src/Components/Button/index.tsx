@@ -109,7 +109,7 @@ const Button = ({
     <button
       ref={buttonRef}
       className={`
-        uppercase group hover:shadow-theme-spread-md  cursor-pointer rounded-8xl relative overflow-hidden border-2   font-montserrat touch-none px-8 py-2 md:px-15 md:py-5 ${className}
+        uppercase group hover:shadow-theme-spread-md  cursor-pointer  relative overflow-hidden border-2   font-montserrat touch-none px-8 py-1 md:px-15 md:py-5 ${className}
       `}
       style={{
         borderColor: color,
@@ -132,7 +132,7 @@ const Button = ({
           opacity: 0,
         }}
       />
-      <span className="relative text-lg md:text-base  group-hover:text-theme-black">
+      <span className="relative text-lg md:text-base group-active:text-theme-black group-hover:text-theme-black">
         {children}
       </span>
     </button>
