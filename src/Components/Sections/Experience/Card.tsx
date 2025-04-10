@@ -4,7 +4,7 @@ import Image from "next/image";
 import React, { useRef, useState, useEffect } from "react";
 import Overview from "./Overview";
 import "./Card.css";
-import { Draggable, InertiaPlugin } from "gsap/all";
+import { Draggable } from "gsap/all";
 import { useGSAP } from "@gsap/react";
 
 interface CardProps {
@@ -36,7 +36,7 @@ const Card: React.FC<CardProps> = ({ data }) => {
 
   useGSAP(() => {
     if (window && window.innerWidth > 768) {
-      gsap.registerPlugin(Draggable, InertiaPlugin);
+      gsap.registerPlugin(Draggable);
 
       Draggable.create(".card", {
         type: "x",
@@ -86,6 +86,7 @@ const Card: React.FC<CardProps> = ({ data }) => {
               className="object-cover object-center w-full h-full "
               width={-1}
               height={-1}
+              loading="lazy"
               style={{
                 filter: "grayscale(50%)",
               }}

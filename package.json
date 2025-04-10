@@ -8,7 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "predeploy:gh": "next build && touch out/.nojekyll",
+    "predeploy": "next build && touch out/.nojekyll",
     "deploy:gh": "npm run predeploy && gh-pages -d out",
     "lint:fix": "next lint --fix",
     "type-check": "tsc --noEmit",

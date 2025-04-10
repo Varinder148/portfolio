@@ -6,6 +6,7 @@ import React from "react";
 import Button from "@/Components/Button";
 import Link from "next/link";
 import { THEME } from "@/utils/constants";
+import { useViewport } from "@/Providers/ViewportProvider";
 
 interface AboutProps {
   className?: string;
@@ -17,6 +18,8 @@ const About: React.FC<AboutProps> = ({ className = "", scrollToContact }) => {
   const sectionRef = useRef<HTMLElement>(null);
 
   const highlightedValues = ".highlighted-values";
+
+  const { isMobile } = useViewport();
 
   useGSAP(() => {
     // hey text animation
@@ -89,8 +92,12 @@ const About: React.FC<AboutProps> = ({ className = "", scrollToContact }) => {
 
   return (
     <section ref={sectionRef} id="about">
-      <div className="absolute w-full h-screen inset rounded-b-full bg-mountain -z-50 inset-shadow" />
-      <div className="absolute w-full h-screen inset opacity-80 bg-theme-black -z-40 " />
+      {!isMobile && (
+        <>
+          <div className="absolute w-full h-screen inset rounded-b-full bg-mountain -z-50 inset-shadow" />
+          <div className="absolute w-full h-screen inset opacity-80 bg-theme-black -z-40 " />
+        </>
+      )}
 
       <div
         className={`bg-theme-grainy min-h-screen relative flex flex-col items-center justify-between pt-10  ${
