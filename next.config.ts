@@ -2,19 +2,19 @@ import type { NextConfig } from "next";
 
 const isDev = process.env.NODE_ENV !== "production";
 
+const isVercel = process.env.DEPLOYMENT_TARGET === "VERCEL";
+
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  images: {
-    loader: "custom",
-    loaderFile: "./imgLoader.ts",
-  },
-  assetPrefix: !isDev ? "/portfolio/" : "",
-  basePath: !isDev ? "/portfolio" : "",
+  images: !isVercel
+    ? {
+        loader: "custom",
+        loaderFile: "./imgLoader.ts",
+      }
+    : {},
+  assetPrefix: !isDev && !isVercel ? "/portfolio/" : "",
+  basePath: !isDev && !isVercel ? "/portfolio" : "",
   output: "export",
 };
-
-// const withBundleAnalyzer = require("@next/bundle-analyzer")({
-//   enabled: "false",
-// });
 
 export default nextConfig;

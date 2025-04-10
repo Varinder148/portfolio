@@ -8,8 +8,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "predeploy": "next build && touch out/.nojekyll",
-    "deploy": "npm run predeploy && gh-pages -d out",
+    "predeploy:gh": "next build && touch out/.nojekyll",
+    "deploy:gh": "npm run predeploy && gh-pages -d out",
     "lint:fix": "next lint --fix",
     "type-check": "tsc --noEmit",
     "prepare": "husky install"
