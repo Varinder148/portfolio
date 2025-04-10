@@ -1,8 +1,4 @@
 @import "tailwindcss";
-@import url("https://fonts.googleapis.com/css2?family=McLaren&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Alegreya+Sans&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Montserrat&display=swap");
-
 
 
 @theme {
@@ -28,8 +24,7 @@
   --font-luckiest-guy: var(--font-luckiest-guy);
   --font-montserrat: var(--font-montserrat);
   --font-overpass: var(--font-overpass);
-  --font-noto-color-emoji : var(--font-noto-color-emoji);
-
+ 
 }
 
 

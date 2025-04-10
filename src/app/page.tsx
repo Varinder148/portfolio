@@ -126,9 +126,8 @@ export default function Home() {
           >
             <SectionHeading triggerClass="experience">
               Let's begin with the{" "}
-              <span className="italic text-theme-green">people</span> 🧑‍💻🧑🏻‍💻 I
-              have <span className="semibold text-theme-red-wood">Worked</span>
-              🏢 with
+              <span className="italic text-theme-green">people</span> I have{" "}
+              <span className="semibold text-theme-red-wood">Worked</span> with
             </SectionHeading>
 
             <Experience />

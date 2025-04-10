@@ -185,17 +185,20 @@ const About: React.FC<AboutProps> = ({ className = "", scrollToContact }) => {
         <div className={`flex flex-col w-full gap-10 `}>
           <div className="flex flex-col md:flex-row justify-center gap-5 p-10">
             <Link href="./resume.pdf" target="_blank" download>
-              <Button className=" md:min-w-[300px]  w-full " color={THEME.ROSE}>
-                My resume <span className="font-noto-color-emoji">👔</span>
+              <Button
+                className=" md:min-w-[300px]  w-full "
+                color={THEME.OLIVE}
+              >
+                My resume
               </Button>
             </Link>
 
             <Button
               className=" md:min-w-[300px]  "
               onClick={() => scrollToContact?.()}
-              color={THEME.REDWOOD}
+              color={THEME.RED}
             >
-              Contact me <span className="font-noto-color-emoji">🤙</span>
+              Contact me
             </Button>
           </div>
         </div>

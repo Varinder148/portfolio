@@ -5,7 +5,7 @@ import React, { useRef, useState, useEffect } from "react";
 import Overview from "./Overview";
 import "./Card.css";
 import { Draggable, InertiaPlugin } from "gsap/all";
-import { useViewport } from "@/Providers/ViewportProvider";
+import { useGSAP } from "@gsap/react";
 
 interface CardProps {
   data: {
@@ -28,10 +28,14 @@ const Card: React.FC<CardProps> = ({ data }) => {
   const frontRef = useRef(null);
   const backRef = useRef(null);
 
-  const { isMobile } = useViewport();
-
   useEffect(() => {
-    if (!isMobile) {
+    gsap.set([frontRef.current, backRef.current], {
+      backfaceVisibility: "hidden",
+    });
+  }, []);
+
+  useGSAP(() => {
+    if (window && window.innerWidth > 768) {
       gsap.registerPlugin(Draggable, InertiaPlugin);
 
       Draggable.create(".card", {
@@ -39,11 +43,7 @@ const Card: React.FC<CardProps> = ({ data }) => {
         inertia: true,
       });
     }
-
-    gsap.set([frontRef.current, backRef.current], {
-      backfaceVisibility: "hidden",
-    });
-  }, []);
+  });
 
   const flipCard = () => {
     const duration = 0.6;
