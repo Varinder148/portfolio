@@ -32,6 +32,7 @@ export default function Home() {
     [refs.Experience]: null,
     [refs.Skills]: null,
     [refs.Contact]: null,
+    [refs.Education]: null,
   });
 
   useGSAP(() => {
@@ -150,7 +151,12 @@ export default function Home() {
             </div>
           </div>
 
-          <div>
+          <div
+            ref={(ref) => {
+              anchorRefs.current[refs.Education] = ref;
+            }}
+            id={refs.Education}
+          >
             <Education></Education>
           </div>
         </div>

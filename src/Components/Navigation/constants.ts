@@ -3,11 +3,12 @@ export const refs = {
   Experience: "experience",
   Skills: "skills",
   Contact: "contact",
+  Education: "education",
 };
 
 const menuItems = [
   {
-    name: "About",
+    name: "About Me",
     anchor: refs.About,
     index: 0,
   },
@@ -21,11 +22,16 @@ const menuItems = [
     anchor: refs.Skills,
     index: 2,
   },
+  {
+    name: "Education",
+    anchor: refs.Education,
+    index: 4,
+  },
 
   {
-    name: "Contact Info",
+    name: "Let's Connect",
     anchor: refs.Contact,
-    index: 4,
+    index: 5,
   },
 ];
 

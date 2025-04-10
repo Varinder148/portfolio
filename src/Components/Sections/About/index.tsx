@@ -98,7 +98,7 @@ const About: React.FC<AboutProps> = ({ className = "", scrollToContact }) => {
         }`}
       >
         <div className="flex flex-col w-full items-center">
-          <h1 className="flex items-center font-luckiest-guy  tracking-widest text-[clamp(6rem,10vw,8rem)] justify-self-center  relative -z-1">
+          <h1 className="flex items-center font-luckiest-guy  tracking-wider text-4xl mb-2 md:text-[clamp(6rem,10vw,8rem)] justify-self-center  relative -z-1">
             <span id="hey">.</span>
           </h1>
 
@@ -125,7 +125,6 @@ const About: React.FC<AboutProps> = ({ className = "", scrollToContact }) => {
               >
                 Varinder Singh
               </button>
-              <span className="font-noto-color-emoji text-4xl">👋</span>
             </div>
             <div
               id="about-block"
