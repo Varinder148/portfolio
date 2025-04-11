@@ -29,7 +29,7 @@ const Education = () => {
         My Education
       </h2>
       <article className="flex gap-10 lg:gap-40">
-        <p className="max-w-[300px] my-auto">
+        <p className="max-w-[300px] my-auto text-md">
           I graduated from{" "}
           <Link
             href="https://www.gndec.ac.in/"
@@ -46,7 +46,7 @@ const Education = () => {
         </p>
         <Image
           src="./gne.jpg"
-          className="hidden md:block object-cover rounded-4xl object-center h-[600px] w-[400px]"
+          className="hidden md:block object-cover rounded-4xl object-center h-[600px] w-[500px]"
           height={-1}
           width={-1}
           loading="lazy"

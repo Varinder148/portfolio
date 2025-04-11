@@ -4,8 +4,10 @@ import Phone from "@/app/Svgs/Phone";
 import Button from "@/Components/Button";
 import TextField from "@/Components/TextField";
 import { useViewport } from "@/Providers/ViewportProvider";
+import { THEME } from "@/utils/constants";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
 
@@ -135,7 +137,7 @@ const Contact = ({ pinTriggerContact }: { pinTriggerContact: string }) => {
       <div
         className={`relative h-full items-center mb-10 px-10 justify-center  w-screen flex-col flex lg:flex-row  ${REVEAL}`}
       >
-        <h2 className="text-center flex flex-wrap w-full justify-center gap-x-2 items-center text-5xl md:w-1/2 pb-5 md:text-[clamp(6rem,10vw,12rem)] font-luckiest-guy">
+        <h2 className="text-center flex flex-wrap w-full justify-center gap-x-2 items-center text-5xl md:w-1/2 pb-5 md:text-[clamp(6rem,10vw,7rem)] font-luckiest-guy">
           Let's{" "}
           <i className="text-theme-red inline-block" id="connect">
             Connect
@@ -150,7 +152,7 @@ const Contact = ({ pinTriggerContact }: { pinTriggerContact: string }) => {
             and build awesome things{" "}
             <strong
               id="together"
-              className="bg-theme-green inline-block text-2xl md:text-5xl font-montserrat p-2 text-theme-ivory"
+              className="bg-theme-green inline-block text-2xl md:text-3xl font-montserrat p-2 text-theme-ivory"
             >
               together!
             </strong>
@@ -180,8 +182,17 @@ const Contact = ({ pinTriggerContact }: { pinTriggerContact: string }) => {
             <Button
               className="col-span-2 py-2 px-10 min-w-[300px] font-semibold mx-auto"
               onClick={handleSubmit}
+              color={THEME.GREEN}
             >
-              Send
+              <div className="flex justify-center gap-1">
+                Send
+                <Image
+                  src="send.svg"
+                  width={16}
+                  height={16}
+                  alt="pointer icon"
+                ></Image>
+              </div>
             </Button>
           </div>
         </div>

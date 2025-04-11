@@ -9,6 +9,7 @@ export const SKILLS = [
   "Tailwind",
   "SCSS",
   "JavaScript",
+  "GSAP",
   "Typescript",
   "Git",
   "TDD",
@@ -16,7 +17,10 @@ export const SKILLS = [
   "Jest",
   "AWS",
   "Webpack",
+  "LaunchDarkly",
   "Contentful",
+  "Datadog",
+  "Fullstory",
 ];
 
 export const getSvgTexture = (skill: string) => {

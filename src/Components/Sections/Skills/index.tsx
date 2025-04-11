@@ -191,7 +191,7 @@ const Skills: React.FC = () => {
       x: svgCenter.x - (bounds.max.x - bounds.min.x) * 0.3,
       y: svgCenter.y - (bounds.max.y - bounds.min.y) * 0.3,
       cols: 4,
-      rows: 4,
+      rows: 5,
       spacing: 2,
     };
 
