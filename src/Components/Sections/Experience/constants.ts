@@ -1,6 +1,6 @@
 export const CARDS = [
   {
-    id: 1,
+    id: 0,
     color: "#000000",
     image: "./infosys.avif",
     name: "Infosys",
@@ -14,7 +14,7 @@ export const CARDS = [
     ],
   },
   {
-    id: 2,
+    id: 1,
     color: "#66ff66",
     image: "./geektrust.avif",
     name: "Geektrust",
@@ -28,7 +28,7 @@ export const CARDS = [
     ],
   },
   {
-    id: 3,
+    id: 2,
     color: "#6666ff",
     image: "./thoughtworks.avif",
     name: "Thoughtworks",
@@ -44,7 +44,7 @@ export const CARDS = [
     ],
   },
   {
-    id: 4,
+    id: 3,
     color: "#ffff66",
     image: "./gartner.avif",
     name: "Gartner",

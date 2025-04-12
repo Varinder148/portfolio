@@ -6,6 +6,7 @@ import Overview from "./Overview";
 import "./Card.css";
 import { Draggable } from "gsap/all";
 import { useGSAP } from "@gsap/react";
+import { useViewport } from "@/Providers/ViewportProvider";
 
 interface CardProps {
   data: {
@@ -24,6 +25,8 @@ interface CardProps {
 const Card: React.FC<CardProps> = ({ data }) => {
   const [isFlipped, setIsFlipped] = useState(false);
 
+  const { isMobile } = useViewport();
+
   const cardRef = useRef(null);
   const frontRef = useRef(null);
   const backRef = useRef(null);
@@ -38,9 +41,14 @@ const Card: React.FC<CardProps> = ({ data }) => {
     if (window && window.innerWidth > 768) {
       gsap.registerPlugin(Draggable);
 
-      Draggable.create(".card", {
-        type: "x",
-        inertia: true,
+      const cards = gsap.utils.toArray(".card");
+
+      cards.forEach((card: any, index) => {
+        Draggable.create(card, {
+          type: "x",
+          inertia: true,
+          trigger: `.drag-trigger-${index}`,
+        });
       });
     }
   });
@@ -79,7 +87,7 @@ const Card: React.FC<CardProps> = ({ data }) => {
           ref={frontRef}
           className="absolute card-front mt-10 flex flex-col h-full w-full items-center justify-self-center px-10"
         >
-          <div className="relative  h-2/3 ">
+          <button className={`relative drag-trigger-${data.id}  h-2/3 `} id="">
             <Image
               src={data.image}
               alt={`${data.name} office`}
@@ -95,10 +103,15 @@ const Card: React.FC<CardProps> = ({ data }) => {
               id="overlay"
               className="absolute top-0 left-0 w-full h-full bg-theme-black opacity-50 bg-theme-grainy"
             ></div>
-            <span className="absolute top-1/2 left-1/2 -translate-1/2 text-2xl md:text-5xl  font-bold font-montserrat">
+            <span className="absolute text-center top-1/2 left-1/2 -translate-1/2 text-2xl md:text-5xl  font-bold font-montserrat">
               {data.name}
             </span>
-          </div>
+            {!isMobile && (
+              <div className="text-sm font-normal absolute text-center bottom-2 left-1/2 -translate-1/2 ">
+                You can drag this card from this portion
+              </div>
+            )}
+          </button>
 
           <div className="flex-1 items-center flex">
             <Button className="min-w-[300px] " onClick={() => flipCard()}>
@@ -107,9 +120,9 @@ const Card: React.FC<CardProps> = ({ data }) => {
           </div>
         </div>
 
-        <div
+        <a
           ref={backRef}
-          className="card-back absolute w-full h-full bg-theme-ivory text-theme-black rounded-2xl overflow-hidden"
+          className={`card-back drag-trigger-${data.id}  absolute w-full h-full bg-theme-ivory text-theme-black rounded-2xl overflow-hidden`}
         >
           <div className="h-full flex flex-col gap-1 p-2 md:gap-5 md:p-10">
             <>
@@ -119,7 +132,7 @@ const Card: React.FC<CardProps> = ({ data }) => {
               </Button>
             </>
           </div>
-        </div>
+        </a>
       </div>
     </div>
   );

@@ -15,7 +15,7 @@ const Experience: React.FC = () => {
     cards.forEach((card: any, i) => {
       const angleMultiplier = i % 2 === 1 ? -1 : 1;
       gsap.to(card, {
-        rotate: () => 5 * angleMultiplier, // Rotate based on index
+        rotateZ: () => 5 * angleMultiplier, // Rotate based on index
         ease: "power2.inOut", // Smooth easing for scaling
         scrollTrigger: {
           trigger: card,
@@ -44,7 +44,7 @@ const Experience: React.FC = () => {
       {CARDS.map((card) => {
         return <Card key={card.id} data={card} />;
       })}
-      <div className="end-element h-[50vh]" />
+      <div className="end-element h-2 mb-[50vh]" />
     </>
   );
 };

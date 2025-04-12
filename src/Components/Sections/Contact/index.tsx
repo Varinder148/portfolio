@@ -3,6 +3,7 @@ import Mail from "@/app/Svgs/Mail";
 import Phone from "@/app/Svgs/Phone";
 import Button from "@/Components/Button";
 import TextField from "@/Components/TextField";
+import Tooltip from "@/Components/Tooltip";
 import { useViewport } from "@/Providers/ViewportProvider";
 import { THEME } from "@/utils/constants";
 import { useGSAP } from "@gsap/react";
@@ -28,18 +29,21 @@ const IconLinks = () => {
 
   return (
     <div className="flex gap-5 justify-center justify-self-center ">
-      <Link
-        className="connect block"
-        href="mailto:varindersingh14.vs@gmail.com"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <Mail
-          width={isMobile ? 36 : 40}
-          height={isMobile ? 36 : 40}
-          className="hover:text-theme-red border-2 border-theme-gray text-theme-gray p-2 rounded-lg hover:border-theme-red"
-        />
-      </Link>
+      <Tooltip text="varindersingh14.vs@gmail.com">
+        <Link
+          className="connect block"
+          href="mailto:varindersingh14.vs@gmail.com"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Mail
+            width={isMobile ? 36 : 40}
+            height={isMobile ? 36 : 40}
+            className="hover:text-theme-red border-2 border-theme-gray text-theme-gray p-2 rounded-lg hover:border-theme-red"
+          />
+        </Link>
+      </Tooltip>
+
       <Link
         className="connect block"
         href="https://in.linkedin.com/in/varinder-singh-2317b8150"
@@ -52,18 +56,20 @@ const IconLinks = () => {
           className="hover:text-theme-red border-2 border-theme-gray text-theme-gray p-2 rounded-lg hover:border-theme-red"
         />
       </Link>
-      <Link
-        href="tel:+917696134521"
-        className="connect block"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <Phone
-          height={isMobile ? 36 : 40}
-          width={isMobile ? 36 : 40}
-          className="hover:text-theme-red border-2 border-theme-gray text-theme-gray p-2 rounded-lg hover:border-theme-red"
-        ></Phone>
-      </Link>
+      <Tooltip text="+91 7696134521">
+        <Link
+          href="tel:+917696134521"
+          className="connect block"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Phone
+            height={isMobile ? 36 : 40}
+            width={isMobile ? 36 : 40}
+            className="hover:text-theme-red border-2 border-theme-gray text-theme-gray p-2 rounded-lg hover:border-theme-red"
+          ></Phone>
+        </Link>
+      </Tooltip>
     </div>
   );
 };
@@ -135,9 +141,9 @@ const Contact = ({ pinTriggerContact }: { pinTriggerContact: string }) => {
       id="education"
     >
       <div
-        className={`relative h-full items-center mb-10 px-10 justify-center  w-screen flex-col flex lg:flex-row  ${REVEAL}`}
+        className={`relative h-full items-center mb-10 px-10 pt-10  md:justify-center   w-screen flex-col flex lg:flex-row  ${REVEAL}`}
       >
-        <h2 className="text-center flex flex-wrap w-full justify-center gap-x-2 items-center text-5xl md:w-1/2 pb-5 md:text-[clamp(6rem,10vw,7rem)] font-luckiest-guy">
+        <h2 className="text-center flex flex-wrap w-full justify-start md:justify-center gap-x-2  text-5xl md:w-1/2 pb-5 md:text-[clamp(6rem,10vw,7rem)] font-luckiest-guy">
           Let's{" "}
           <i className="text-theme-red inline-block" id="connect">
             Connect
@@ -158,7 +164,7 @@ const Contact = ({ pinTriggerContact }: { pinTriggerContact: string }) => {
             </strong>
           </h3>
           <IconLinks></IconLinks>
-          <div className={"grid grid-cols-2 gap-5  "}>
+          <div className={"grid grid-cols-2 gap-2 md:gap-5  "}>
             <TextField
               label={"Email address:"}
               value={email}
@@ -194,6 +200,10 @@ const Contact = ({ pinTriggerContact }: { pinTriggerContact: string }) => {
                 ></Image>
               </div>
             </Button>
+          </div>
+          <div className=" bg-theme-black p-2 md:px-10 md:py-5 absolute text-center text-sm md:text-md w-screen md:w-max md:rounded-t-4xl left-1/2 -translate-x-1/2 text-theme-ivory bottom-0">
+            &copy; 2025 Varinder Singh. Coded with coffee, chaos & a bit of
+            magic ✨.
           </div>
         </div>
       </div>

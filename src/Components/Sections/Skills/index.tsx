@@ -288,10 +288,16 @@ const Skills: React.FC = () => {
   return (
     <>
       {isTouchDevice && (
-        <div className="text-2xl relative  top-50 w-full text-center">
+        <div className="text-2xl relative  top-0 w-full text-center">
           Try tilting your device
         </div>
       )}
+      {!isTouchDevice && (
+        <div className="text-2xl  relative  top-0 w-full text-center">
+          Try dragging the skills
+        </div>
+      )}
+
       <div
         ref={canvasRef}
         style={{
