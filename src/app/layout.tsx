@@ -26,25 +26,29 @@ const overpass = Josefin_Sans({
 
 export async function generateMetadata() {
   const metadata = {
-    title: "Varinder Singh - Software Engineer",
+    title:
+      "Varinder Singh | Frontend Developer – React.js, Next.js, JavaScript Expert",
     description:
-      "Portfolio of Varinder Singh who is a Software engineer currently working at Gartner",
+      "Varinder Singh – Frontend Developer with expertise in React.js, Next.js, and modern JavaScript frameworks. Experienced in building scalable, high-performance web applications at Gartner, Thoughtworks, and Infosys. Skilled in micro frontends, A/B testing, TDD, and UI development with tools like Tailwind, GraphQL, and Contentful. Explore my portfolio for clean, responsive, and production-ready interfaces.",
     openGraph: {
-      title: "Varinder Singh - Software Engineer",
+      title:
+        "Varinder Singh | Frontend Developer – React.js, Next.js, JavaScript Expert",
       description:
-        "Portfolio of Varinder Singh who is a Software engineer currently working at Gartner",
+        "Varinder Singh – Frontend Developer with expertise in React.js, Next.js, and modern JavaScript frameworks. Experienced in building scalable, high-performance web applications at Gartner, Thoughtworks, and Infosys. Skilled in micro frontends, A/B testing, TDD, and UI development with tools like Tailwind, GraphQL, and Contentful. Explore my portfolio for clean, responsive, and production-ready interfaces.",
       siteName: "Portfolio",
       type: "website",
       url: "https://varinder148.github.io/portfolio",
     },
     referrer: "origin-when-cross-origin",
     appleWebApp: {
-      title: "Varinder Singh - Software Engineer",
+      title:
+        "Varinder Singh | Frontend Developer – React.js, Next.js, JavaScript Expert",
     },
     twitter: {
-      title: "Varinder Singh - Software Engineer",
+      title:
+        "Varinder Singh | Frontend Developer – React.js, Next.js, JavaScript Expert",
       description:
-        "Portfolio of Varinder Singh who is a Software engineer currently working at Gartner",
+        "Varinder Singh – Frontend Developer with expertise in React.js, Next.js, and modern JavaScript frameworks. Experienced in building scalable, high-performance web applications at Gartner, Thoughtworks, and Infosys. Skilled in micro frontends, A/B testing, TDD, and UI development with tools like Tailwind, GraphQL, and Contentful. Explore my portfolio for clean, responsive, and production-ready interfaces.",
     },
   };
 
