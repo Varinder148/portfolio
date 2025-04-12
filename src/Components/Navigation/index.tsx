@@ -73,7 +73,7 @@ const Navigation: React.FC<NavigationProps> = ({
   const [visible, setVisible] = useState(false);
   const { isMobile } = useViewport();
 
-  const angle = 180 / menuItems.length;
+  const angle = 270 / menuItems.length;
   const circleSize = 400;
   const initialRotation = 270;
 

@@ -25,13 +25,13 @@ const menuItems = [
   {
     name: "Education",
     anchor: refs.Education,
-    index: 4,
+    index: 3,
   },
 
   {
     name: "Let's Connect",
     anchor: refs.Contact,
-    index: 5,
+    index: 4,
   },
 ];
 
