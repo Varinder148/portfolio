@@ -3,6 +3,7 @@ import { gsap } from "gsap";
 
 import { ReactNode } from "react";
 import { THEME } from "@/utils/constants";
+import clsx from "clsx";
 
 interface ButtonProps {
   children: ReactNode;
@@ -13,6 +14,8 @@ interface ButtonProps {
   ) => void;
   className?: string;
   color?: string;
+  type?: "submit" | "button";
+  disabled?: boolean;
 }
 
 const Button = ({
@@ -20,6 +23,8 @@ const Button = ({
   onClick = () => {},
   className = "",
   color = THEME.RED,
+  type = "button",
+  disabled = false,
 }: ButtonProps) => {
   const circleRef = useRef(null);
   const buttonRef = useRef(null);
@@ -108,13 +113,21 @@ const Button = ({
   return (
     <button
       ref={buttonRef}
-      className={`
-        uppercase group hover:shadow-theme-spread-md  cursor-pointer  relative overflow-hidden border-2   font-montserrat touch-none px-8 py-1 md:px-15 md:py-5 ${className}
-      `}
+      className={clsx(
+        `
+        uppercase group   cursor-pointer  relative overflow-hidden border-2   font-montserrat touch-none px-8 py-1 md:px-15 md:py-5 ${className}
+      `,
+        {
+          "bg-gray-100  ": disabled,
+          "hover:shadow-theme-spread-md": !disabled,
+        },
+      )}
       style={{
-        borderColor: color,
+        borderColor: disabled ? "transparent" : color,
         color,
       }}
+      disabled={disabled}
+      type={type}
       onClick={onClick}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
@@ -132,7 +145,13 @@ const Button = ({
           opacity: 0,
         }}
       />
-      <span className="relative text-lg md:text-base group-active:text-theme-black group-hover:text-theme-black">
+      <span
+        className={clsx("relative text-lg md:text-base ", {
+          "group-hover:text-gray-500 text-gray-500": disabled,
+          "group-active:text-theme-black group-hover:text-theme-black":
+            !disabled,
+        })}
+      >
         {children}
       </span>
     </button>

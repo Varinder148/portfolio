@@ -8,9 +8,8 @@ import { useViewport } from "@/Providers/ViewportProvider";
 import { THEME } from "@/utils/constants";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 
 const IconLinks = () => {
   const { isMobile } = useViewport();
@@ -79,6 +78,41 @@ const Contact = ({ pinTriggerContact }: { pinTriggerContact: string }) => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
+
+  const handleIframeLoad = () => {
+    if (!submitted) {
+      setSubmitted(true);
+      setEmail("");
+      setName("");
+      setMessage("");
+      gsap
+        .timeline()
+        .to("#send", {
+          text: "...",
+          ease: "",
+          duration: 0.5,
+        })
+        .to("#send", {
+          text: "Sent",
+          ease: "",
+          duration: 0.5,
+        })
+        .to("#send", {
+          delay: 2,
+          text: "...",
+          ease: "",
+          duration: 0.5,
+        })
+        .to("#send", {
+          text: "Send",
+          duration: 0.5,
+          ease: "",
+        });
+      formRef.current?.reset();
+    }
+  };
 
   useGSAP(() => {
     const tl = gsap.timeline({
@@ -129,12 +163,6 @@ const Contact = ({ pinTriggerContact }: { pinTriggerContact: string }) => {
     }
   };
 
-  const handleSubmit = () => {
-    if (!validateEmail(email) && !validateEmpty(name)) {
-      console.log("submitted");
-    }
-  };
-
   return (
     <section
       className={`w-screen overflow-hidden min-h-screen font-overpass`}
@@ -164,42 +192,59 @@ const Contact = ({ pinTriggerContact }: { pinTriggerContact: string }) => {
             </strong>
           </h3>
           <IconLinks></IconLinks>
-          <div className={"grid grid-cols-2 gap-2 md:gap-5  "}>
-            <TextField
-              label={"Email address:"}
-              value={email}
-              type="email"
-              onChange={(value: string) => setEmail(value)}
-              validate={validateEmail}
-            />
-            <TextField
-              label={"Name:"}
-              value={name}
-              onChange={(value: string) => setName(value)}
-              validate={validateEmpty}
-            />
-            <TextField
-              label={"Your Message"}
-              value={message}
-              className="col-span-2"
-              onChange={(value: string) => setMessage(value)}
-              multiline
-            />
-            <Button
-              className="col-span-2 py-2 px-10 min-w-[300px] font-semibold mx-auto"
-              onClick={handleSubmit}
-              color={THEME.GREEN}
+
+          <div>
+            <div className="text-sm font-normal font-overpass text-theme-green text-center mb-2">
+              Note: Only one message per session is allowed
+            </div>
+            <form
+              className={"grid grid-cols-2 gap-2 md:gap-5  "}
+              action="https://docs.google.com/forms/u/0/d/e/1FAIpQLSfZOZqPUED1FCGx3OntVoE8yqVxcGsMSmceiCxuNN16U1Ohsg/formResponse"
+              method="POST"
+              target="hidden_iframe"
+              ref={formRef}
             >
-              <div className="flex justify-center gap-1">
-                Send
-                <Image
-                  src="send.svg"
-                  width={16}
-                  height={16}
-                  alt="pointer icon"
-                ></Image>
-              </div>
-            </Button>
+              <TextField
+                label={"Email address:"}
+                value={email}
+                type="email"
+                onChange={(value: string) => setEmail(value)}
+                validate={validateEmail}
+                name="entry.1195739850"
+              />
+              <TextField
+                label={"Name:"}
+                value={name}
+                onChange={(value: string) => setName(value)}
+                validate={validateEmpty}
+                name="entry.939547033"
+              />
+              <TextField
+                label={"Your Message"}
+                value={message}
+                className="col-span-2"
+                onChange={(value: string) => setMessage(value)}
+                multiline
+                name="entry.1570976079"
+              />
+              <Button
+                className="col-span-2 py-2 px-10 min-w-[300px] font-semibold mx-auto"
+                color={THEME.GREEN}
+                type="submit"
+                disabled={
+                  !!(validateEmail(email) || validateEmpty(name)) || submitted
+                }
+              >
+                <div className="block" id="send">
+                  Send
+                </div>
+              </Button>
+            </form>
+            <iframe
+              name="hidden_iframe"
+              style={{ display: "none" }}
+              onLoad={handleIframeLoad}
+            />
           </div>
           <div className=" bg-theme-black p-2 md:px-10 md:py-5 absolute text-center text-sm md:text-md w-screen md:w-max md:rounded-t-4xl left-1/2 -translate-x-1/2 text-theme-ivory bottom-0">
             &copy; 2025 Varinder Singh. Coded with coffee, chaos & a bit of

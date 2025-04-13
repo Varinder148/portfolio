@@ -77,7 +77,7 @@ const CustomMousePointer: React.FC = () => {
     const onMouseLeave = () => setIsHovered(false);
 
     const clickableElements = document.querySelectorAll(
-      'a, button, [role="button"]',
+      'a, button:not([disabled]), [role="button"]',
     );
     clickableElements.forEach((element) => {
       element.addEventListener("mouseenter", onMouseEnter);

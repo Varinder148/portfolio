@@ -10,6 +10,7 @@ interface Props {
   validate?: (value: string) => string | undefined;
   multiline?: boolean;
   rows?: number;
+  name?: string;
 }
 
 const TextField = ({
@@ -22,6 +23,7 @@ const TextField = ({
   validate = () => "",
   multiline = false,
   rows = 7,
+  name = "",
 }: Props) => {
   const [error, setError] = useState<string | undefined>("");
   const [touched, setTouched] = useState(false);
@@ -71,6 +73,7 @@ const TextField = ({
           onBlur={handleBlur}
           placeholder={placeholder}
           rows={rows}
+          name={name}
           className={`mt-2 block w-full px-4 py-2 border rounded-md focus:outline-none ${
             error ? "border-red-500" : "border-gray-300"
           } focus:ring-0`}
@@ -83,6 +86,7 @@ const TextField = ({
           onChange={handleChange}
           onFocus={handleFocus}
           onBlur={handleBlur}
+          name={name}
           placeholder={placeholder}
           className={`mt-2 block w-full px-4 py-2 border rounded-md focus:outline-none ${
             error ? "border-red-500" : "border-gray-300"
