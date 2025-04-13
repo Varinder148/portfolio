@@ -11,7 +11,9 @@ const nextConfig: NextConfig = {
         loader: "custom",
         loaderFile: "./imgLoader.ts",
       }
-    : {},
+    : {
+        formats: ["image/avif", "image/webp"],
+      },
   assetPrefix: !isDev && !isVercel ? "/portfolio/" : "",
   basePath: !isDev && !isVercel ? "/portfolio" : "",
   output: "export",

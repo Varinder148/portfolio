@@ -92,8 +92,8 @@ const Card: React.FC<CardProps> = ({ data }) => {
               src={data.image}
               alt={`${data.name} office`}
               className="object-cover object-center w-full h-full "
-              width={-1}
-              height={-1}
+              width={0}
+              height={0}
               loading="lazy"
               style={{
                 filter: "grayscale(50%)",
