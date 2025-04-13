@@ -12,7 +12,7 @@ const nextConfig: NextConfig = {
         loaderFile: "./imgLoader.ts",
       }
     : {
-        formats: ["image/avif", "image/webp"],
+        unoptimized: true,
       },
   assetPrefix: !isDev && !isVercel ? "/portfolio/" : "",
   basePath: !isDev && !isVercel ? "/portfolio" : "",
