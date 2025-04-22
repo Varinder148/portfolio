@@ -2,7 +2,6 @@
   "name": "portfolio",
   "version": "0.1.0",
   "private": true,
-  "type": "module",
   "homepage": "https://varinder148.github.io/portfolio/",
   "scripts": {
     "dev": "next dev",
