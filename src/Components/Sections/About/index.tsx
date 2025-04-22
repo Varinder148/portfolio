@@ -14,7 +14,7 @@ interface AboutProps {
 }
 
 const About: React.FC<AboutProps> = ({ className = "", scrollToContact }) => {
-  const timelineRef = useRef<gsap.core.Timeline>(null);
+  const timelineRef = useRef<gsap.core.Timeline | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
 
   const highlightedValues = ".highlighted-values";
@@ -83,7 +83,9 @@ const About: React.FC<AboutProps> = ({ className = "", scrollToContact }) => {
         },
       });
 
-    timelineRef.current = tl;
+    if (timelineRef.current) {
+      timelineRef.current = tl;
+    }
 
     return () => {
       tl.kill();

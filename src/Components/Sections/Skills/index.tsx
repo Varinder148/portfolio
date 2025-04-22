@@ -53,8 +53,8 @@ const getScaledVertices = (vertexSets: any[], viewportWidth: number) => {
 
 const Skills: React.FC = () => {
   const canvasRef = useRef<HTMLDivElement>(null);
-  const engineRef = useRef<Matter.Engine>(null);
-  const renderRef = useRef<Matter.Render>(null);
+  const engineRef = useRef<Matter.Engine | null>(null);
+  const renderRef = useRef<Matter.Render | null>(null);
   const runnerRef = useRef<Matter.Runner>(null);
 
   const { viewportWidth, viewportHeight, isMobile, isTouchDevice } =
@@ -78,12 +78,13 @@ const Skills: React.FC = () => {
         pixelRatio: window.devicePixelRatio,
       },
     });
-    renderRef.current = render;
+    (renderRef as React.MutableRefObject<Matter.Render | null>).current =
+      render;
 
     Render.run(render);
 
     const runner = Runner.create();
-    runnerRef.current = runner;
+    (runnerRef as React.MutableRefObject<Matter.Runner>).current = runner;
     Runner.run(runner, engine);
 
     if (typeof window !== "undefined" && isTouchDevice) {
@@ -118,7 +119,7 @@ const Skills: React.FC = () => {
       {
         isStatic: true,
         render: { fillStyle: "#0F0F0F" },
-      },
+      }
     );
 
     const leftWall = Bodies.rectangle(
@@ -129,7 +130,7 @@ const Skills: React.FC = () => {
       {
         isStatic: true,
         render: { fillStyle: "#0F0F0F" },
-      },
+      }
     );
 
     const roof = Bodies.rectangle(viewportWidth / 2, 0, viewportWidth, 10, {
@@ -145,7 +146,7 @@ const Skills: React.FC = () => {
       {
         isStatic: true,
         render: { fillStyle: "#0F0F0F" },
-      },
+      }
     );
 
     Composite.add(world, [ground, leftWall, rightWall, roof]);
@@ -176,7 +177,7 @@ const Skills: React.FC = () => {
           lineWidth: 1,
         },
       },
-      true,
+      true
     );
 
     if (!isMobile) Composite.add(world, terrain);
@@ -224,8 +225,8 @@ const Skills: React.FC = () => {
 
           return Bodies.circle(x, y, 40, bodyOptions);
           // }
-        },
-      ),
+        }
+      )
     );
 
     engine.world.gravity.y = 0.5;
@@ -245,25 +246,25 @@ const Skills: React.FC = () => {
     mouseConstraint.mouse.element.removeEventListener(
       "wheel",
       //@ts-ignore
-      mouseConstraint.mouse.mousewheel,
+      mouseConstraint.mouse.mousewheel
     );
 
     if (isTouchDevice) {
       mouseConstraint.mouse.element.removeEventListener(
         "touchmove",
         //@ts-ignore
-        mouseConstraint.mouse.mousemove,
+        mouseConstraint.mouse.mousemove
       );
 
       mouseConstraint.mouse.element.removeEventListener(
         "touchstart",
         //@ts-ignore
-        mouseConstraint.mouse.mousedown,
+        mouseConstraint.mouse.mousedown
       );
       mouseConstraint.mouse.element.removeEventListener(
         "touchend",
         //@ts-ignore
-        mouseConstraint.mouse.mouseup,
+        mouseConstraint.mouse.mouseup
       );
     }
 
