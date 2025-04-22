@@ -1,4 +1,0 @@
-User-agent: *
-Disallow:
-
-Sitemap: https://varinder148.github.io/portfolio/sitemap.xml

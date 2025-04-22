@@ -24,6 +24,8 @@ const overpass = Josefin_Sans({
   variable: "--font-overpass",
 });
 
+const isVercel = process.env.DEPLOYMENT_TARGET === "VERCEL";
+
 export async function generateMetadata() {
   const metadata = {
     title:
@@ -37,7 +39,9 @@ export async function generateMetadata() {
         "Varinder Singh – Frontend Developer with expertise in React.js, Next.js, and modern JavaScript frameworks. Experienced in building scalable, high-performance web applications at Gartner, Thoughtworks, and Infosys. Skilled in micro frontends, A/B testing, TDD, and UI development with tools like Tailwind, GraphQL, and Contentful. Explore my portfolio for clean, responsive, and production-ready interfaces.",
       siteName: "Portfolio",
       type: "website",
-      url: "https://varinder148.github.io/portfolio",
+      url: isVercel
+        ? "https://varinder.vercel.app/sitemap.xml"
+        : "https://varinder148.github.io/portfolio/sitemap.xml",
     },
     referrer: "origin-when-cross-origin",
     appleWebApp: {
