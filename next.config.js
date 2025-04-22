@@ -1,10 +1,8 @@
-import type { NextConfig } from "next";
-
 const isDev = process.env.NODE_ENV !== "production";
 
 const isVercel = process.env.DEPLOYMENT_TARGET === "VERCEL";
 
-const nextConfig: NextConfig = {
+const nextConfig = {
   reactStrictMode: true,
   images: !isVercel
     ? {
