@@ -66,6 +66,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <meta
+          name="google-site-verification"
+          content="tkz1gT-sHQLzAo4k2YBHsW-EsLi0gMXecCZIlR3yNNo"
+        />
+      </head>
       <body
         className={`${luckiestGuy.variable}  ${montserrat.variable} ${overpass.variable} bg-theme-ivory bg-theme-grainy text-theme-black`}
       >
