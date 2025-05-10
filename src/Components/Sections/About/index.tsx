@@ -7,6 +7,7 @@ import Button from "@/Components/Button";
 import Link from "next/link";
 import { THEME } from "@/utils/constants";
 import { useViewport } from "@/Providers/ViewportProvider";
+import { SplitText } from "gsap/all";
 
 interface AboutProps {
   className?: string;
@@ -22,6 +23,8 @@ const About: React.FC<AboutProps> = ({ className = "", scrollToContact }) => {
   const { isMobile } = useViewport();
 
   useGSAP(() => {
+    gsap.registerPlugin(SplitText);
+
     // hey text animation
     const tl = gsap
       .timeline()
@@ -42,6 +45,8 @@ const About: React.FC<AboutProps> = ({ className = "", scrollToContact }) => {
     //   transformOrigin: "top right",
     // });
 
+    const split = SplitText.create(".split", { type: "words" });
+
     gsap
       .timeline({ delay: 0.1 })
       .to("#name", {
@@ -49,12 +54,18 @@ const About: React.FC<AboutProps> = ({ className = "", scrollToContact }) => {
           value: "Software Engineer",
         },
       })
+
       .from("#about-block", {
         opacity: 0,
-        yPercent: 20,
-        scale: 1.1,
-        duration: 0.2,
-        ease: "back.in",
+      })
+      .from(split.words, {
+        y: -100,
+        opacity: 0,
+        rotation: "random(-180,180)",
+        duration: 0.5,
+        transformOrigin: "center center",
+        ease: "back",
+        stagger: 0.05,
       })
       .from(`${highlightedValues}:nth-child(2n)`, {
         y: -20,
@@ -137,9 +148,9 @@ const About: React.FC<AboutProps> = ({ className = "", scrollToContact }) => {
             </div>
             <div
               id="about-block"
-              className="text-md md:text-lg p-5 md:w-3/4 mx-auto flex gap-5 flex-col tracking-normal font-overpass "
+              className="text-md split md:text-lg p-5 md:w-3/4 mx-auto flex gap-5 flex-col tracking-normal font-overpass "
             >
-              <p>
+              <p className="">
                 I’m a{" "}
                 <span
                   className={`inline-block  ${highlightedValues.replace(".", "")} translate-0 bg-theme-red-wood rounded-sm p-1 pt-2  font-bold text-theme-ivory font-overpass text-lg md:text-xl uppercase italic`}

@@ -4,7 +4,7 @@ import Image from "next/image";
 import React, { useRef, useState, useEffect } from "react";
 import Overview from "./Overview";
 import "./Card.css";
-import { Draggable } from "gsap/all";
+import { Draggable, InertiaPlugin } from "gsap/all";
 import { useGSAP } from "@gsap/react";
 import { useViewport } from "@/Providers/ViewportProvider";
 
@@ -40,12 +40,15 @@ const Card: React.FC<CardProps> = ({ data }) => {
   useGSAP(() => {
     if (window && window.innerWidth > 768) {
       gsap.registerPlugin(Draggable);
+      gsap.registerPlugin(InertiaPlugin);
 
       const cards = gsap.utils.toArray(".card");
 
       cards.forEach((card: any, index) => {
         Draggable.create(card, {
+          bounds: document.querySelector("#experience_bounds"),
           type: "x",
+          edgeResistance: 0.5,
           inertia: true,
           trigger: `.drag-trigger-${index}`,
         });
@@ -78,7 +81,10 @@ const Card: React.FC<CardProps> = ({ data }) => {
   };
 
   return (
-    <div className="w-screen grid place-items-center p-5   pt-25 lg:p-25 h-screen">
+    <div
+      className="w-screen grid place-items-center p-5   pt-25 lg:p-25 h-screen"
+      id="experience_bounds"
+    >
       <div
         ref={cardRef}
         className="relative card border-2 border-theme-black bg-theme-ivory w-full h-[500px] md:w-[600px] md:h-[700px]  stackingcard rounded-2xl "
