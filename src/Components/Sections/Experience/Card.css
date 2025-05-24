@@ -1,8 +1,11 @@
-
+.stackingcard {
+  transform-style: preserve-3d;
+}
 
 .card {
   transform-style: preserve-3d;
   perspective: 2000px;
+  transform-origin: center center;
 }
 
 .card-front,

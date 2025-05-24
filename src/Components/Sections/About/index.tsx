@@ -196,8 +196,8 @@ const About: React.FC<AboutProps> = ({ className = "", scrollToContact }) => {
                   and <strong className="text-theme-sandy">impactful </strong>
                   user interfaces, from the past ⌛
                 </p>
-                <Time></Time>
               </div>
+              <Time></Time>
             </div>
           </div>
         </div>
@@ -205,7 +205,10 @@ const About: React.FC<AboutProps> = ({ className = "", scrollToContact }) => {
         <div className={`flex flex-col w-full gap-10 `}>
           <div className="flex flex-col md:flex-row justify-center gap-5 p-10">
             <Link href="./resume.pdf" target="_blank" download>
-              <Button className=" md:min-w-[300px]  w-full " color={THEME.GRAY}>
+              <Button
+                className=" md:min-w-[300px]  w-full "
+                color={THEME.REDWOOD}
+              >
                 My resume
               </Button>
             </Link>
@@ -213,7 +216,7 @@ const About: React.FC<AboutProps> = ({ className = "", scrollToContact }) => {
             <Button
               className=" md:min-w-[300px]  "
               onClick={() => scrollToContact?.()}
-              color={THEME.ROSE}
+              color={THEME.SANDY}
             >
               Contact me
             </Button>

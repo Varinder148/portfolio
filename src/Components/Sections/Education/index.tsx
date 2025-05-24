@@ -45,8 +45,8 @@ const Education = () => {
           CGPA
         </p>
         <Image
-          src="/gne.jpg"
-          className="hidden md:block object-cover rounded-4xl object-center h-[600px] w-[500px]"
+          src="/gne.webp"
+          className="hidden md:block object-cover object-center h-[600px] w-auto shadow-2xl"
           height={0}
           width={0}
           loading="lazy"

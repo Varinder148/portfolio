@@ -35,6 +35,10 @@ const Card: React.FC<CardProps> = ({ data }) => {
     gsap.set([frontRef.current, backRef.current], {
       backfaceVisibility: "hidden",
     });
+    gsap.set(cardRef.current, {
+      transformOrigin: "center center",
+      transformPerspective: 1000,
+    });
   }, []);
 
   useGSAP(() => {
@@ -82,12 +86,13 @@ const Card: React.FC<CardProps> = ({ data }) => {
 
   return (
     <div
-      className="w-screen grid place-items-center p-5   pt-25 lg:p-25 h-screen"
+      className="w-screen grid place-items-center p-5 pt-25 lg:p-25 h-screen"
       id="experience_bounds"
     >
       <div
         ref={cardRef}
-        className="relative card border-2 border-theme-black bg-theme-ivory w-full h-[500px] md:w-[600px] md:h-[700px]  stackingcard rounded-2xl "
+        data-flipped={isFlipped}
+        className="relative card border-2 border-theme-black bg-theme-ivory w-full h-[500px] md:w-[600px] md:h-[700px] stackingcard rounded-2xl"
       >
         <div
           ref={frontRef}
