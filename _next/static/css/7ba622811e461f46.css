@@ -1,0 +1,1 @@
+.card,.stackingcard{transform-style:preserve-3d}.card{perspective:2000px;transform-origin:center center}.card-back,.card-front{backface-visibility:hidden}.card-back{transform:rotateY(180deg)}
