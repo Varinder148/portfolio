@@ -15,78 +15,41 @@ const Experience: React.FC = () => {
     cards.forEach((card: any, i) => {
       const angleMultiplier = i % 2 === 1 ? -1 : 1;
 
-      // Initial rotation to maintain consistent transform order
       gsap.set(card, {
-        rotate: 0,
-        rotateZ: 0,
+        transformOrigin: "center center",
+        rotationX: 0,
+        rotationY: 0,
+        rotationZ: 0,
       });
 
-      // Handle the Z rotation animation
-      gsap.to(card, {
-        rotateZ: () => 5 * angleMultiplier,
-        ease: "power2.inOut",
-        scrollTrigger: {
-          trigger: card,
-          start: `top-=${40 * i} 0`, // Adjust starting point based on card index
-          end: "top 20%", // End when card reaches 20% from top
-          scrub: 1, // Smoothly scrub the animation based on scroll position
-          onUpdate: () => {
+      ScrollTrigger.create({
+        trigger: card,
+        start: `top 10%`,
+        end: "top center",
+        endTrigger: ".end-element",
+        pin: true,
+        pinSpacing: false,
+        markers: false,
+        id: `card-${i}`,
+        onToggle: (self) => {
+          // Only handle rotations when card is pinned
+          if (self.isActive) {
             const isFlipped = card.getAttribute("data-flipped") === "true";
             const targetRotation = isFlipped ? 180 : 0;
             gsap.set(card, {
               transformOrigin: "center center",
               rotationX: 0,
               rotationY: targetRotation,
+              rotationZ: 5 * angleMultiplier,
             });
-          },
-        },
-      });
-
-      // Create a ScrollTrigger to pin the card and maintain rotation state
-      ScrollTrigger.create({
-        trigger: card,
-        start: `top 10%`, // Start position based on card index
-        end: "top center", // End position when the card reaches the center
-        endTrigger: ".end-element", // Use a specific end trigger
-        pin: true, // Pin the card while scrolling
-        pinSpacing: false, // Disable pin spacing
-        markers: false, // Set to true for debugging to see the scroll trigger markers
-        id: `card-${i}`, // Unique ID for each card
-        onEnter: () => {
-          const isFlipped = card.getAttribute("data-flipped") === "true";
-          const targetRotation = isFlipped ? 180 : 0;
-          gsap.set(card, {
-            transformOrigin: "center center",
-            rotationX: 0,
-            rotationY: targetRotation,
-          });
-        },
-        onEnterBack: () => {
-          const isFlipped = card.getAttribute("data-flipped") === "true";
-          const targetRotation = isFlipped ? 180 : 0;
-          gsap.set(card, {
-            transformOrigin: "center center",
-            rotationX: 0,
-            rotationY: targetRotation,
-          });
-        },
-        onLeave: () => {
-          const isFlipped = card.getAttribute("data-flipped") === "true";
-          const targetRotation = isFlipped ? 180 : 0;
-          gsap.set(card, {
-            transformOrigin: "center center",
-            rotationX: 0,
-            rotationY: targetRotation,
-          });
-        },
-        onLeaveBack: () => {
-          const isFlipped = card.getAttribute("data-flipped") === "true";
-          const targetRotation = isFlipped ? 180 : 0;
-          gsap.set(card, {
-            transformOrigin: "center center",
-            rotationX: 0,
-            rotationY: targetRotation,
-          });
+          } else {
+            // Reset rotations when unpinned
+            gsap.set(card, {
+              rotationX: 0,
+              rotationY: card.getAttribute("data-flipped") === "true" ? 180 : 0,
+              rotationZ: 0,
+            });
+          }
         },
       });
     });
