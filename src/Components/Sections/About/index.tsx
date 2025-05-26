@@ -38,14 +38,8 @@ const About: React.FC<AboutProps> = ({ className = "", scrollToContact }) => {
           value: "Hello!",
         },
       });
-    // .from("#hey", {
-    //   rotate: 50,
-    //   duration: 0.5,
-    //   ease: "bounce",
-    //   transformOrigin: "top right",
-    // });
 
-    const split = SplitText.create(".split", { type: "words" });
+    const split = SplitText.create(".split", { type: "lines" });
 
     gsap
       .timeline({ delay: 0.1 })
@@ -58,14 +52,14 @@ const About: React.FC<AboutProps> = ({ className = "", scrollToContact }) => {
       .from("#about-block", {
         opacity: 0,
       })
-      .from(split.words, {
+      .from(split.lines, {
         y: -100,
         opacity: 0,
-        rotation: "random(-180,180)",
+        rotation: "random(-50,100)",
         duration: 0.5,
         transformOrigin: "center center",
         ease: "back",
-        stagger: 0.05,
+        stagger: 0.4,
       })
       .from(`${highlightedValues}:nth-child(2n)`, {
         y: -20,
@@ -197,8 +191,8 @@ const About: React.FC<AboutProps> = ({ className = "", scrollToContact }) => {
                   user interfaces, from the past ⌛
                 </p>
               </div>
-              <Time></Time>
             </div>
+            <Time></Time>
           </div>
         </div>
 
