@@ -169,7 +169,7 @@ const Contact = ({ pinTriggerContact }: { pinTriggerContact: string }) => {
       id="education"
     >
       <div
-        className={`relative h-full items-center mb-10 px-10 pt-10  md:justify-center   w-screen flex-col flex lg:flex-row  ${REVEAL}`}
+        className={`pb-16 relative h-full items-center mb-10 px-10 pt-10  justify-center   w-screen flex-col flex lg:flex-row  ${REVEAL}`}
       >
         <h2 className="text-center flex flex-wrap w-full justify-start md:justify-center gap-x-2  text-5xl md:w-1/2 pb-5 md:text-[clamp(6rem,10vw,7rem)] font-luckiest-guy">
           Let's{" "}

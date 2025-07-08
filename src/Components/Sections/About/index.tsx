@@ -35,7 +35,7 @@ const About: React.FC<AboutProps> = ({ className = "", scrollToContact }) => {
         delay: 1,
         opacity: 1,
         text: {
-          value: "Hello!",
+          value: "Hey there!",
         },
       });
 
@@ -53,13 +53,22 @@ const About: React.FC<AboutProps> = ({ className = "", scrollToContact }) => {
         opacity: 0,
       })
       .from(split.lines, {
-        y: -100,
+        rotationX: -100,
+        rotateY: "random(-180,180)",
+        transformOrigin: "50% 50% -160px",
+        // rotation: "random(-50,100)",
+
         opacity: 0,
-        rotation: "random(-50,100)",
-        duration: 0.5,
-        transformOrigin: "center center",
-        ease: "back",
-        stagger: 0.4,
+        duration: 0.8,
+        ease: "power3",
+        stagger: 0.25,
+        // y: -100,
+        // opacity: 0,
+        // rotation: "random(-50,100)",
+        // duration: 0.5,
+        // transformOrigin: "center center",
+        // ease: "back",
+        // stagger: 0.4,
       })
       .from(`${highlightedValues}:nth-child(2n)`, {
         y: -20,
@@ -112,7 +121,7 @@ const About: React.FC<AboutProps> = ({ className = "", scrollToContact }) => {
         }`}
       >
         <div className="flex flex-col w-full items-center">
-          <h1 className="flex items-center font-luckiest-guy  tracking-wider text-4xl mb-2 md:text-[clamp(6rem,10vw,8rem)] justify-self-center  relative -z-1">
+          <h1 className="flex items-center font-luckiest-guy  tracking-wider text-4xl mb-10 md:text-[clamp(6rem,8vw,6rem)] justify-self-center  relative -z-1 ">
             <span id="hey">.</span>
           </h1>
 
@@ -198,7 +207,11 @@ const About: React.FC<AboutProps> = ({ className = "", scrollToContact }) => {
 
         <div className={`flex flex-col w-full gap-10 `}>
           <div className="flex flex-col md:flex-row justify-center gap-5 p-10">
-            <Link href="./resume.pdf" target="_blank" download>
+            <Link
+              href="./Varinder-Singh_Resume_fancy.pdf"
+              target="_blank"
+              download
+            >
               <Button
                 className=" md:min-w-[300px]  w-full "
                 color={THEME.REDWOOD}

@@ -92,7 +92,7 @@ const Card: React.FC<CardProps> = ({ data }) => {
       <div
         ref={cardRef}
         data-flipped={isFlipped}
-        className="relative card border-2 border-theme-black bg-theme-ivory w-full h-[500px] md:w-[600px] md:h-[700px] stackingcard rounded-2xl"
+        className="relative card border-2 border-theme-black bg-theme-ivory w-full h-[600px] md:w-[600px] md:h-[700px] stackingcard rounded-2xl"
       >
         <div
           ref={frontRef}
@@ -119,7 +119,7 @@ const Card: React.FC<CardProps> = ({ data }) => {
             </span>
             {!isMobile && (
               <div className="text-sm font-normal absolute text-center bottom-2 left-1/2 -translate-1/2 ">
-                You can drag this card from this portion
+                You can drag this card from this section
               </div>
             )}
           </button>
