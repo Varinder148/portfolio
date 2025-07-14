@@ -17,8 +17,6 @@ import Education from "@/Components/Sections/Education";
 const Skills = dynamic(() => import("@/Components/Sections/Skills"));
 
 export default function Home() {
-  gsap.registerPlugin(ScrollTrigger);
-  gsap.registerPlugin(useGSAP);
   gsap.registerPlugin(TextPlugin);
   const pinTriggerContact = "pinTrigger";
 
@@ -36,6 +34,8 @@ export default function Home() {
   });
 
   useGSAP(() => {
+    gsap.registerPlugin(ScrollTrigger);
+
     gsap.to(loading, {
       yPercent: -100,
       display: "none",
