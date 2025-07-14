@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-interface Props {
+export interface TextFieldProps {
   label: string;
   value: string;
   onChange: (value: string) => void;
@@ -24,46 +24,30 @@ const TextField = ({
   multiline = false,
   rows = 7,
   name = "",
-}: Props) => {
+}: TextFieldProps) => {
   const [error, setError] = useState<string | undefined>("");
   const [touched, setTouched] = useState(false);
-
-  // Handle input change
-  const handleChange = (e: any) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     const { value } = e.target;
     onChange(value);
-
-    // Run validation function when the value changes, but only if the field is touched
     if (touched && validate) {
-      const errorMessage = validate(value);
-      setError(errorMessage); // Set the error state based on the validation result
+      setError(validate(value));
     }
   };
-
-  // Handle focus event
-  const handleFocus = () => {
-    setTouched(true);
-  };
-
-  // Handle blur event (validation happens after blur)
+  const handleFocus = () => setTouched(true);
   const handleBlur = () => {
-    if (validate) {
-      const errorMessage = validate(value);
-      setError(errorMessage); // Trigger validation on blur
-    }
+    if (validate) setError(validate(value));
   };
-
   return (
     <div className={`mb-4 ${className}`}>
-      {/* Label */}
       <label
         htmlFor={label}
         className="block text-sm font-medium text-theme-black"
       >
         {label}
       </label>
-
-      {/* Input or Textarea */}
       {multiline ? (
         <textarea
           id={label}
@@ -74,9 +58,7 @@ const TextField = ({
           placeholder={placeholder}
           rows={rows}
           name={name}
-          className={`mt-2 block w-full px-4 py-2 border rounded-md focus:outline-none ${
-            error ? "border-red-500" : "border-gray-300"
-          } focus:ring-0`}
+          className={`mt-2 block w-full px-4 py-2 border rounded-md focus:outline-none ${error ? "border-red-500" : "border-gray-300"} focus:ring-0`}
         />
       ) : (
         <input
@@ -88,13 +70,9 @@ const TextField = ({
           onBlur={handleBlur}
           name={name}
           placeholder={placeholder}
-          className={`mt-2 block w-full px-4 py-2 border rounded-md focus:outline-none ${
-            error ? "border-red-500" : "border-gray-300"
-          } focus:ring-0`}
+          className={`mt-2 block w-full px-4 py-2 border rounded-md focus:outline-none ${error ? "border-red-500" : "border-gray-300"} focus:ring-0`}
         />
       )}
-
-      {/* Error Message */}
       {error && touched && <p className="mt-2 text-sm text-red-500">{error}</p>}
     </div>
   );

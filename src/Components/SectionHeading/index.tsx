@@ -13,18 +13,23 @@ const SectionHeading: React.FC<Props> = ({ triggerClass, children }) => {
   const textRef = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
-    if (textRef.current) {
-      gsap.to(textRef.current, {
-        xPercent: -100,
-        ease: "power2",
-        scrollTrigger: {
-          trigger: `.${triggerClass}`,
-          start: "top 65%",
-          end: "+=150%",
-          scrub: 1,
-        },
-      });
-    }
+    if (!textRef.current) return;
+
+    const anim = gsap.to(textRef.current, {
+      xPercent: -100,
+      ease: "power2",
+      scrollTrigger: {
+        trigger: `.${triggerClass}`,
+        start: "top 65%",
+        end: "+=150%",
+        scrub: 1,
+      },
+    });
+
+    return () => {
+      anim.scrollTrigger?.kill();
+      anim.kill();
+    };
   }, [triggerClass]);
 
   return (

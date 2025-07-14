@@ -15,7 +15,7 @@ const IconLinks = () => {
   const { isMobile } = useViewport();
 
   useGSAP(() => {
-    gsap.from(".connect", {
+    const anim = gsap.from(".connect", {
       opacity: 0,
       y: 20,
       ease: "back",
@@ -24,6 +24,9 @@ const IconLinks = () => {
         start: `bottom 20%`,
       },
     });
+    return () => {
+      anim.kill();
+    };
   });
 
   return (
@@ -87,18 +90,9 @@ const Contact = ({ pinTriggerContact }: { pinTriggerContact: string }) => {
       setEmail("");
       setName("");
       setMessage("");
-      gsap
-        .timeline()
-        .to("#send", {
-          text: "...",
-          ease: "",
-          duration: 0.5,
-        })
-        .to("#send", {
-          text: "Sent",
-          ease: "",
-          duration: 0.5,
-        })
+      const tl = gsap.timeline();
+      tl.to("#send", { text: "...", ease: "", duration: 0.5 })
+        .to("#send", { text: "Sent", ease: "", duration: 0.5 })
         .to("#send", {
           delay: 2,
           text: "...",

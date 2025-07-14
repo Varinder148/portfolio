@@ -85,9 +85,7 @@ const Navigation: React.FC<NavigationProps> = ({
   const handleClick = (anchor: string) => {
     setActiveTab(anchor);
     animateCompass();
-    if (refs.current) {
-      refs.current[anchor]?.scrollIntoView({ behavior: "smooth" });
-    }
+    refs.current?.[anchor]?.scrollIntoView({ behavior: "smooth" });
     toggleNav();
   };
 
@@ -99,7 +97,7 @@ const Navigation: React.FC<NavigationProps> = ({
           "fixed top-5 right-5 md:top-10 md:right-10 w-15 h-15 md:w-20 md:h-20 bg-theme-ivory rounded-full shadow-theme-spread-lg  shadow-theme-red  grid place-content-center border-2 border-theme-black cursor-pointer z-20",
           {
             hidden: visible,
-          }
+          },
         )}
       >
         <Image

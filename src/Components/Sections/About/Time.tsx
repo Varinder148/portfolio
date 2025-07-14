@@ -14,8 +14,6 @@ const Time = () => {
 
       setTime(formatTime(totalTime));
     };
-
-    console.log("Time updated");
     updateTime();
 
     const id = setInterval(updateTime, 1000);

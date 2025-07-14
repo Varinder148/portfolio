@@ -15,96 +15,58 @@ interface AboutProps {
 }
 
 const About: React.FC<AboutProps> = ({ className = "", scrollToContact }) => {
-  const timelineRef = useRef<gsap.core.Timeline | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
-
   const highlightedValues = ".highlighted-values";
-
   const { isMobile } = useViewport();
 
   useGSAP(() => {
     gsap.registerPlugin(SplitText);
-
     // hey text animation
     const tl = gsap
       .timeline()
-      .set("#hey", {
-        opacity: 0,
-      })
+      .set("#hey", { opacity: 0 })
       .to("#hey", {
         delay: 1,
         opacity: 1,
-        text: {
-          value: "Hey there!",
-        },
+        text: { value: "Hey there!" },
       });
-
     const split = SplitText.create(".split", { type: "lines" });
-
-    gsap
+    const anim = gsap
       .timeline({ delay: 0.1 })
-      .to("#name", {
-        text: {
-          value: "Software Engineer",
-        },
-      })
-
-      .from("#about-block", {
-        opacity: 0,
-      })
+      .to("#name", { text: { value: "Software Engineer" } })
+      .from("#about-block", { opacity: 0 })
       .from(split.lines, {
         rotationX: -100,
         rotateY: "random(-180,180)",
         transformOrigin: "50% 50% -160px",
-        // rotation: "random(-50,100)",
-
         opacity: 0,
         duration: 0.8,
         ease: "power3",
         stagger: 0.25,
-        // y: -100,
-        // opacity: 0,
-        // rotation: "random(-50,100)",
-        // duration: 0.5,
-        // transformOrigin: "center center",
-        // ease: "back",
-        // stagger: 0.4,
       })
       .from(`${highlightedValues}:nth-child(2n)`, {
         y: -20,
         opacity: 0,
         duration: 0.2,
         ease: "back.in",
-        stagger: {
-          amount: 0.2,
-          from: "random",
-        },
+        stagger: { amount: 0.2, from: "random" },
       })
       .from(`${highlightedValues}:nth-child(2n+1)`, {
         y: 20,
         opacity: 0,
         duration: 0.2,
         ease: "back.in",
-        stagger: {
-          amount: 0.2,
-          from: "random",
-        },
+        stagger: { amount: 0.2, from: "random" },
       })
       .to("#name", {
-        text: {
-          value: "Varinder&nbsp;Singh",
-          padSpace: true,
-        },
+        text: { value: "Varinder\u00A0Singh", padSpace: true },
       });
-
-    if (timelineRef.current) {
-      timelineRef.current = tl;
-    }
-
     return () => {
       tl.kill();
+      anim.kill();
+      if (split.revert) split.revert();
     };
-  }, []);
+  });
 
   return (
     <section ref={sectionRef} id="about">
