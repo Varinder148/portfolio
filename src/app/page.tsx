@@ -17,9 +17,6 @@ import Education from "@/Components/Sections/Education";
 const Skills = dynamic(() => import("@/Components/Sections/Skills"));
 
 export default function Home() {
-  gsap.registerPlugin(ScrollTrigger);
-  gsap.registerPlugin(useGSAP);
-  gsap.registerPlugin(TextPlugin);
   const pinTriggerContact = "pinTrigger";
 
   const [loadSkills, setLoadSkills] = useState(false);
@@ -44,6 +41,10 @@ export default function Home() {
   });
 
   useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+    gsap.registerPlugin(useGSAP);
+    gsap.registerPlugin(TextPlugin);
+
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting && !loadSkills) {
