@@ -7,8 +7,10 @@ import gsap from "gsap";
 import React from "react";
 import { useViewport } from "@/Providers/ViewportProvider";
 
+let compassTimeline: gsap.core.Timeline | null = null;
 export const animateCompass = () => {
-  const tl = gsap
+  if (compassTimeline) compassTimeline.kill();
+  compassTimeline = gsap
     .timeline()
     .to("#compass", {
       rotate: 45,
@@ -25,36 +27,33 @@ export const animateCompass = () => {
       duration: 0.5,
       ease: "elastic.out(1, 0.3)",
     });
-
-  return () => tl.kill();
 };
 
+let navTimeline: gsap.core.Timeline | null = null;
 export const animateNavOpeningandClosing = (visible: boolean) => {
-  const tl = gsap.timeline();
-
-  tl.set("#list", {
+  if (navTimeline) navTimeline.kill();
+  navTimeline = gsap.timeline();
+  navTimeline.set("#list", {
     top: 0,
     right: 0,
     position: "fixed",
     zIndex: 30,
   });
   if (!visible) {
-    tl.to("#list", {
+    navTimeline.to("#list", {
       scale: 1,
       transformOrigin: "top right",
       duration: 0.3,
       ease: "back.out",
     });
   } else {
-    tl.to("#list", {
+    navTimeline.to("#list", {
       scale: 0,
       transformOrigin: "top right",
       duration: 0.3,
       ease: "back.in",
     });
   }
-
-  return () => tl.kill();
 };
 
 interface NavigationProps {

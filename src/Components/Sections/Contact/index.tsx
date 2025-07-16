@@ -8,24 +8,33 @@ import { useViewport } from "@/Providers/ViewportProvider";
 import { THEME } from "@/utils/constants";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/all";
 import Link from "next/link";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useCallback } from "react";
 
 const IconLinks = () => {
   const { isMobile } = useViewport();
+  const mailRef = useRef<HTMLAnchorElement>(null);
+  const linkedinRef = useRef<HTMLAnchorElement>(null);
+  const phoneRef = useRef<HTMLAnchorElement>(null);
 
   useGSAP(() => {
-    const anim = gsap.from(".connect", {
-      opacity: 0,
-      y: 20,
-      ease: "back",
-      scrollTrigger: {
-        trigger: "#education",
-        start: `bottom 20%`,
+    const anim = gsap.from(
+      [mailRef.current, linkedinRef.current, phoneRef.current],
+      {
+        opacity: 0,
+        y: 20,
+        ease: "back",
+        stagger: 0.1,
+        scrollTrigger: {
+          trigger: "#education",
+          start: `bottom 20%`,
+        },
       },
-    });
+    );
     return () => {
       anim.kill();
+      ScrollTrigger.getAll().forEach((trigger: any) => trigger.kill());
     };
   });
 
@@ -37,6 +46,8 @@ const IconLinks = () => {
           href="mailto:varindersingh14.vs@gmail.com"
           target="_blank"
           rel="noopener noreferrer"
+          aria-label="Send email to varindersingh14.vs@gmail.com"
+          ref={mailRef}
         >
           <Mail
             width={isMobile ? 36 : 40}
@@ -51,6 +62,8 @@ const IconLinks = () => {
         href="https://in.linkedin.com/in/varinder-singh-2317b8150"
         target="_blank"
         rel="noopener noreferrer"
+        aria-label="Visit Varinder Singh's LinkedIn profile"
+        ref={linkedinRef}
       >
         <Linkedin
           height={isMobile ? 36 : 40}
@@ -62,8 +75,9 @@ const IconLinks = () => {
         <Link
           href="tel:+917696134521"
           className="connect block"
-          target="_blank"
           rel="noopener noreferrer"
+          aria-label="Call +91 7696134521"
+          ref={phoneRef}
         >
           <Phone
             height={isMobile ? 36 : 40}
@@ -146,16 +160,16 @@ const Contact = ({ pinTriggerContact }: { pinTriggerContact: string }) => {
       });
   });
 
-  const validateEmpty = (value: string) => {
+  const validateEmpty = useCallback((value: string) => {
     if (value?.length === 0) {
       return "This field cannot be empty.";
     }
-  };
-  const validateEmail = (email: string) => {
+  }, []);
+  const validateEmail = useCallback((email: string) => {
     if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
       return "Invalid Email Address";
     }
-  };
+  }, []);
 
   return (
     <section
@@ -229,7 +243,7 @@ const Contact = ({ pinTriggerContact }: { pinTriggerContact: string }) => {
                   !!(validateEmail(email) || validateEmpty(name)) || submitted
                 }
               >
-                <div className="block" id="send">
+                <div className="block" id="send" aria-live="polite">
                   Send
                 </div>
               </Button>
@@ -238,6 +252,9 @@ const Contact = ({ pinTriggerContact }: { pinTriggerContact: string }) => {
               name="hidden_iframe"
               style={{ display: "none" }}
               onLoad={handleIframeLoad}
+              title="hidden_iframe"
+              tabIndex={-1}
+              aria-hidden="true"
             />
           </div>
           <div className=" bg-theme-black p-2 md:px-10 md:py-5 absolute text-center text-sm md:text-md w-screen md:w-max md:rounded-t-4xl left-1/2 -translate-x-1/2 text-theme-ivory bottom-0">

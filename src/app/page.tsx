@@ -8,7 +8,7 @@ import About from "@/Components/Sections/About";
 import Experience from "@/Components/Sections/Experience";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { ScrollTrigger, TextPlugin } from "gsap/all";
+import { ScrollTrigger, TextPlugin, SplitText } from "gsap/all";
 import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import Contact from "@/Components/Sections/Contact";
@@ -18,6 +18,9 @@ const Skills = dynamic(() => import("@/Components/Sections/Skills"));
 
 export default function Home() {
   gsap.registerPlugin(TextPlugin);
+  gsap.registerPlugin(ScrollTrigger);
+  gsap.registerPlugin(SplitText);
+
   const pinTriggerContact = "pinTrigger";
 
   const [loadSkills, setLoadSkills] = useState(false);
@@ -34,11 +37,9 @@ export default function Home() {
   });
 
   useGSAP(() => {
-    gsap.registerPlugin(ScrollTrigger);
-
     gsap.to(loading, {
       yPercent: -100,
-      display: "none",
+      opacity: 0,
       delay: 0.2,
     });
   });
@@ -70,13 +71,13 @@ export default function Home() {
       { threshold: 0.1 },
     );
 
-    Object.values(anchorRefs?.current)?.forEach((ref) =>
-      observer.observe(ref as HTMLElement),
+    Object.values(anchorRefs?.current)?.forEach(
+      (ref) => ref && observer.observe(ref as HTMLElement),
     );
 
     return () => {
-      Object.values(anchorRefs?.current)?.forEach((ref) =>
-        observer.unobserve(ref as HTMLElement),
+      Object.values(anchorRefs?.current)?.forEach(
+        (ref) => ref && observer.unobserve(ref as HTMLElement),
       );
     };
   }, []);
@@ -156,7 +157,7 @@ export default function Home() {
             }}
             id={refs.Education}
           >
-            <Education></Education>
+            <Education />
           </div>
         </div>
       </div>

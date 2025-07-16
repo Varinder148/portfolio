@@ -1,6 +1,7 @@
 import { useViewport } from "@/Providers/ViewportProvider";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/all";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -8,8 +9,9 @@ const Education = () => {
   const { isMobile } = useViewport();
 
   useGSAP(() => {
+    let tween: gsap.core.Tween | undefined;
     if (!isMobile) {
-      gsap.from("#college", {
+      tween = gsap.from("#college", {
         scaleX: 0,
         ease: "back",
         scrollTrigger: {
@@ -18,6 +20,10 @@ const Education = () => {
         },
       });
     }
+    return () => {
+      if (tween) tween.kill();
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+    };
   });
 
   return (

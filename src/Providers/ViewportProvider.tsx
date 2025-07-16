@@ -19,20 +19,21 @@ const ViewportContext = createContext<ViewportContextType | undefined>(
 );
 
 const ViewportProvider = ({ children }: { children: ReactNode }) => {
-  const [viewportWidth, setViewportWidth] = useState<number>(0);
-  const [viewportHeight, setViewportHeight] = useState<number>(0);
-  const [isMobile, setIsMobile] = useState<boolean>(false);
+  // SSR safety: initialize with window values if available
+  const getInitialWidth = () =>
+    typeof window !== "undefined" ? window.innerWidth : 0;
+  const getInitialHeight = () =>
+    typeof window !== "undefined" ? window.innerHeight : 0;
+  const [viewportWidth, setViewportWidth] = useState<number>(getInitialWidth());
+  const [viewportHeight, setViewportHeight] =
+    useState<number>(getInitialHeight());
+  const [isMobile, setIsMobile] = useState<boolean>(getInitialWidth() < 768);
   const [isTouchDevice, setIsTouchDevice] = useState<boolean>(false);
 
-  // Handle resizing and viewport changes
   useEffect(() => {
-    const handleResize = () => {
-      setViewportWidth(window.innerWidth);
-      setViewportHeight(window.innerHeight);
-      setIsMobile(window.innerWidth < 768); // Define mobile based on width
-    };
+    if (typeof window === "undefined") return;
+    let resizeTimeout: NodeJS.Timeout | null = null;
 
-    // Check if the device is a touch device
     const checkTouchDevice = () => {
       return (
         "ontouchstart" in window ||
@@ -42,16 +43,24 @@ const ViewportProvider = ({ children }: { children: ReactNode }) => {
       );
     };
 
-    setIsTouchDevice(checkTouchDevice());
+    const handleResize = () => {
+      if (resizeTimeout) clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        setViewportWidth(window.innerWidth);
+        setViewportHeight(window.innerHeight);
+        setIsMobile(window.innerWidth < 768);
+        setIsTouchDevice(checkTouchDevice());
+      }, 150);
+    };
 
-    // Add resize listener on mount
     window.addEventListener("resize", handleResize);
-
-    // Call handleResize to set the initial viewport
+    // Set initial values
     handleResize();
 
-    // Clean up the event listener on unmount
-    return () => window.removeEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      if (resizeTimeout) clearTimeout(resizeTimeout);
+    };
   }, []);
 
   return (

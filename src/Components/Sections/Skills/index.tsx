@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useMemo, useState } from "react";
 import Matter, {
   Mouse,
   MouseConstraint,
@@ -34,7 +34,6 @@ function getScaleFactor(viewportWidth: number) {
 
 const getScaledVertices = (vertexSets: any[], viewportWidth: number) => {
   const scaleFactor = getScaleFactor(viewportWidth);
-  console.log(scaleFactor, viewportWidth);
 
   const scaledVertices: any[][] = [];
   vertexSets.forEach((vertexSet) => {
@@ -59,6 +58,32 @@ const Skills: React.FC = () => {
 
   const { viewportWidth, viewportHeight, isMobile, isTouchDevice } =
     useViewport();
+
+  // Debounced resize state
+  const [dimensions, setDimensions] = useState({
+    width: viewportWidth,
+    height: viewportHeight,
+  });
+  useEffect(() => {
+    let resizeTimeout: NodeJS.Timeout | null = null;
+    const handleResize = () => {
+      if (resizeTimeout) clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        setDimensions({ width: window.innerWidth, height: window.innerHeight });
+      }, 200);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      if (resizeTimeout) clearTimeout(resizeTimeout);
+    };
+  }, []);
+
+  // Memoize scaledVertices
+  const scaledVertices = useMemo(
+    () => getScaledVertices(vertexSets, dimensions.width),
+    [vertexSets, dimensions.width],
+  );
 
   useEffect(() => {
     Common.setDecomp(decomp);
@@ -90,9 +115,8 @@ const Skills: React.FC = () => {
     if (typeof window !== "undefined" && isTouchDevice) {
       const updateGravity = function (event: any) {
         const orientation =
-            typeof window.orientation !== "undefined" ? window.orientation : 0,
-          gravity = engine.gravity;
-
+          typeof window.orientation !== "undefined" ? window.orientation : 0;
+        const gravity = engine.gravity;
         if (orientation === 0) {
           gravity.x = Common.clamp(event.gamma, -90, 90) / 90;
           gravity.y = Common.clamp(event.beta, -90, 90) / 90;
@@ -107,8 +131,9 @@ const Skills: React.FC = () => {
           gravity.y = Common.clamp(event.gamma, -90, 90) / 90;
         }
       };
-
-      window.addEventListener("deviceorientation", updateGravity);
+      window.addEventListener("deviceorientation", updateGravity, {
+        passive: true,
+      });
     }
 
     const ground = Bodies.rectangle(
@@ -119,7 +144,7 @@ const Skills: React.FC = () => {
       {
         isStatic: true,
         render: { fillStyle: "#0F0F0F" },
-      }
+      },
     );
 
     const leftWall = Bodies.rectangle(
@@ -130,7 +155,7 @@ const Skills: React.FC = () => {
       {
         isStatic: true,
         render: { fillStyle: "#0F0F0F" },
-      }
+      },
     );
 
     const roof = Bodies.rectangle(viewportWidth / 2, 0, viewportWidth, 10, {
@@ -146,7 +171,7 @@ const Skills: React.FC = () => {
       {
         isStatic: true,
         render: { fillStyle: "#0F0F0F" },
-      }
+      },
     );
 
     Composite.add(world, [ground, leftWall, rightWall, roof]);
@@ -156,7 +181,6 @@ const Skills: React.FC = () => {
       max: { x: -Infinity, y: -Infinity },
     };
 
-    const scaledVertices = getScaledVertices(vertexSets, viewportWidth);
     vertexSets.forEach((vertices) => {
       vertices.forEach((vertex) => {
         bounds.min.x = Math.min(bounds.min.x, vertex.x);
@@ -177,7 +201,7 @@ const Skills: React.FC = () => {
           lineWidth: 1,
         },
       },
-      true
+      true,
     );
 
     if (!isMobile) Composite.add(world, terrain);
@@ -225,8 +249,8 @@ const Skills: React.FC = () => {
 
           return Bodies.circle(x, y, 40, bodyOptions);
           // }
-        }
-      )
+        },
+      ),
     );
 
     engine.world.gravity.y = 0.5;
@@ -246,25 +270,24 @@ const Skills: React.FC = () => {
     mouseConstraint.mouse.element.removeEventListener(
       "wheel",
       //@ts-ignore
-      mouseConstraint.mouse.mousewheel
+      mouseConstraint.mouse.mousewheel,
     );
 
     if (isTouchDevice) {
       mouseConstraint.mouse.element.removeEventListener(
         "touchmove",
         //@ts-ignore
-        mouseConstraint.mouse.mousemove
+        mouseConstraint.mouse.mousemove,
       );
-
       mouseConstraint.mouse.element.removeEventListener(
         "touchstart",
         //@ts-ignore
-        mouseConstraint.mouse.mousedown
+        mouseConstraint.mouse.mousedown,
       );
       mouseConstraint.mouse.element.removeEventListener(
         "touchend",
         //@ts-ignore
-        mouseConstraint.mouse.mouseup
+        mouseConstraint.mouse.mouseup,
       );
     }
 
@@ -283,8 +306,17 @@ const Skills: React.FC = () => {
       Render.stop(render);
       Runner.stop(runner);
       render.canvas.remove();
+      // Clear Matter.js world and engine for memory management
+      Composite.clear(engine.world, false);
+      Engine.clear(engine);
     };
-  }, []);
+  }, [
+    dimensions.width,
+    dimensions.height,
+    isMobile,
+    isTouchDevice,
+    scaledVertices,
+  ]);
 
   return (
     <>

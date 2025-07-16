@@ -1,8 +1,5 @@
 import React, { ReactNode, useEffect, useRef } from "react";
 import gsap from "gsap";
-import ScrollTrigger from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
 
 interface Props {
   children: ReactNode;
@@ -28,7 +25,7 @@ const SectionHeading: React.FC<Props> = ({ triggerClass, children }) => {
 
     return () => {
       anim.scrollTrigger?.kill();
-      anim.kill();
+      anim?.kill();
     };
   }, [triggerClass]);
 

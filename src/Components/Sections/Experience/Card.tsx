@@ -42,6 +42,7 @@ const Card: React.FC<CardProps> = ({ data }) => {
   }, []);
 
   useGSAP(() => {
+    const draggables: any[] = [];
     if (window && window.innerWidth > 768) {
       gsap.registerPlugin(Draggable);
       gsap.registerPlugin(InertiaPlugin);
@@ -49,25 +50,31 @@ const Card: React.FC<CardProps> = ({ data }) => {
       const cards = gsap.utils.toArray(".card");
 
       cards.forEach((card: any, index) => {
-        Draggable.create(card, {
+        const instances = Draggable.create(card, {
           bounds: document.querySelector("#experience_bounds"),
           type: "x",
           edgeResistance: 0.5,
           inertia: true,
           trigger: `.drag-trigger-${index}`,
         });
+        draggables.push(...instances);
       });
     }
+    return () => {
+      draggables.forEach(
+        (draggable) => draggable && draggable.kill && draggable.kill(),
+      );
+    };
   });
 
   const flipCard = () => {
     const duration = 0.6;
     if (!isFlipped) {
-      // setIsExpanded(true);
       gsap.to(cardRef.current, {
         rotationY: 180,
         duration,
         ease: "power2.inOut",
+        overwrite: "auto",
         onComplete: () => {
           setIsFlipped(true);
         },
@@ -77,6 +84,7 @@ const Card: React.FC<CardProps> = ({ data }) => {
         rotationY: 0,
         duration,
         ease: "power2.inOut",
+        overwrite: "auto",
         onComplete: () => {
           setIsFlipped(false);
         },

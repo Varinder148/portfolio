@@ -1,5 +1,6 @@
-import { useRef } from "react";
+import { useRef, useCallback } from "react";
 import { gsap } from "gsap";
+import { throttle } from "lodash";
 
 import { THEME } from "@/utils/constants";
 import clsx from "clsx";
@@ -29,45 +30,57 @@ const Button = ({
   const buttonRef = useRef<HTMLButtonElement>(null);
 
   // Helper to animate the circle
-  const animateCircle = (props: any) => {
+  const animateCircle = useCallback((props: any) => {
     if (circleRef.current) {
       gsap.to(circleRef.current, props);
     }
-  };
+  }, []);
 
-  const handleMouseEnter = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    gsap.set(circleRef.current, { opacity: 1, top: y, left: x, scale: 0 });
-    animateCircle({ scale: 1, duration: 0.5, ease: "power1.out" });
-  };
+  const handleMouseEnter = useCallback(
+    throttle((e: React.MouseEvent<HTMLButtonElement>) => {
+      const rect = e.currentTarget.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      gsap.set(circleRef.current, { opacity: 1, top: y, left: x, scale: 0 });
+      animateCircle({ scale: 1, duration: 0.5, ease: "power1.out" });
+    }, 100),
+    [animateCircle],
+  );
 
-  const handleMouseLeave = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    animateCircle({
-      scale: 0,
-      top: y,
-      left: x,
-      duration: 0.5,
-      ease: "power1.out",
-    });
-  };
+  const handleMouseLeave = useCallback(
+    throttle((e: React.MouseEvent<HTMLButtonElement>) => {
+      const rect = e.currentTarget.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      animateCircle({
+        scale: 0,
+        top: y,
+        left: x,
+        duration: 0.5,
+        ease: "power1.out",
+      });
+    }, 100),
+    [animateCircle],
+  );
 
-  const handleTouchStart = (e: React.TouchEvent<HTMLButtonElement>) => {
-    const touch = e.touches[0];
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = touch.clientX - rect.left;
-    const y = touch.clientY - rect.top;
-    gsap.set(circleRef.current, { opacity: 1, top: y, left: x, scale: 0 });
-    animateCircle({ scale: 0.8, duration: 0.3, ease: "power1.out" });
-  };
+  const handleTouchStart = useCallback(
+    throttle((e: React.TouchEvent<HTMLButtonElement>) => {
+      const touch = e.touches[0];
+      const rect = e.currentTarget.getBoundingClientRect();
+      const x = touch.clientX - rect.left;
+      const y = touch.clientY - rect.top;
+      gsap.set(circleRef.current, { opacity: 1, top: y, left: x, scale: 0 });
+      animateCircle({ scale: 0.8, duration: 0.3, ease: "power1.out" });
+    }, 100),
+    [animateCircle],
+  );
 
-  const handleTouchEnd = () => {
-    animateCircle({ scale: 0, duration: 0.3, ease: "power1.out" });
-  };
+  const handleTouchEnd = useCallback(
+    throttle(() => {
+      animateCircle({ scale: 0, duration: 0.3, ease: "power1.out" });
+    }, 100),
+    [animateCircle],
+  );
 
   return (
     <button

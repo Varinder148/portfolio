@@ -20,6 +20,7 @@ const Experience: React.FC = () => {
         rotationX: 0,
         rotationY: 0,
         rotationZ: 0,
+        overwrite: "auto",
       });
 
       ScrollTrigger.create({
@@ -41,6 +42,7 @@ const Experience: React.FC = () => {
               rotationX: 0,
               rotationY: targetRotation,
               rotationZ: 5 * angleMultiplier,
+              overwrite: "auto",
             });
           } else {
             // Reset rotations when unpinned
@@ -48,11 +50,15 @@ const Experience: React.FC = () => {
               rotationX: 0,
               rotationY: card.getAttribute("data-flipped") === "true" ? 180 : 0,
               rotationZ: 0,
+              overwrite: "auto",
             });
           }
         },
       });
     });
+    return () => {
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+    };
   });
 
   return (

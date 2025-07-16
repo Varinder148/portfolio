@@ -18,9 +18,14 @@ const About: React.FC<AboutProps> = ({ className = "", scrollToContact }) => {
   const sectionRef = useRef<HTMLElement>(null);
   const highlightedValues = ".highlighted-values";
   const { isMobile } = useViewport();
+  // Store timelines in refs to kill previous ones
+  const tlRef = useRef<gsap.core.Timeline | null>(null);
+  const animRef = useRef<gsap.core.Timeline | null>(null);
 
   useGSAP(() => {
-    gsap.registerPlugin(SplitText);
+    // Kill previous timelines if any
+    if (tlRef.current) tlRef.current.kill();
+    if (animRef.current) animRef.current.kill();
     // hey text animation
     const tl = gsap
       .timeline()
@@ -30,6 +35,7 @@ const About: React.FC<AboutProps> = ({ className = "", scrollToContact }) => {
         opacity: 1,
         text: { value: "Hey there!" },
       });
+    tlRef.current = tl;
     const split = SplitText.create(".split", { type: "lines" });
     const anim = gsap
       .timeline({ delay: 0.1 })
@@ -61,6 +67,7 @@ const About: React.FC<AboutProps> = ({ className = "", scrollToContact }) => {
       .to("#name", {
         text: { value: "Varinder\u00A0Singh", padSpace: true },
       });
+    animRef.current = anim;
     return () => {
       tl.kill();
       anim.kill();

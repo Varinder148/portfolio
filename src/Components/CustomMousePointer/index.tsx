@@ -1,8 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import gsap from "gsap";
 import { THEME } from "@/utils/constants";
 import clsx from "clsx";
 import { useViewport } from "@/Providers/ViewportProvider";
+
+import { throttle } from "lodash";
 
 const CustomMousePointer: React.FC = () => {
   const pointerRef = useRef<HTMLDivElement>(null);
@@ -10,56 +12,65 @@ const CustomMousePointer: React.FC = () => {
   const { isTouchDevice } = useViewport();
   const [isHovered, setIsHovered] = useState(false);
 
+  // Memoized pointer update logic
+  const updatePointer = useCallback(
+    (clientX: number, clientY: number, isInWindow: boolean) => {
+      const pointerRect = pointerRef.current?.getBoundingClientRect();
+      const secondaryPointerRect =
+        secondaryPointerRef.current?.getBoundingClientRect();
+      if (isInWindow && pointerRect && secondaryPointerRect) {
+        const pointerOffsetX =
+          (secondaryPointerRect.width - pointerRect.width) / 2;
+        const pointerOffsetY =
+          (secondaryPointerRect.height - pointerRect.height) / 2;
+        // Kill previous tweens before starting new ones
+        gsap.killTweensOf(pointerRef.current);
+        gsap.killTweensOf(secondaryPointerRef.current);
+        gsap.to(pointerRef.current, {
+          x: clientX,
+          y: clientY,
+          scale: isHovered ? 3 : 1,
+          backgroundColor: isHovered ? THEME.IVORY : THEME.RED,
+          display: "block",
+          duration: 0.1,
+          ease: "power3.out",
+          overwrite: "auto",
+        });
+        gsap.to(secondaryPointerRef.current, {
+          x: clientX - pointerOffsetX,
+          y: clientY - pointerOffsetY,
+          display: "block",
+          duration: 0.7,
+          ease: "power3.out",
+          overwrite: "auto",
+        });
+      } else {
+        gsap.killTweensOf(pointerRef.current);
+        gsap.killTweensOf(secondaryPointerRef.current);
+        gsap.to(pointerRef.current, { display: "none", overwrite: "auto" });
+        gsap.to(secondaryPointerRef.current, {
+          display: "none",
+          overwrite: "auto",
+        });
+      }
+    },
+    [isHovered],
+  );
+
   useEffect(() => {
     if (isTouchDevice) return;
-    let animationRef: gsap.core.Tween | null = null;
-    let secondaryAnimationRef: gsap.core.Tween | null = null;
 
-    const onMouseMove = (event: MouseEvent) => {
+    // Throttle mousemove to 16ms (60fps)
+    const throttledMouseMove = throttle((event: MouseEvent) => {
       const { clientX, clientY } = event;
       const { innerWidth, innerHeight } = window;
-      if (
+      const isInWindow =
         clientX >= 0 &&
         clientX <= innerWidth &&
         clientY >= 0 &&
-        clientY <= innerHeight
-      ) {
-        const pointerRect = pointerRef.current?.getBoundingClientRect();
-        const secondaryPointerRect =
-          secondaryPointerRef.current?.getBoundingClientRect();
-        if (pointerRect && secondaryPointerRect) {
-          const pointerOffsetX =
-            (secondaryPointerRect.width - pointerRect.width) / 2;
-          const pointerOffsetY =
-            (secondaryPointerRect.height - pointerRect.height) / 2;
-          animationRef?.kill();
-          secondaryAnimationRef?.kill();
-          animationRef = gsap.to(pointerRef.current, {
-            x: clientX,
-            y: clientY,
-            scale: isHovered ? 3 : 1,
-            backgroundColor: isHovered ? THEME.IVORY : THEME.RED,
-            display: "block",
-            duration: 0.1,
-            ease: "power3.out",
-          });
-          secondaryAnimationRef = gsap.to(secondaryPointerRef.current, {
-            x: clientX - pointerOffsetX,
-            y: clientY - pointerOffsetY,
-            display: "block",
-            duration: 0.7,
-            ease: "power3.out",
-          });
-        }
-      } else {
-        animationRef?.kill();
-        secondaryAnimationRef?.kill();
-        animationRef = gsap.to(pointerRef.current, { display: "none" });
-        secondaryAnimationRef = gsap.to(secondaryPointerRef.current, {
-          display: "none",
-        });
-      }
-    };
+        clientY <= innerHeight;
+      updatePointer(clientX, clientY, isInWindow);
+    }, 16);
 
     const onMouseEnter = () => setIsHovered(true);
     const onMouseLeave = () => setIsHovered(false);
@@ -70,17 +81,16 @@ const CustomMousePointer: React.FC = () => {
       element.addEventListener("mouseenter", onMouseEnter);
       element.addEventListener("mouseleave", onMouseLeave);
     });
-    window.addEventListener("mousemove", onMouseMove);
+    window.addEventListener("mousemove", throttledMouseMove);
     return () => {
-      window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("mousemove", throttledMouseMove);
+      throttledMouseMove.cancel();
       clickableElements.forEach((element) => {
         element.removeEventListener("mouseenter", onMouseEnter);
         element.removeEventListener("mouseleave", onMouseLeave);
       });
-      animationRef?.kill();
-      secondaryAnimationRef?.kill();
     };
-  }, [isHovered, isTouchDevice]);
+  }, [isHovered, isTouchDevice, updatePointer]);
 
   if (isTouchDevice) return null;
   return (
