@@ -59,6 +59,27 @@ export default function Home() {
     }
   }, []);
 
+  // Update the observer for Skills to handle delayed mount/unmount
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting && !loadSkills) {
+          setLoadSkills(true);
+        }
+      });
+    });
+
+    // Start observing the canvas element
+    if (anchorRefs?.current?.[refs.Skills]) {
+      observer.observe(anchorRefs?.current?.[refs.Skills] as Element);
+    }
+    return () => {
+      if (anchorRefs?.current?.[refs.Skills]) {
+        observer.unobserve(anchorRefs?.current?.[refs.Skills] as Element);
+      }
+    };
+  }, [loadSkills]);
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -130,7 +151,6 @@ export default function Home() {
               <span className="italic text-theme-green">people</span> I have{" "}
               <span className="semibold text-theme-red-wood">Worked</span> with
             </SectionHeading>
-
             <Experience />
           </div>
           <div
@@ -145,7 +165,6 @@ export default function Home() {
               collected over the years
               <span className="text-theme-gray"></span>
             </SectionHeading>
-
             <div className={`w-screen h-screen  ${pinTriggerContact}`}>
               {loadSkills && <Skills />}
             </div>

@@ -3,18 +3,19 @@
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/all";
-import React from "react";
+import React, { useRef } from "react";
 import { CARDS } from "./constants";
 import Card from "./Card";
 
 const Experience: React.FC = () => {
+  const cardRefs = useRef<Array<HTMLDivElement | null>>([]);
+
   useGSAP(() => {
     if (typeof window === "undefined") return;
-    const cards = gsap.utils.toArray(".stackingcard");
-
-    cards.forEach((card: any, i) => {
+    // Only use refs instead of DOM queries
+    cardRefs.current.forEach((card, i) => {
+      if (!card) return;
       const angleMultiplier = i % 2 === 1 ? -1 : 1;
-
       gsap.set(card, {
         transformOrigin: "center center",
         rotationX: 0,
@@ -22,7 +23,6 @@ const Experience: React.FC = () => {
         rotationZ: 0,
         overwrite: "auto",
       });
-
       ScrollTrigger.create({
         trigger: card,
         start: `top 10%`,
@@ -33,7 +33,6 @@ const Experience: React.FC = () => {
         markers: false,
         id: `card-${i}`,
         onToggle: (self) => {
-          // Only handle rotations when card is pinned
           if (self.isActive) {
             const isFlipped = card.getAttribute("data-flipped") === "true";
             const targetRotation = isFlipped ? 180 : 0;
@@ -45,7 +44,6 @@ const Experience: React.FC = () => {
               overwrite: "auto",
             });
           } else {
-            // Reset rotations when unpinned
             gsap.set(card, {
               rotationX: 0,
               rotationY: card.getAttribute("data-flipped") === "true" ? 180 : 0,
@@ -63,8 +61,16 @@ const Experience: React.FC = () => {
 
   return (
     <>
-      {CARDS.map((card) => {
-        return <Card key={card.id} data={card} />;
+      {CARDS.map((card, idx) => {
+        return (
+          <Card
+            key={card.id}
+            data={card}
+            ref={(el) => {
+              cardRefs.current[idx] = el;
+            }}
+          />
+        );
       })}
       <div className="end-element h-2 mb-[50vh]" />
     </>

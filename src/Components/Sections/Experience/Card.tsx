@@ -22,14 +22,14 @@ interface CardProps {
   className?: string;
 }
 
-const Card: React.FC<CardProps> = ({ data }) => {
+const Card = React.forwardRef<HTMLDivElement, CardProps>(({ data }, ref) => {
   const [isFlipped, setIsFlipped] = useState(false);
 
   const { isMobile } = useViewport();
 
-  const cardRef = useRef(null);
-  const frontRef = useRef(null);
-  const backRef = useRef(null);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const frontRef = useRef<HTMLDivElement>(null);
+  const backRef = useRef<HTMLAnchorElement>(null);
 
   useEffect(() => {
     gsap.set([frontRef.current, backRef.current], {
@@ -98,7 +98,11 @@ const Card: React.FC<CardProps> = ({ data }) => {
       id="experience_bounds"
     >
       <div
-        ref={cardRef}
+        ref={(node) => {
+          // @ts-ignore
+          cardRef.current = node;
+          if (typeof ref === "function") ref(node);
+        }}
         data-flipped={isFlipped}
         className="relative card border-2 border-theme-black bg-theme-ivory w-full h-[600px] md:w-[600px] md:h-[700px] stackingcard rounded-2xl"
       >
@@ -155,6 +159,8 @@ const Card: React.FC<CardProps> = ({ data }) => {
       </div>
     </div>
   );
-};
+});
+
+Card.displayName = "Card";
 
 export default React.memo(Card);
