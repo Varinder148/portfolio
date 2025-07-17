@@ -17,13 +17,14 @@ import "pathseg";
 import { vertexSets } from "./vertexSets";
 import { getSvgTexture, SKILLS } from "./utils";
 import { useViewport } from "@/Providers/ViewportProvider";
+// import simplify from "simplify-js";
 
 function getScaleFactor(viewportWidth: number) {
   const maxWidth = 1200;
   const minWidth = 100;
 
   if (viewportWidth >= maxWidth) {
-    return 1.5;
+    return 1.3;
   }
 
   const scaleFactor =
@@ -32,16 +33,44 @@ function getScaleFactor(viewportWidth: number) {
   return scaleFactor;
 }
 
-const getScaledVertices = (vertexSets: any[], viewportWidth: number) => {
-  const scaleFactor = getScaleFactor(viewportWidth);
+const getScaledVertices = (
+  vertexSets: any[],
+  viewportWidth: number,
+  viewportHeight: number,
+) => {
+  // Find bounding box of all vertices
+  let minX = Infinity,
+    minY = Infinity,
+    maxX = -Infinity,
+    maxY = -Infinity;
+  vertexSets.forEach((vertexSet) => {
+    vertexSet.forEach((vertex: { x: number; y: number }) => {
+      minX = Math.min(minX, vertex.x);
+      minY = Math.min(minY, vertex.y);
+      maxX = Math.max(maxX, vertex.x);
+      maxY = Math.max(maxY, vertex.y);
+    });
+  });
+
+  // Calculate scale factors to fit SVG into viewport (with some margin)
+  const margin = 20; // reduce margin for bigger shape
+  const scaleMultiplier = getScaleFactor(viewportWidth); // increase for bigger shape
+  const scaleX = (viewportWidth - margin * 2) / (maxX - minX);
+  const scaleY = (viewportHeight - margin * 2) / (maxY - minY);
+  const scale = Math.min(scaleX, scaleY) * scaleMultiplier; // uniform scaling, bigger
+
+  // Center the shape in the viewport
+  const offsetX = (viewportWidth - (maxX - minX) * scale) / 2;
+  const offsetY = (viewportHeight - (maxY - minY) * scale) / 2;
 
   const scaledVertices: any[][] = [];
   vertexSets.forEach((vertexSet) => {
     let scaledVertexSetRow: any[] = [];
     vertexSet.forEach((vertex: { x: number; y: number }) => {
-      const scaledVertex = { x: 0, y: 0 };
-      scaledVertex.x = vertex.x * scaleFactor;
-      scaledVertex.y = vertex.y * scaleFactor;
+      const scaledVertex = {
+        x: (vertex.x - minX) * scale + offsetX,
+        y: (vertex.y - minY) * scale + offsetY,
+      };
       scaledVertexSetRow.push(scaledVertex);
     });
     scaledVertices.push(scaledVertexSetRow);
@@ -49,6 +78,36 @@ const getScaledVertices = (vertexSets: any[], viewportWidth: number) => {
   });
   return scaledVertices;
 };
+
+// function to recalculate vertexes
+// const createVertexSets = () => {
+//   var select = function (root, selector) {
+//     return Array.prototype.slice.call(root.querySelectorAll(selector));
+//   };
+//   var loadSvg = function (url) {
+//     return fetch(url)
+//       .then(function (response) {
+//         return response.text();
+//       })
+//       .then(function (raw) {
+//         return new window.DOMParser().parseFromString(raw, "image/svg+xml");
+//       });
+//   };
+//   loadSvg("./brain.svg").then(function (root) {
+//     var paths = select(root, "path");
+
+//     var vertexSets = paths.map(function (path) {
+//       return Svg.pathToVertices(path, 10000);
+//     });
+
+//     // Apply simplify-js to each vertex set with a tolerance value (e.g., 5)
+//     const tolerance = 10;
+//     const simplifiedSets = vertexSets.map((set) =>
+//       simplify(set, tolerance, true)
+//     );
+//     console.log(simplifiedSets);
+//   });
+// };
 
 const Skills: React.FC = () => {
   const canvasRef = useRef<HTMLDivElement>(null);
@@ -65,6 +124,8 @@ const Skills: React.FC = () => {
     height: viewportHeight,
   });
   useEffect(() => {
+    // createVertexSets();
+
     let resizeTimeout: NodeJS.Timeout | null = null;
     const handleResize = () => {
       if (resizeTimeout) clearTimeout(resizeTimeout);
@@ -81,8 +142,8 @@ const Skills: React.FC = () => {
 
   // Memoize scaledVertices
   const scaledVertices = useMemo(
-    () => getScaledVertices(vertexSets, dimensions.width),
-    [vertexSets, dimensions.width],
+    () => getScaledVertices(vertexSets, dimensions.width, dimensions.height),
+    [vertexSets, dimensions.width, dimensions.height],
   );
 
   useEffect(() => {
@@ -197,7 +258,8 @@ const Skills: React.FC = () => {
       {
         isStatic: true,
         render: {
-          strokeStyle: "#F6F7EB",
+          fillStyle: "#222831",
+          strokeStyle: "#FFFFFF",
           lineWidth: 1,
         },
       },
