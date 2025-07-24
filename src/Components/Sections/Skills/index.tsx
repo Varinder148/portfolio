@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useMemo, useState } from "react";
+import React, { useEffect } from "react";
 import {
   Mouse,
   MouseConstraint,
@@ -16,7 +16,6 @@ import decomp from "poly-decomp";
 import "pathseg";
 import { vertexSets } from "./vertexSets";
 import { getSvgTexture, SKILLS } from "./utils";
-import { useViewport } from "@/Providers/ViewportProvider";
 // import simplify from "simplify-js";
 
 function getScaleFactor(viewportWidth: number) {
@@ -124,256 +123,39 @@ const SKILLS_CONFIG = {
 };
 
 // 2. Custom hook for physics logic
-function useSkillsPhysics({
-  canvasRef,
-  scaledVertices,
-  vertexSets,
-  viewportWidth,
-  viewportHeight,
-  isMobile,
-  isTouchDevice,
-  skills,
-}: {
-  canvasRef: React.RefObject<HTMLDivElement>;
-  scaledVertices: { x: number; y: number }[][];
-  vertexSets: { x: number; y: number }[][];
-  viewportWidth: number;
-  viewportHeight: number;
-  isMobile: boolean;
-  isTouchDevice: boolean;
-  skills: string[];
-}) {
-  // createVertexSets();
-
-  React.useEffect(() => {
-    Common.setDecomp(decomp);
-    const engine = Engine.create();
-    const { world } = engine;
-    const render = Render.create({
-      element: canvasRef.current!,
-      engine: engine,
-      options: {
-        width: viewportWidth,
-        height: viewportHeight,
-        wireframes: false,
-        background: "transparent",
-        pixelRatio: Math.min(window.devicePixelRatio, 1.5), // Lower pixel ratio for performance
-      },
-    });
-    Render.run(render);
-    const runner = Runner.create();
-    Runner.run(runner, engine);
-
-    let updateGravity: ((event: DeviceOrientationEvent) => void) | undefined;
-    let lastGravityUpdate = 0;
-    const GRAVITY_THROTTLE_MS = 50;
-    if (typeof window !== "undefined" && isTouchDevice) {
-      updateGravity = function (event: DeviceOrientationEvent) {
-        const now = Date.now();
-        if (now - lastGravityUpdate < GRAVITY_THROTTLE_MS) return;
-        lastGravityUpdate = now;
-        const orientation =
-          typeof window.orientation !== "undefined" ? window.orientation : 0;
-        const gravity = engine.gravity;
-        if (orientation === 0) {
-          gravity.x = Common.clamp(event.gamma ?? 0, -90, 90) / 90;
-          gravity.y = Common.clamp(event.beta ?? 0, -90, 90) / 90;
-        } else if (orientation === 180) {
-          gravity.x = Common.clamp(event.gamma ?? 0, -90, 90) / 90;
-          gravity.y = Common.clamp(-(event.beta ?? 0), -90, 90) / 90;
-        } else if (orientation === 90) {
-          gravity.x = Common.clamp(event.beta ?? 0, -90, 90) / 90;
-          gravity.y = Common.clamp(-(event.gamma ?? 0), -90, 90) / 90;
-        } else if (orientation === -90) {
-          gravity.x = Common.clamp(-(event.beta ?? 0), -90, 90) / 90;
-          gravity.y = Common.clamp(event.gamma ?? 0, -90, 90) / 90;
-        }
-      };
-      window.addEventListener("deviceorientation", updateGravity, {
-        passive: true,
-      });
-    }
-
-    // Walls
-    const ground = Bodies.rectangle(
-      viewportWidth / 2,
-      viewportHeight - 10,
-      viewportWidth,
-      10,
-      { isStatic: true, render: { fillStyle: "#0F0F0F" } },
+function useSkillsPhysics() {
+  const canvasRef = React.useRef<HTMLDivElement>(null);
+  // Device detection
+  const getIsTouchDevice = () => {
+    if (typeof window === "undefined") return false;
+    return (
+      "ontouchstart" in window || (navigator && navigator.maxTouchPoints > 0)
     );
-    const leftWall = Bodies.rectangle(
-      0,
-      viewportHeight / 2,
-      10,
-      viewportHeight + 40,
-      { isStatic: true, render: { fillStyle: "#0F0F0F" } },
-    );
-    const roof = Bodies.rectangle(viewportWidth / 2, 0, viewportWidth, 10, {
-      isStatic: true,
-      render: { fillStyle: "#0F0F0F" },
-    });
-    const rightWall = Bodies.rectangle(
-      viewportWidth - 20,
-      viewportHeight / 2,
-      10,
-      viewportHeight + 40,
-      { isStatic: true, render: { fillStyle: "#0F0F0F" } },
-    );
-    Composite.add(world, [ground, leftWall, rightWall, roof]);
-
-    // Terrain
-    const bounds = {
-      min: { x: Infinity, y: Infinity },
-      max: { x: -Infinity, y: -Infinity },
-    };
-    vertexSets.forEach((vertices: { x: number; y: number }[]) => {
-      vertices.forEach((vertex: { x: number; y: number }) => {
-        bounds.min.x = Math.min(bounds.min.x, vertex.x);
-        bounds.min.y = Math.min(bounds.min.y, vertex.y);
-        bounds.max.x = Math.max(bounds.max.x, vertex.x);
-        bounds.max.y = Math.max(bounds.max.y, vertex.y);
-      });
-    });
-    const terrain = Bodies.fromVertices(
-      viewportWidth / 2,
-      viewportHeight / 2,
-      scaledVertices,
-      {
-        isStatic: true,
-        render: {
-          fillStyle: "#222831",
-          strokeStyle: "#FFFFFF",
-          lineWidth: 1,
-        },
-      },
-      true,
-    );
-    if (!isMobile) Composite.add(world, terrain);
-
-    // Balls
-    const svgCenter = { x: viewportWidth / 2, y: viewportHeight / 2 };
-    const ballArea = {
-      x: svgCenter.x - (bounds.max.x - bounds.min.x) * 0.3,
-      y: svgCenter.y - (bounds.max.y - bounds.min.y) * 0.3,
-      cols: SKILLS_CONFIG.ballCols,
-      rows: SKILLS_CONFIG.ballRows,
-      spacing: SKILLS_CONFIG.ballSpacing,
-    };
-    Composite.add(
-      world,
-      Composites.stack(
-        ballArea.x,
-        ballArea.y,
-        ballArea.cols,
-        ballArea.rows,
-        ballArea.spacing,
-        ballArea.spacing,
-        (
-          x: number,
-          y: number,
-          i: number,
-          j: number,
-          k: number,
-          index: number,
-        ) => {
-          const bodyOptions = {
-            frictionAir: SKILLS_CONFIG.frictionAir,
-            friction: SKILLS_CONFIG.friction,
-            restitution: SKILLS_CONFIG.restitution,
-            density: 1,
-            render: {
-              fillStyle: "#4285f4",
-              sprite: {
-                texture: getSvgTexture(skills[index]),
-                xScale: 1,
-                yScale: 1,
-              },
-            },
-          };
-          return Bodies.circle(x, y, SKILLS_CONFIG.ballRadius, bodyOptions);
-        },
-      ),
-    );
-    engine.world.gravity.y = SKILLS_CONFIG.gravity;
-
-    // Mouse control
-    const mouse = Mouse.create(canvasRef.current as HTMLElement);
-    const mouseConstraint = MouseConstraint.create(engine, {
-      mouse: mouse,
-      constraint: {
-        stiffness: 0.2,
-        render: { visible: false },
-      },
-    });
-    mouseConstraint.mouse.element.removeEventListener(
-      "wheel",
-      //@ts-ignore
-      mouseConstraint.mouse.mousewheel,
-    );
-    if (isTouchDevice) {
-      mouseConstraint.mouse.element.removeEventListener(
-        "touchmove",
-        //@ts-ignore
-        mouseConstraint.mouse.mousemove,
-      );
-      mouseConstraint.mouse.element.removeEventListener(
-        "touchstart",
-        //@ts-ignore
-        mouseConstraint.mouse.mousedown,
-      );
-      mouseConstraint.mouse.element.removeEventListener(
-        "touchend",
-        //@ts-ignore
-        mouseConstraint.mouse.mouseup,
-      );
-    }
-    Composite.add(world, mouseConstraint);
-    render.mouse = mouse;
-    Render.lookAt(render, {
-      min: { x: 0, y: 0 },
-      max: { x: viewportWidth, y: viewportHeight },
-    });
-    // Cleanup
-    return () => {
-      Render.stop(render);
-      Runner.stop(runner);
-      render.canvas.remove();
-      Composite.clear(engine.world, false);
-      Engine.clear(engine);
-      // Remove deviceorientation event listener if it was added
-      if (typeof window !== "undefined" && isTouchDevice && updateGravity) {
-        window.removeEventListener("deviceorientation", updateGravity);
-      }
-    };
-  }, [
-    canvasRef,
-    scaledVertices,
-    vertexSets,
-    viewportWidth,
-    viewportHeight,
-    isMobile,
-    isTouchDevice,
-    skills,
-  ]);
-}
-
-const Skills: React.FC = () => {
-  const canvasRef = useRef<HTMLDivElement>(null);
-  const { viewportWidth, viewportHeight, isMobile, isTouchDevice } =
-    useViewport();
-  // Debounced resize state
-  const [dimensions, setDimensions] = useState({
-    width: viewportWidth,
-    height: viewportHeight,
+  };
+  const getIsMobile = () => {
+    if (typeof window === "undefined") return false;
+    return window.innerWidth <= 768;
+  };
+  const [device, setDevice] = React.useState({
+    isTouchDevice: getIsTouchDevice(),
+    isMobile: getIsMobile(),
   });
-  useEffect(() => {
+  // Debounced resize state
+  const [dimensions, setDimensions] = React.useState({
+    width: typeof window !== "undefined" ? window.innerWidth : 1200,
+    height: typeof window !== "undefined" ? window.innerHeight : 800,
+  });
+  React.useEffect(() => {
     let resizeTimeout: NodeJS.Timeout | null = null;
     const handleResize = () => {
       if (resizeTimeout) clearTimeout(resizeTimeout);
       resizeTimeout = setTimeout(() => {
         setDimensions({ width: window.innerWidth, height: window.innerHeight });
-      }, 300); // More aggressive debounce
+        setDevice({
+          isTouchDevice: getIsTouchDevice(),
+          isMobile: getIsMobile(),
+        });
+      }, 300);
     };
     window.addEventListener("resize", handleResize);
     return () => {
@@ -382,22 +164,235 @@ const Skills: React.FC = () => {
     };
   }, []);
   // Memoize scaledVertices
-  const scaledVertices = useMemo(
+  const scaledVertices = React.useMemo(
     () => getScaledVertices(vertexSets, dimensions.width, dimensions.height),
     [dimensions.width, dimensions.height],
   );
+  // Use effect for physics
+  React.useEffect(
+    () => {
+      Common.setDecomp(decomp);
+      const engine = Engine.create();
+      const { world } = engine;
+      const render = Render.create({
+        element: canvasRef.current!,
+        engine: engine,
+        options: {
+          width: dimensions.width,
+          height: dimensions.height,
+          wireframes: false,
+          background: "transparent",
+          pixelRatio: Math.min(window.devicePixelRatio, 1.5),
+        },
+      });
+      Render.run(render);
+      const runner = Runner.create();
+      Runner.run(runner, engine);
+      let updateGravity: ((event: DeviceOrientationEvent) => void) | undefined;
+      let lastGravityUpdate = 0;
+      const GRAVITY_THROTTLE_MS = 50;
+      if (typeof window !== "undefined" && device.isTouchDevice) {
+        updateGravity = function (event: DeviceOrientationEvent) {
+          const now = Date.now();
+          if (now - lastGravityUpdate < GRAVITY_THROTTLE_MS) return;
+          lastGravityUpdate = now;
+          const orientation =
+            typeof window.orientation !== "undefined" ? window.orientation : 0;
+          const gravity = engine.gravity;
+          if (orientation === 0) {
+            gravity.x = Common.clamp(event.gamma ?? 0, -90, 90) / 90;
+            gravity.y = Common.clamp(event.beta ?? 0, -90, 90) / 90;
+          } else if (orientation === 180) {
+            gravity.x = Common.clamp(event.gamma ?? 0, -90, 90) / 90;
+            gravity.y = Common.clamp(-(event.beta ?? 0), -90, 90) / 90;
+          } else if (orientation === 90) {
+            gravity.x = Common.clamp(event.beta ?? 0, -90, 90) / 90;
+            gravity.y = Common.clamp(-(event.gamma ?? 0), -90, 90) / 90;
+          } else if (orientation === -90) {
+            gravity.x = Common.clamp(-(event.beta ?? 0), -90, 90) / 90;
+            gravity.y = Common.clamp(event.gamma ?? 0, -90, 90) / 90;
+          }
+        };
+        window.addEventListener("deviceorientation", updateGravity, {
+          passive: true,
+        });
+      }
+      // Walls
+      const ground = Bodies.rectangle(
+        dimensions.width / 2,
+        dimensions.height - 10,
+        dimensions.width,
+        10,
+        { isStatic: true, render: { fillStyle: "#0F0F0F" } },
+      );
+      const leftWall = Bodies.rectangle(
+        0,
+        dimensions.height / 2,
+        10,
+        dimensions.height + 40,
+        { isStatic: true, render: { fillStyle: "#0F0F0F" } },
+      );
+      const roof = Bodies.rectangle(
+        dimensions.width / 2,
+        0,
+        dimensions.width,
+        10,
+        {
+          isStatic: true,
+          render: { fillStyle: "#0F0F0F" },
+        },
+      );
+      const rightWall = Bodies.rectangle(
+        dimensions.width - 20,
+        dimensions.height / 2,
+        10,
+        dimensions.height + 40,
+        { isStatic: true, render: { fillStyle: "#0F0F0F" } },
+      );
+      Composite.add(world, [ground, leftWall, rightWall, roof]);
+      // Terrain
+      const bounds = {
+        min: { x: Infinity, y: Infinity },
+        max: { x: -Infinity, y: -Infinity },
+      };
+      vertexSets.forEach((vertices: { x: number; y: number }[]) => {
+        vertices.forEach((vertex: { x: number; y: number }) => {
+          bounds.min.x = Math.min(bounds.min.x, vertex.x);
+          bounds.min.y = Math.min(bounds.min.y, vertex.y);
+          bounds.max.x = Math.max(bounds.max.x, vertex.x);
+          bounds.max.y = Math.max(bounds.max.y, vertex.y);
+        });
+      });
+      const terrain = Bodies.fromVertices(
+        dimensions.width / 2,
+        dimensions.height / 2,
+        scaledVertices,
+        {
+          isStatic: true,
+          render: {
+            fillStyle: "#222831",
+            strokeStyle: "#FFFFFF",
+            lineWidth: 1,
+          },
+        },
+        true,
+      );
+      if (!device.isMobile) Composite.add(world, terrain);
+      // Balls
+      const svgCenter = { x: dimensions.width / 2, y: dimensions.height / 2 };
+      const ballArea = {
+        x: svgCenter.x - (bounds.max.x - bounds.min.x) * 0.3,
+        y: svgCenter.y - (bounds.max.y - bounds.min.y) * 0.3,
+        cols: SKILLS_CONFIG.ballCols,
+        rows: SKILLS_CONFIG.ballRows,
+        spacing: SKILLS_CONFIG.ballSpacing,
+      };
+      Composite.add(
+        world,
+        Composites.stack(
+          ballArea.x,
+          ballArea.y,
+          ballArea.cols,
+          ballArea.rows,
+          ballArea.spacing,
+          ballArea.spacing,
+          (
+            x: number,
+            y: number,
+            i: number,
+            j: number,
+            k: number,
+            index: number,
+          ) => {
+            const bodyOptions = {
+              frictionAir: SKILLS_CONFIG.frictionAir,
+              friction: SKILLS_CONFIG.friction,
+              restitution: SKILLS_CONFIG.restitution,
+              density: 1,
+              render: {
+                fillStyle: "#4285f4",
+                sprite: {
+                  texture: getSvgTexture(SKILLS[index]),
+                  xScale: 1,
+                  yScale: 1,
+                },
+              },
+            };
+            return Bodies.circle(x, y, SKILLS_CONFIG.ballRadius, bodyOptions);
+          },
+        ),
+      );
+      engine.world.gravity.y = SKILLS_CONFIG.gravity;
+      // Mouse control
+      const mouse = Mouse.create(canvasRef.current as HTMLElement);
+      const mouseConstraint = MouseConstraint.create(engine, {
+        mouse: mouse,
+        constraint: {
+          stiffness: 0.2,
+          render: { visible: false },
+        },
+      });
+      mouseConstraint.mouse.element.removeEventListener(
+        "wheel",
+        //@ts-ignore
+        mouseConstraint.mouse.mousewheel,
+      );
+      if (device.isTouchDevice) {
+        mouseConstraint.mouse.element.removeEventListener(
+          "touchmove",
+          //@ts-ignore
+          mouseConstraint.mouse.mousemove,
+        );
+        mouseConstraint.mouse.element.removeEventListener(
+          "touchstart",
+          //@ts-ignore
+          mouseConstraint.mouse.mousedown,
+        );
+        mouseConstraint.mouse.element.removeEventListener(
+          "touchend",
+          //@ts-ignore
+          mouseConstraint.mouse.mouseup,
+        );
+      }
+      Composite.add(world, mouseConstraint);
+      render.mouse = mouse;
+      Render.lookAt(render, {
+        min: { x: 0, y: 0 },
+        max: { x: dimensions.width, y: dimensions.height },
+      });
+      // Cleanup
+      return () => {
+        Render.stop(render);
+        Runner.stop(runner);
+        render.canvas.remove();
+        Composite.clear(engine.world, false);
+        Engine.clear(engine);
+        if (
+          typeof window !== "undefined" &&
+          device.isTouchDevice &&
+          updateGravity
+        ) {
+          window.removeEventListener("deviceorientation", updateGravity);
+        }
+      };
+    },
+    [
+      // dimensions.width,
+      // dimensions.height,
+      // device.isMobile,
+      // device.isTouchDevice,
+    ],
+  );
+  return { canvasRef, ...device };
+}
 
-  // Use custom hook for physics
-  useSkillsPhysics({
-    canvasRef,
-    scaledVertices,
-    vertexSets,
-    viewportWidth: dimensions.width,
-    viewportHeight: dimensions.height,
-    isMobile,
-    isTouchDevice,
-    skills: SKILLS,
+const Skills: React.FC = () => {
+  const { canvasRef, isTouchDevice } = useSkillsPhysics();
+
+  useEffect(() => {
+    return () => console.log("unmounted");
   });
+
   return (
     <>
       {isTouchDevice && (
