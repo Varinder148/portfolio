@@ -71,6 +71,21 @@ export default function RootLayout({
           name="google-site-verification"
           content="tkz1gT-sHQLzAo4k2YBHsW-EsLi0gMXecCZIlR3yNNo"
         />
+        {/* Google Analytics 4 (GA4) */}
+        <script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-6JM3N2WDEY"
+        ></script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-6JM3N2WDEY');
+            `,
+          }}
+        />
       </head>
       <body
         className={`${luckiestGuy.variable}  ${montserrat.variable} ${overpass.variable} bg-theme-ivory bg-theme-grainy text-theme-black`}
