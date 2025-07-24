@@ -4,8 +4,6 @@ import Image from "next/image";
 import React, { useRef, useState, useEffect } from "react";
 import Overview from "./Overview";
 import "./Card.css";
-import { Draggable, InertiaPlugin } from "gsap/all";
-import { useGSAP } from "@gsap/react";
 import { useViewport } from "@/Providers/ViewportProvider";
 
 interface CardProps {
@@ -40,32 +38,6 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(({ data }, ref) => {
       transformPerspective: 1000,
     });
   }, []);
-
-  useGSAP(() => {
-    const draggables: any[] = [];
-    if (window && window.innerWidth > 768) {
-      gsap.registerPlugin(Draggable);
-      gsap.registerPlugin(InertiaPlugin);
-
-      const cards = gsap.utils.toArray(".card");
-
-      cards.forEach((card: any, index) => {
-        const instances = Draggable.create(card, {
-          bounds: document.querySelector("#experience_bounds"),
-          type: "x",
-          edgeResistance: 0.5,
-          inertia: true,
-          trigger: `.drag-trigger-${index}`,
-        });
-        draggables.push(...instances);
-      });
-    }
-    return () => {
-      draggables.forEach(
-        (draggable) => draggable && draggable.kill && draggable.kill(),
-      );
-    };
-  });
 
   const flipCard = () => {
     const duration = 0.6;

@@ -2,13 +2,39 @@
 
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/all";
+import { Draggable, InertiaPlugin, ScrollTrigger } from "gsap/all";
 import React, { useRef } from "react";
 import { CARDS } from "./constants";
 import Card from "./Card";
 
 const Experience: React.FC = () => {
   const cardRefs = useRef<Array<HTMLDivElement | null>>([]);
+
+  useGSAP(() => {
+    if (typeof window === "undefined") return;
+
+    const draggables: any[] = [];
+    if (window && window.innerWidth > 768) {
+      gsap.registerPlugin(Draggable);
+      gsap.registerPlugin(InertiaPlugin);
+
+      cardRefs.current.forEach((card: any, index) => {
+        const instances = Draggable.create(card, {
+          bounds: document.querySelector("#experience_bounds"),
+          type: "x",
+          edgeResistance: 0.5,
+          inertia: true,
+          trigger: `.drag-trigger-${index}`,
+        });
+        draggables.push(...instances);
+      });
+    }
+    return () => {
+      draggables.forEach(
+        (draggable) => draggable && draggable.kill && draggable.kill(),
+      );
+    };
+  });
 
   useGSAP(() => {
     if (typeof window === "undefined") return;
