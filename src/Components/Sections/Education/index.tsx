@@ -52,7 +52,7 @@ const Education = () => {
         </p>
         <Image
           src="/gne.webp"
-          className="hidden md:block object-cover object-center h-[600px] w-auto"
+          className="hidden md:block object-cover object-center h-[400px] lg:h-[600px] w-auto"
           height={0}
           width={0}
           loading="lazy"
