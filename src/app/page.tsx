@@ -14,12 +14,25 @@ import dynamic from "next/dynamic";
 import Contact from "@/Components/Sections/Contact";
 import { ViewportProvider } from "@/Providers/ViewportProvider";
 import Education from "@/Components/Sections/Education";
+import { isIOSSafari } from "@/utils/iosUtils";
 const Skills = dynamic(() => import("@/Components/Sections/Skills"));
 
 export default function Home() {
   gsap.registerPlugin(TextPlugin);
   gsap.registerPlugin(ScrollTrigger);
   gsap.registerPlugin(SplitText);
+
+  // iOS Safari ScrollTrigger optimization
+  useEffect(() => {
+    const iosSafari = isIOSSafari();
+
+    if (iosSafari) {
+      ScrollTrigger.config({
+        ignoreMobileResize: true,
+        autoRefreshEvents: "visibilitychange,DOMContentLoaded,load",
+      });
+    }
+  }, []);
 
   const pinTriggerContact = "pinTrigger";
 

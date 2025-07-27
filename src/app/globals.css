@@ -42,8 +42,38 @@
 }
 
 
-html, body {margin: 0; padding: 0; overflow-x:hidden;
+html, body {
+  margin: 0; 
+  padding: 0; 
+  overflow-x: hidden;
   font-size: 16px;
+  /* iOS Safari scroll fixes */
+  -webkit-overflow-scrolling: touch;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* iOS Safari specific scroll improvements */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  touch-action: manipulation;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Fix for iOS Safari momentum scrolling */
+* {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Ensure proper scrolling on iOS Safari */
+.scroll-container {
+  -webkit-overflow-scrolling: touch;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .no-scrollbar::-webkit-scrollbar { 

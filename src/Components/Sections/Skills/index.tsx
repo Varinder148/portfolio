@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Mouse,
   MouseConstraint,
@@ -16,6 +16,7 @@ import decomp from "poly-decomp";
 import "pathseg";
 import { vertexSets } from "./vertexSets";
 import { getSvgTexture, SKILLS } from "./utils";
+import { requestDeviceOrientationPermission, isIOS } from "@/utils/iosUtils";
 // import simplify from "simplify-js";
 
 function getScaleFactor(viewportWidth: number) {
@@ -377,9 +378,14 @@ function useSkillsPhysics() {
   React.useEffect(() => {
     const engine = engineRef.current!;
     if (typeof window === "undefined" || !device.isTouchDevice) return;
+
     let lastGravityUpdate = 0;
     const GRAVITY_THROTTLE_MS = 50;
+    let permissionRequested = false;
+    let orientationEventFired = false;
+
     function updateGravity(event: DeviceOrientationEvent) {
+      orientationEventFired = true;
       const now = Date.now();
       if (now - lastGravityUpdate < GRAVITY_THROTTLE_MS) return;
       lastGravityUpdate = now;
@@ -400,9 +406,33 @@ function useSkillsPhysics() {
         gravity.y = Common.clamp(event.gamma ?? 0, -90, 90) / 90;
       }
     }
+
+    // Try to add event listener first (works for most browsers)
     window.addEventListener("deviceorientation", updateGravity, {
       passive: true,
     });
+
+    // Check if device orientation event fires naturally
+    const checkOrientationPermission = () => {
+      if (!orientationEventFired && !permissionRequested && isIOS()) {
+        permissionRequested = true;
+        // Only request permission if the event hasn't fired after a delay
+        setTimeout(async () => {
+          if (!orientationEventFired) {
+            const hasPermission = await requestDeviceOrientationPermission();
+            if (hasPermission) {
+              console.log("Device orientation permission granted");
+            } else {
+              console.log("Device orientation permission denied");
+            }
+          }
+        }, 2000); // Wait 2 seconds to see if event fires naturally
+      }
+    };
+
+    // Check permission after a delay
+    setTimeout(checkOrientationPermission, 1000);
+
     return () => {
       window.removeEventListener("deviceorientation", updateGravity);
     };
@@ -413,23 +443,60 @@ function useSkillsPhysics() {
 
 const Skills: React.FC = () => {
   const { canvasRef, isTouchDevice } = useSkillsPhysics();
+  const [orientationStatus, setOrientationStatus] = useState<
+    "waiting" | "working" | "permission-needed"
+  >("waiting");
 
   useEffect(() => {
-    return () => console.log("unmounted");
-  });
+    if (isTouchDevice && isIOS()) {
+      // Check if device orientation is working after a delay
+      const checkOrientation = setTimeout(() => {
+        setOrientationStatus("working");
+      }, 3000);
+
+      // Listen for device orientation events to update status
+      const handleOrientation = () => {
+        setOrientationStatus("working");
+      };
+
+      window.addEventListener("deviceorientation", handleOrientation, {
+        passive: true,
+      });
+
+      return () => {
+        clearTimeout(checkOrientation);
+        window.removeEventListener("deviceorientation", handleOrientation);
+        console.log("unmounted");
+      };
+    }
+  }, [isTouchDevice]);
+
+  const getInstructionText = () => {
+    if (!isTouchDevice) {
+      return "Try dragging the skills";
+    }
+
+    if (isIOS()) {
+      switch (orientationStatus) {
+        case "waiting":
+          return "Tilting your device...";
+        case "working":
+          return "Try tilting your device";
+        case "permission-needed":
+          return "Allow motion access to tilt";
+        default:
+          return "Try tilting your device";
+      }
+    }
+
+    return "Try tilting your device";
+  };
 
   return (
     <>
-      {isTouchDevice && (
-        <div className="text-2xl relative  top-0 w-full text-center">
-          Try tilting your device
-        </div>
-      )}
-      {!isTouchDevice && (
-        <div className="text-2xl  relative  top-0 w-full text-center">
-          Try dragging the skills
-        </div>
-      )}
+      <div className="text-2xl relative top-0 w-full text-center">
+        {getInstructionText()}
+      </div>
       <div
         ref={canvasRef}
         style={{
