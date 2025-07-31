@@ -19,6 +19,32 @@ import { getSvgTexture, SKILLS } from "./utils";
 import { requestDeviceOrientationPermission, isIOS } from "@/utils/iosUtils";
 // import simplify from "simplify-js";
 
+// Performance monitoring utility
+const usePerformanceMonitor = () => {
+  useEffect(() => {
+    let frameCount = 0;
+    let lastTime = performance.now();
+
+    const measureFPS = () => {
+      frameCount++;
+      const currentTime = performance.now();
+
+      if (currentTime - lastTime >= 1000) {
+        const fps = Math.round((frameCount * 1000) / (currentTime - lastTime));
+        if (fps < 30) {
+          console.warn(`Low FPS detected: ${fps}`);
+        }
+        frameCount = 0;
+        lastTime = currentTime;
+      }
+
+      requestAnimationFrame(measureFPS);
+    };
+
+    requestAnimationFrame(measureFPS);
+  }, []);
+};
+
 function getScaleFactor(viewportWidth: number) {
   const maxWidth = 1200;
   const minWidth = 100;
@@ -201,7 +227,7 @@ function useSkillsPhysics() {
     // Remove any previous renderers
     const prevCanvas = canvasRef.current?.querySelector("canvas");
     if (prevCanvas) prevCanvas.remove();
-    // Setup renderer
+    // Setup renderer with performance optimizations
     const render = Render.create({
       element: canvasRef.current!,
       engine: engine,
@@ -210,12 +236,16 @@ function useSkillsPhysics() {
         height: dimensions.height,
         wireframes: false,
         background: "transparent",
-        pixelRatio: Math.min(window.devicePixelRatio, 1.5),
+        pixelRatio: Math.min(window.devicePixelRatio, 1.0), // Reduced from 1.5
+        showDebug: false,
+        showBounds: false,
+        showVelocity: false,
       },
     });
     Render.run(render);
     const runner = Runner.create();
     Runner.run(runner, engine);
+
     // Walls
     const ground = Bodies.rectangle(
       dimensions.width / 2,
@@ -277,6 +307,7 @@ function useSkillsPhysics() {
       true,
     );
     if (!device.isMobile) Composite.add(engine.world, terrain);
+
     // Balls
     const svgCenter = { x: dimensions.width / 2, y: dimensions.height / 2 };
     const ballArea = {
@@ -446,6 +477,9 @@ const Skills: React.FC = () => {
   const [orientationStatus, setOrientationStatus] = useState<
     "waiting" | "working" | "permission-needed"
   >("waiting");
+
+  // Add performance monitoring
+  usePerformanceMonitor();
 
   useEffect(() => {
     if (isTouchDevice && isIOS()) {

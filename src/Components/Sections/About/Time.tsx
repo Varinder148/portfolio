@@ -2,10 +2,12 @@
 
 import formatTime from "@/utils/timeCalculator";
 import { parseDateSafely } from "@/utils/iosUtils";
-import React, { useEffect, useState, memo } from "react";
+import React, { useEffect, useState, memo, useMemo } from "react";
+import { useViewport } from "@/Providers/ViewportProvider";
 
 const Time = () => {
   const [time, setTime] = useState("");
+  const { isMobile } = useViewport();
 
   useEffect(() => {
     const updateTime = () => {
@@ -47,16 +49,27 @@ const Time = () => {
 
     updateTime();
 
-    const id = setInterval(updateTime, 1000);
+    // Reduce update frequency on mobile for better performance
+    const updateInterval = isMobile ? 2000 : 1000;
+    const id = setInterval(updateTime, updateInterval);
 
     return () => clearInterval(id);
-  }, []);
+  }, [isMobile]);
+
+  // Memoize the formatted time display to prevent unnecessary re-renders
+  const formattedTime = useMemo(() => {
+    const timeParts = time.split(" ");
+    return {
+      firstLine: timeParts.slice(0, 6).join(" "),
+      secondLine: timeParts.slice(6).join(" "),
+    };
+  }, [time]);
 
   return (
     <div className=" text-2xl md:text-3xl text-theme-ivory ">
-      {time.split(" ").slice(0, 6).join(" ")}
+      {formattedTime.firstLine}
       <br />
-      {time.split(" ").slice(6).join(" ")}
+      {formattedTime.secondLine}
     </div>
   );
 };

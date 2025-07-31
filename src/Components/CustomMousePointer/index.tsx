@@ -12,6 +12,10 @@ const CustomMousePointer: React.FC = () => {
   const { isTouchDevice } = useViewport();
   const [isHovered, setIsHovered] = useState(false);
 
+  // Cache DOM rects to avoid repeated queries
+  const pointerRectRef = useRef<DOMRect | null>(null);
+  const secondaryPointerRectRef = useRef<DOMRect | null>(null);
+
   // Refs to track cleanup functions
   const throttledMouseMoveRef = useRef<ReturnType<typeof throttle> | null>(
     null,
@@ -21,12 +25,23 @@ const CustomMousePointer: React.FC = () => {
     Map<Element, { enter: () => void; leave: () => void }>
   >(new Map());
 
+  // Cache DOM rects when elements change
+  useEffect(() => {
+    if (pointerRef.current) {
+      pointerRectRef.current = pointerRef.current.getBoundingClientRect();
+    }
+    if (secondaryPointerRef.current) {
+      secondaryPointerRectRef.current =
+        secondaryPointerRef.current.getBoundingClientRect();
+    }
+  }, []);
+
   // Memoized pointer update logic
   const updatePointer = useCallback(
     (clientX: number, clientY: number, isInWindow: boolean) => {
-      const pointerRect = pointerRef.current?.getBoundingClientRect();
-      const secondaryPointerRect =
-        secondaryPointerRef.current?.getBoundingClientRect();
+      const pointerRect = pointerRectRef.current;
+      const secondaryPointerRect = secondaryPointerRectRef.current;
+
       if (isInWindow && pointerRect && secondaryPointerRect) {
         const pointerOffsetX =
           (secondaryPointerRect.width - pointerRect.width) / 2;
@@ -44,6 +59,7 @@ const CustomMousePointer: React.FC = () => {
           duration: 0.1,
           ease: "power3.out",
           overwrite: "auto",
+          force3D: true, // Hardware acceleration
         });
         gsap.to(secondaryPointerRef.current, {
           x: clientX - pointerOffsetX,
@@ -52,6 +68,7 @@ const CustomMousePointer: React.FC = () => {
           duration: 0.7,
           ease: "power3.out",
           overwrite: "auto",
+          force3D: true, // Hardware acceleration
         });
       } else {
         gsap.killTweensOf(pointerRef.current);
@@ -113,7 +130,7 @@ const CustomMousePointer: React.FC = () => {
   useEffect(() => {
     if (isTouchDevice) return;
 
-    // Throttle mousemove to 16ms (60fps)
+    // Throttle mousemove to 32ms (30fps) instead of 16ms (60fps) for better performance
     throttledMouseMoveRef.current = throttle((event: MouseEvent) => {
       const { clientX, clientY } = event;
       const { innerWidth, innerHeight } = window;
@@ -123,7 +140,7 @@ const CustomMousePointer: React.FC = () => {
         clientY >= 0 &&
         clientY <= innerHeight;
       updatePointer(clientX, clientY, isInWindow);
-    }, 16);
+    }, 32); // Increased from 16ms to 32ms
 
     // Add listeners to existing elements
     addListenersToAllClickableElements();

@@ -15,6 +15,7 @@ import Contact from "@/Components/Sections/Contact";
 import { ViewportProvider } from "@/Providers/ViewportProvider";
 import Education from "@/Components/Sections/Education";
 import { isIOSSafari } from "@/utils/iosUtils";
+import PerformanceMonitor from "@/Components/PerformanceMonitor";
 const Skills = dynamic(() => import("@/Components/Sections/Skills"));
 
 export default function Home() {
@@ -57,47 +58,17 @@ export default function Home() {
     });
   });
 
-  useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting && !loadSkills) {
-          setLoadSkills(true);
-        }
-      });
-    });
-
-    // Start observing the canvas element
-    if (anchorRefs?.current?.[refs.Skills]) {
-      observer.observe(anchorRefs?.current?.[refs.Skills] as Element);
-    }
-  }, []);
-
-  // Update the observer for Skills to handle delayed mount/unmount
-  useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting && !loadSkills) {
-          setLoadSkills(true);
-        }
-      });
-    });
-
-    // Start observing the canvas element
-    if (anchorRefs?.current?.[refs.Skills]) {
-      observer.observe(anchorRefs?.current?.[refs.Skills] as Element);
-    }
-    return () => {
-      if (anchorRefs?.current?.[refs.Skills]) {
-        observer.unobserve(anchorRefs?.current?.[refs.Skills] as Element);
-      }
-    };
-  }, [loadSkills]);
-
+  // Consolidated observer for all sections
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
+            // Handle Skills loading
+            if (entry.target.id === refs.Skills && !loadSkills) {
+              setLoadSkills(true);
+            }
+            // Handle active tab updates
             setActiveTab(entry.target.id);
           }
         });
@@ -114,7 +85,7 @@ export default function Home() {
         (ref) => ref && observer.unobserve(ref as HTMLElement),
       );
     };
-  }, []);
+  }, [loadSkills]);
 
   return (
     <ViewportProvider>
@@ -204,6 +175,7 @@ export default function Home() {
         <Contact pinTriggerContact={pinTriggerContact} />
       </div>
       <CustomMousePointer />
+      <PerformanceMonitor />
     </ViewportProvider>
   );
 }
