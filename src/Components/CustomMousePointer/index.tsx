@@ -43,16 +43,15 @@ const CustomMousePointer: React.FC = () => {
       const secondaryPointerRect = secondaryPointerRectRef.current;
 
       if (isInWindow && pointerRect && secondaryPointerRect) {
-        const pointerOffsetX =
-          (secondaryPointerRect.width - pointerRect.width) / 2;
-        const pointerOffsetY =
-          (secondaryPointerRect.height - pointerRect.height) / 2;
         // Kill previous tweens before starting new ones
         gsap.killTweensOf(pointerRef.current);
         gsap.killTweensOf(secondaryPointerRef.current);
+
         gsap.to(pointerRef.current, {
-          x: clientX,
-          y: clientY,
+          left: clientX,
+          top: clientY,
+          x: "-50%",
+          y: "-50%",
           scale: isHovered ? 3 : 1,
           backgroundColor: isHovered ? THEME.IVORY : THEME.RED,
           display: "block",
@@ -61,9 +60,12 @@ const CustomMousePointer: React.FC = () => {
           overwrite: "auto",
           force3D: true, // Hardware acceleration
         });
+
         gsap.to(secondaryPointerRef.current, {
-          x: clientX - pointerOffsetX,
-          y: clientY - pointerOffsetY,
+          left: clientX,
+          top: clientY,
+          x: "-50%",
+          y: "-50%",
           display: "block",
           duration: 0.7,
           ease: "power3.out",
@@ -223,12 +225,12 @@ const CustomMousePointer: React.FC = () => {
     <>
       <div
         ref={pointerRef}
-        className={`fixed top-0 left-0 w-5 h-5 opacity-50 rounded-full pointer-events-none z-[1000] hidden ${isHovered ? "bg-theme-red" : "bg-theme-white"}`}
+        className={`fixed w-5 h-5 opacity-50 rounded-full pointer-events-none z-[1000] hidden ${isHovered ? "bg-theme-red" : "bg-theme-white"}`}
       />
       <div
         ref={secondaryPointerRef}
         className={clsx(
-          `fixed top-0 left-0 w-15 h-15 border-2 border-theme-gray rounded-full pointer-events-none z-[1000] hidden `,
+          `fixed w-15 h-15 border-2 border-theme-gray rounded-full pointer-events-none z-[1000] hidden `,
           { invisible: isHovered },
         )}
       />
