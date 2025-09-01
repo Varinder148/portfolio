@@ -1,4 +1,4 @@
 User-Agent: *
 Allow: /
 
-Sitemap: https://varinder148.github.io/portfolio/sitemap.xml
+Sitemap: https://varinder.vercel.app/sitemap.xml
