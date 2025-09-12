@@ -71,12 +71,12 @@ const IconLinks = () => {
           className="hover:text-theme-red border-2 border-theme-gray text-theme-gray p-2 rounded-lg hover:border-theme-red"
         />
       </Link>
-      <Tooltip text="+91 7696134521">
+      <Tooltip text="+1 438-348-2838">
         <Link
-          href="tel:+917696134521"
+          href="tel:+14383482838 "
           className="connect block"
           rel="noopener noreferrer"
-          aria-label="Call +91 7696134521"
+          aria-label="Call +1 438-348-2838"
           ref={phoneRef}
         >
           <Phone

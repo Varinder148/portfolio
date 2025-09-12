@@ -12,6 +12,7 @@ interface CardProps {
     image: string;
     name: string;
     from: string;
+    subText?: string;
     to: string;
     responsibilities: string[];
     location: string;
@@ -100,6 +101,7 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(({ data }, ref) => {
             ></div>
             <span className="absolute text-center top-1/2 left-1/2 -translate-1/2 text-2xl md:text-5xl  font-bold font-montserrat">
               {data.name}
+              <div className="text-lg md:text-3xl ">{data?.subText}</div>
             </span>
             {!isMobile && (
               <div className="text-sm font-normal absolute text-center bottom-2 left-1/2 -translate-1/2 ">
