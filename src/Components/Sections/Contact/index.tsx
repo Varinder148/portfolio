@@ -71,12 +71,12 @@ const IconLinks = () => {
           className="hover:text-theme-red border-2 border-theme-gray text-theme-gray p-2 rounded-lg hover:border-theme-red"
         />
       </Link>
-      <Tooltip text="+1 438-348-2838">
+      <Tooltip text="+1 647-366-7162">
         <Link
-          href="tel:+14383482838 "
+          href="tel:+16473667162"
           className="connect block"
           rel="noopener noreferrer"
-          aria-label="Call +1 438-348-2838"
+          aria-label="Call +1 647-366-7162"
           ref={phoneRef}
         >
           <Phone
@@ -194,7 +194,7 @@ const Contact = ({ pinTriggerContact }: { pinTriggerContact: string }) => {
             and build awesome things{" "}
             <strong
               id="together"
-              className="bg-theme-green inline-block text-2xl md:text-3xl font-montserrat p-2 text-theme-ivory"
+              className="bg-theme-green inline-block text-xl md:text-3xl font-montserrat p-2 text-theme-ivory"
             >
               together!
             </strong>
