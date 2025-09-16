@@ -79,7 +79,7 @@ const About: React.FC<AboutProps> = ({ className = "", scrollToContact }) => {
     <section ref={sectionRef} id="about">
       {!isMobile && (
         <>
-          <div className="absolute w-full h-screen inset rounded-b-full bg-mountain -z-50 inset-shadow" />
+          <div className="absolute w-full h-screen inset rounded-b-full bg-mountain bg-fixed -z-50 inset-shadow" />
           <div className="absolute w-full h-screen inset opacity-80 bg-theme-black -z-40 " />
         </>
       )}
