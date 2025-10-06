@@ -5,14 +5,14 @@ export const CARDS = [
     name: "Gartner",
     from: "12 Jun, 2023",
     to: "24 Sept, 2025",
-    position: "Software Engineer, Advanced",
+    position: "Software Engineer 2",
     location: "Gurugram | India",
     responsibilities: [
-      "Migrated software systems and a serverless codebase to a Next.js monorepo, improving maintainability and Core Web Vitals by 20%.",
-      "Led the implementation of 8 experimental features over 2 months, with 4 successfully adopted.",
-      "Developed custom fields in Contentful to improve content flexibility on the blog web app.",
-      "Managed Datadog and FullStory for auditing and benchmarking, and conducted weekly bug bashes that reduced errors by 99% in a quarter.",
-      "Collaborated with design, QA, and product teams in agile sprints to ensure accurate feature delivery and provide ongoing technical support.",
+      "Accountable for migration and optimization of serverless codebase to a Next.js monorepo, enhancing maintainability and improving core web vitals by approximately 20%",
+      "Led the implementation of 8 experimental features over 2 months, 4 of which were successful",
+      "Developed an innovative solution to support tokens for two design systems within a single web application, reducing the deployment timeline for the revamped app from 12 months to just 3 months",
+      "Managed Datadog and FullStory for auditing and benchmarking, and conducted weekly bug bashes, reducing errors by 99% over the course of a quarter",
+      "Collaborated with cross-functional teams to discuss integration strategies and build solutions quickly while maintaining high-quality standards",
     ],
   },
   {
@@ -24,9 +24,10 @@ export const CARDS = [
     position: "UI Developer – Consultant",
     location: "Gurugram | India",
     responsibilities: [
-      "Built micro-frontends (using Module Federation) in React, leveraging API contracts to create reusable forms for banking services.",
-      "Championed TDD practices and reusable frontend components to improve code quality and maintain team standards.",
-      "Developed a generic project boilerplate for micro-frontends, accelerating onboarding by approximately 10 days.",
+      "Worked with micro-frontends (using Module Federation) written in React, leveraging the API contract to create dedicated forms for banking services by simple data fetching via GraphQL query, thereby eliminating the need to develop each form individually",
+      "Championed Test-Driven Development practices and reusable frontend components to improve code quality and team standards",
+      "Took ownership of setting up a generic project boilerplate for micro-frontends, accelerating onboarding by approximately 10 days, thus increasing overall productivity",
+      "Participated in and received code reviews to iterate on and develop a robust, high-quality polished solution",
     ],
   },
   {
@@ -39,8 +40,9 @@ export const CARDS = [
     position: "Application Developer",
     location: "Gurugram | India",
     responsibilities: [
-      "Developed client-specific proof-of-concept solutions using React.js.",
-      "Integrated a React widget with Microsoft Dynamics 365 to enable real-time CRM data interaction.",
+      "Responsible for developing client-specific proof-of-concept solutions using React.js",
+      "Took ownership of Integrating a React widget with Microsoft Dynamics 365 dashboard to enable real-time CRM data interaction",
+      "Collaborated closely with design and product teams to align on requirements and deliver seamless solutions",
     ],
   },
   {
@@ -52,8 +54,8 @@ export const CARDS = [
     position: "Systems Engineer",
     location: "Chandigarh | India",
     responsibilities: [
-      "Built a serverless web application using React with an upload feature, processing user data via a machine learning model hosted on AWS Sagemaker.",
-      "Deployed the serverless application on AWS, leveraging AWS Lambda to create and manage API endpoints while supporting production environments.",
+      "Developed serverless single page applications using React, one of which, incorporated an upload feature that allowed users to submit data. This data was then processed by a machine learning algorithm hosted on AWS Sagemaker",
+      "Used AWS to deploy the serverless application, leveraging AWS Lambda to create and manage the required API endpoints",
     ],
   },
 ];
