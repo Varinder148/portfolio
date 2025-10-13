@@ -176,11 +176,7 @@ const About: React.FC<AboutProps> = ({ className = "", scrollToContact }) => {
 
         <div className={`flex flex-col w-full gap-10 `}>
           <div className="flex flex-col md:flex-row justify-center gap-5 p-10">
-            <Link
-              href="./Varinder-Singh_Resume_fancy.pdf"
-              target="_blank"
-              download
-            >
+            <Link href="./Varinder-Singh_Resume.pdf" target="_blank" download>
               <Button
                 className=" md:min-w-[300px]  w-full "
                 color={THEME.REDWOOD}

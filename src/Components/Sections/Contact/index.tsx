@@ -12,6 +12,8 @@ import { ScrollTrigger } from "gsap/all";
 import Link from "next/link";
 import React, { useRef, useState, useCallback } from "react";
 
+const PHONE_NUMBER = "+1 438-348-2838";
+
 const IconLinks = () => {
   const { isMobile } = useViewport();
   const mailRef = useRef<HTMLAnchorElement>(null);
@@ -71,12 +73,12 @@ const IconLinks = () => {
           className="hover:text-theme-red border-2 border-theme-gray text-theme-gray p-2 rounded-lg hover:border-theme-red"
         />
       </Link>
-      <Tooltip text="+1 647-366-7162">
+      <Tooltip text={PHONE_NUMBER}>
         <Link
-          href="tel:+16473667162"
+          href={`tel:${PHONE_NUMBER.replaceAll(" ", "").replaceAll("-", "")}`}
           className="connect block"
           rel="noopener noreferrer"
-          aria-label="Call +1 647-366-7162"
+          aria-label={`Call ${PHONE_NUMBER}`}
           ref={phoneRef}
         >
           <Phone
