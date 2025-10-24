@@ -12,7 +12,7 @@ import { ScrollTrigger } from "gsap/all";
 import Link from "next/link";
 import React, { useRef, useState, useCallback } from "react";
 
-const PHONE_NUMBER = "+1 438-348-2838";
+const PHONE_NUMBER = "+1 365-987-4787";
 
 const IconLinks = () => {
   const { isMobile } = useViewport();
