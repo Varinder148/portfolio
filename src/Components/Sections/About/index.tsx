@@ -42,12 +42,12 @@ const About: React.FC<AboutProps> = ({ className = "", scrollToContact }) => {
       .to("#name", { text: { value: "Software Engineer" } })
       .from("#about-block", { opacity: 0 })
       .from(split.lines, {
-        rotationX: -100,
-        rotateY: "random(-180,180)",
-        transformOrigin: "50% 50% -160px",
+        // rotationX: -100,
+        // rotateY: "random(-180,180)",
+        // transformOrigin: "50% 50% -160px",
         opacity: 0,
-        duration: 0.8,
-        ease: "power3",
+        duration: 0.3,
+        ease: "sine.in",
         stagger: 0.25,
       })
       .from(`${highlightedValues}:nth-child(2n)`, {
