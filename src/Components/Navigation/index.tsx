@@ -5,7 +5,6 @@ import menuItems from "./constants";
 import clsx from "clsx";
 import gsap from "gsap";
 import React from "react";
-import { useViewport } from "@/Providers/ViewportProvider";
 
 let compassTimeline: gsap.core.Timeline | null = null;
 export const animateCompass = () => {
@@ -70,7 +69,6 @@ const Navigation: React.FC<NavigationProps> = ({
   activeTab,
 }) => {
   const [visible, setVisible] = useState(false);
-  const { isMobile } = useViewport();
 
   const angle = 270 / menuItems.length;
   const circleSize = 400;
@@ -103,8 +101,9 @@ const Navigation: React.FC<NavigationProps> = ({
           src="/compass.svg"
           alt="compass"
           id="compass"
-          width={isMobile ? 25 : 50}
-          height={isMobile ? 25 : 50}
+          width={-1}
+          height={-1}
+          className="w-[50px] h-[50px] md:w-[75px] md:h-[75px]"
           priority
         />
       </button>
@@ -133,7 +132,7 @@ const Navigation: React.FC<NavigationProps> = ({
             id="compass"
             width={150}
             height={150}
-            className="bg-none "
+            className="bg-none"
             priority
           />
           <ul>

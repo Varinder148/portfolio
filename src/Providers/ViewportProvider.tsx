@@ -1,3 +1,5 @@
+"use client";
+
 import React, {
   createContext,
   ReactNode,
@@ -14,26 +16,21 @@ interface ViewportContextType {
   viewportHeight: number;
 }
 
-const ViewportContext = createContext<ViewportContextType | undefined>(
-  undefined,
-);
+const ViewportContext = createContext<ViewportContextType>({
+  isMobile: false,
+  isTouchDevice: false,
+  viewportWidth: 1024,
+  viewportHeight: 768,
+});
 
 const ViewportProvider = ({ children }: { children: ReactNode }) => {
-  // SSR safety: initialize with window values if available
-  const getInitialWidth = () =>
-    typeof window !== "undefined" ? window.innerWidth : 0;
-  const getInitialHeight = () =>
-    typeof window !== "undefined" ? window.innerHeight : 0;
-  const [viewportWidth, setViewportWidth] = useState<number>(getInitialWidth());
-  const [viewportHeight, setViewportHeight] =
-    useState<number>(getInitialHeight());
-  const [isMobile, setIsMobile] = useState<boolean>(getInitialWidth() < 768);
+  // Start with default desktop values for SSR
+  const [viewportWidth, setViewportWidth] = useState<number>(1024);
+  const [viewportHeight, setViewportHeight] = useState<number>(768);
+  const [isMobile, setIsMobile] = useState<boolean>(false);
   const [isTouchDevice, setIsTouchDevice] = useState<boolean>(false);
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
-    let resizeTimeout: NodeJS.Timeout | null = null;
-
     const checkTouchDevice = () => {
       return (
         "ontouchstart" in window ||
@@ -44,29 +41,36 @@ const ViewportProvider = ({ children }: { children: ReactNode }) => {
     };
 
     const handleResize = () => {
-      if (resizeTimeout) clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(() => {
-        setViewportWidth(window.innerWidth);
-        setViewportHeight(window.innerHeight);
-        setIsMobile(window.innerWidth < 768);
-        setIsTouchDevice(checkTouchDevice());
-      }, 150);
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+
+      setViewportWidth(width);
+      setViewportHeight(height);
+      setIsMobile(width < 768);
+      setIsTouchDevice(checkTouchDevice());
     };
 
-    window.addEventListener("resize", handleResize);
-    // Set initial values
+    // Initial measurement
     handleResize();
+
+    // Setup resize listener
+    window.addEventListener("resize", handleResize);
 
     return () => {
       window.removeEventListener("resize", handleResize);
-      if (resizeTimeout) clearTimeout(resizeTimeout);
     };
   }, []);
 
   return (
     <ViewportContext.Provider
-      value={{ isMobile, isTouchDevice, viewportWidth, viewportHeight }}
+      value={{
+        isMobile,
+        isTouchDevice,
+        viewportWidth,
+        viewportHeight,
+      }}
     >
+      {/* Render children immediately but update values after mount */}
       {children}
     </ViewportContext.Provider>
   );

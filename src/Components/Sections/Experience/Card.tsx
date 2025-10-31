@@ -24,7 +24,7 @@ interface CardProps {
 const Card = React.forwardRef<HTMLDivElement, CardProps>(({ data }, ref) => {
   const [isFlipped, setIsFlipped] = useState(false);
 
-  const { isMobile } = useViewport();
+  const { isMobile, viewportHeight } = useViewport();
 
   const cardRef = useRef<HTMLDivElement>(null);
   const frontRef = useRef<HTMLDivElement>(null);
@@ -77,7 +77,10 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(({ data }, ref) => {
           if (typeof ref === "function") ref(node);
         }}
         data-flipped={isFlipped}
-        className="relative card border-2 border-theme-black bg-theme-ivory w-full h-[600px] md:w-[600px] md:h-[700px] stackingcard rounded-2xl"
+        className="relative card border-2 border-theme-black bg-theme-ivory w-full h-[600px] md:w-[600px] stackingcard rounded-2xl"
+        style={{
+          height: viewportHeight - viewportHeight * 0.2,
+        }}
       >
         <div
           ref={frontRef}

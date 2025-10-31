@@ -60,32 +60,38 @@ export default function Home() {
 
   // Consolidated observer for all sections
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            // Handle Skills loading
-            if (entry.target.id === refs.Skills && !loadSkills) {
-              setLoadSkills(true);
+    // Wait for next tick to ensure DOM is ready
+    const timer = setTimeout(() => {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              // Handle Skills loading
+              if (entry.target.id === refs.Skills && !loadSkills) {
+                setLoadSkills(true);
+              }
+              // Handle active tab updates
+              setActiveTab(entry.target.id);
             }
-            // Handle active tab updates
-            setActiveTab(entry.target.id);
-          }
-        });
-      },
-      { threshold: 0.1 },
-    );
-
-    Object.values(anchorRefs?.current)?.forEach(
-      (ref) => ref && observer.observe(ref as HTMLElement),
-    );
-
-    return () => {
-      Object.values(anchorRefs?.current)?.forEach(
-        (ref) => ref && observer.unobserve(ref as HTMLElement),
+          });
+        },
+        { threshold: 0.1 },
       );
-    };
-  }, [loadSkills]);
+
+      // Make sure refs are available before observing
+      const currentRefs = Object.values(anchorRefs.current).filter(Boolean);
+      if (currentRefs.length > 0) {
+        currentRefs.forEach((ref) => observer.observe(ref as HTMLElement));
+      }
+
+      return () => {
+        currentRefs.forEach((ref) => observer.unobserve(ref as HTMLElement));
+        observer.disconnect();
+      };
+    }, 0);
+
+    return () => clearTimeout(timer);
+  }, [loadSkills, anchorRefs]);
 
   return (
     <ViewportProvider>

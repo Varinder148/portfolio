@@ -76,19 +76,14 @@ const About: React.FC<AboutProps> = ({ className = "", scrollToContact }) => {
   });
 
   return (
-    <section ref={sectionRef} id="about">
-      {!isMobile && (
-        <>
-          <div className="absolute w-full h-screen inset rounded-b-full bg-mountain bg-fixed -z-50 inset-shadow" />
-          <div className="absolute w-full h-screen inset opacity-80 bg-theme-black -z-40 " />
-        </>
-      )}
-
+    <section ref={sectionRef} id="about" className={`relative ${className}`}>
       <div
-        className={`bg-theme-grainy min-h-screen relative flex flex-col items-center justify-between pt-10  ${
-          className
-        }`}
-      >
+        className={`absolute w-full h-screen inset rounded-b-full bg-mountain bg-fixed -z-50 inset-shadow ${isMobile ? "hidden" : ""}`}
+      />
+      <div
+        className={`absolute w-full h-screen inset opacity-80 bg-theme-black -z-40 ${isMobile ? "hidden" : ""}`}
+      />
+      <div className="bg-theme-grainy min-h-screen relative flex flex-col items-center justify-between pt-10">
         <div className="flex flex-col w-full items-center">
           <h1 className="flex items-center font-luckiest-guy  tracking-wider text-4xl mb-10 md:text-[clamp(6rem,8vw,6rem)] justify-self-center  relative -z-1 ">
             <span id="hey">.</span>
