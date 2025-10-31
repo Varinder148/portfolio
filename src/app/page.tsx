@@ -16,6 +16,7 @@ import { ViewportProvider } from "@/Providers/ViewportProvider";
 import Education from "@/Components/Sections/Education";
 import { isIOSSafari } from "@/utils/iosUtils";
 import PerformanceMonitor from "@/Components/PerformanceMonitor";
+import Loading from "@/Components/Loading";
 const Skills = dynamic(() => import("@/Components/Sections/Skills"));
 
 export default function Home() {
@@ -104,14 +105,7 @@ export default function Home() {
           activeTab={activeTab}
         />
 
-        <div
-          className={` w-screen h-screen bg-theme-red grid place-items-center fixed z-50 overflow-hidden rounded-b-4xl ${loading.replace(
-            ".",
-            "",
-          )}`}
-        >
-          Loading...
-        </div>
+        <Loading className={loading.replace(".", "")} />
 
         <div className="flex flex-col gap-40">
           <div
