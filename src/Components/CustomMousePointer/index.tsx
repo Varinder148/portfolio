@@ -67,7 +67,7 @@ const CustomMousePointer: React.FC = () => {
           x: "-50%",
           y: "-50%",
           display: "block",
-          duration: 0.7,
+          duration: 0.4,
           ease: "power3.out",
           overwrite: "auto",
           force3D: true, // Hardware acceleration
