@@ -1,4 +1,16 @@
-const Circle = ({ className = "", fill = "", id = "" }) => {
+import React from "react";
+
+interface CircleProps {
+  className?: string;
+  fill?: string;
+  id?: string;
+}
+
+const Circle: React.FC<CircleProps> = ({
+  className = "",
+  fill = "",
+  id = "",
+}) => {
   return (
     <svg
       width="585"
@@ -13,4 +25,4 @@ const Circle = ({ className = "", fill = "", id = "" }) => {
   );
 };
 
-export default Circle;
+export default React.memo(Circle);

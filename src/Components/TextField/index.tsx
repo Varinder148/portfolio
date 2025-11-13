@@ -78,4 +78,4 @@ const TextField = ({
   );
 };
 
-export default TextField;
+export default React.memo(TextField);

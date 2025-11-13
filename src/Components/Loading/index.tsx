@@ -2,10 +2,10 @@ import React from "react";
 import Circle from "../Circle";
 
 interface LoadingProps {
-  className: string;
+  className?: string;
 }
 
-const Loading: React.FC<LoadingProps> = ({ className }) => {
+const Loading: React.FC<LoadingProps> = ({ className = "" }) => {
   return (
     <div
       className={`w-screen h-screen bg-theme-black grid place-items-center fixed z-50 overflow-hidden rounded-b-4xl ${className}`}
@@ -34,4 +34,4 @@ const Loading: React.FC<LoadingProps> = ({ className }) => {
   );
 };
 
-export default Loading;
+export default React.memo(Loading);

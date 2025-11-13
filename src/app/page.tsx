@@ -145,11 +145,14 @@ export default function Home() {
             id={refs.Skills}
           >
             <SectionHeading triggerClass="skills">
-              <span className="text-theme-sandy"> 'The Skills' </span> I
-              collected over the years
+              <span className={`text-theme-sandy ${pinTriggerContact}`}>
+                {" "}
+                'The Skills'{" "}
+              </span>{" "}
+              I collected over the years
               <span className="text-theme-gray"></span>
             </SectionHeading>
-            <div className={`w-screen h-screen  ${pinTriggerContact}`}>
+            <div className={`w-screen h-screen  `}>
               {loadSkills && <Skills />}
             </div>
           </div>

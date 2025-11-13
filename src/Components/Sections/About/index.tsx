@@ -1,8 +1,6 @@
-import { useGSAP } from "@gsap/react";
-import { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import Time from "./Time";
 import gsap from "gsap";
-import React from "react";
 import Button from "@/Components/Button";
 import Link from "next/link";
 import { THEME } from "@/utils/constants";
@@ -21,59 +19,75 @@ const About: React.FC<AboutProps> = ({ className = "", scrollToContact }) => {
   // Store timelines in refs to kill previous ones
   const tlRef = useRef<gsap.core.Timeline | null>(null);
   const animRef = useRef<gsap.core.Timeline | null>(null);
+  const splitRef = useRef<any>(null);
 
-  useGSAP(() => {
-    // Kill previous timelines if any
-    if (tlRef.current) tlRef.current.kill();
-    if (animRef.current) animRef.current.kill();
-    // hey text animation
-    const tl = gsap
-      .timeline()
-      .set("#hey", { opacity: 0 })
-      .to("#hey", {
-        delay: 1,
-        opacity: 1,
-        text: { value: "Hey there!" },
-      });
-    tlRef.current = tl;
-    const split = SplitText.create(".split", { type: "lines" });
-    const anim = gsap
-      .timeline({ delay: 0.1 })
-      .to("#name", { text: { value: "Software Engineer" } })
-      .from("#about-block", { opacity: 0 })
-      .from(split.lines, {
-        // rotationX: -100,
-        // rotateY: "random(-180,180)",
-        // transformOrigin: "50% 50% -160px",
-        opacity: 0,
-        duration: 0.3,
-        ease: "sine.in",
-        stagger: 0.25,
-      })
-      .from(`${highlightedValues}:nth-child(2n)`, {
-        y: -20,
-        opacity: 0,
-        duration: 0.2,
-        ease: "back.in",
-        stagger: { amount: 0.2, from: "random" },
-      })
-      .from(`${highlightedValues}:nth-child(2n+1)`, {
-        y: 20,
-        opacity: 0,
-        duration: 0.2,
-        ease: "back.in",
-        stagger: { amount: 0.2, from: "random" },
-      })
-      .to("#name", {
-        text: { value: "Varinder\u00A0Singh", padSpace: true },
-      });
-    animRef.current = anim;
+  useEffect(() => {
+    if (!sectionRef.current) return;
+
+    // use gsap.context to scope selectors and make cleanup simple
+    const ctx = gsap.context(() => {
+      // Kill previous timelines if any
+      if (tlRef.current) tlRef.current.kill();
+      if (animRef.current) animRef.current.kill();
+
+      // hey text animation
+      const tl = gsap
+        .timeline()
+        .set("#hey", { opacity: 0 })
+        .to("#hey", {
+          delay: 1,
+          opacity: 1,
+          text: { value: "Hey there!" },
+        });
+      tlRef.current = tl;
+
+      const split = SplitText.create(".split", { type: "lines" });
+
+      // store split on ref for cleanup (can't reference ctx inside this callback)
+      splitRef.current = split;
+
+      const anim = gsap
+        .timeline({ delay: 0.1 })
+        .to("#name", { text: { value: "Software Engineer" } })
+        .from("#about-block", { opacity: 0 })
+        .from(split.lines, {
+          opacity: 0,
+          duration: 0.3,
+          ease: "sine.in",
+          stagger: 0.25,
+        })
+        .from(`${highlightedValues}:nth-child(2n)`, {
+          y: -20,
+          opacity: 0,
+          duration: 0.2,
+          ease: "back.in",
+          stagger: { amount: 0.2, from: "random" },
+        })
+        .from(`${highlightedValues}:nth-child(2n+1)`, {
+          y: 20,
+          opacity: 0,
+          duration: 0.2,
+          ease: "back.in",
+          stagger: { amount: 0.2, from: "random" },
+        })
+        .to("#name", {
+          text: { value: "Varinder\u00A0Singh", padSpace: true },
+        });
+
+      animRef.current = anim;
+
+      // store split on ctx for cleanup
+    }, sectionRef.current);
+
+    (ctx as any)._split = splitRef.current;
+
     return () => {
-      tl.kill();
-      anim.kill();
-      if (split.revert) split.revert();
+      // revert SplitText first if present
+      splitRef.current?.revert?.();
+      ctx?.revert?.();
     };
-  });
+    // run once on mount
+  }, []);
 
   return (
     <section ref={sectionRef} id="about" className={`relative ${className}`}>

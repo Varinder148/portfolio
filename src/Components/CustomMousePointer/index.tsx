@@ -6,59 +6,45 @@ import { useViewport } from "@/Providers/ViewportProvider";
 
 import { throttle } from "lodash";
 
+const CLICKABLE_SELECTOR = 'a, button:not([disabled]), [role="button"]';
+
 const CustomMousePointer: React.FC = () => {
   const pointerRef = useRef<HTMLDivElement>(null);
   const secondaryPointerRef = useRef<HTMLDivElement>(null);
   const { isTouchDevice } = useViewport();
-  const [isHovered, setIsHovered] = useState(false);
+  const [isHovered, setIsHoveredState] = useState(false);
 
-  // Cache DOM rects to avoid repeated queries
-  const pointerRectRef = useRef<DOMRect | null>(null);
-  const secondaryPointerRectRef = useRef<DOMRect | null>(null);
-
-  // Refs to track cleanup functions
-  const throttledMouseMoveRef = useRef<ReturnType<typeof throttle> | null>(
-    null,
-  );
-  const mutationObserverRef = useRef<MutationObserver | null>(null);
-  const eventListenersRef = useRef<
-    Map<Element, { enter: () => void; leave: () => void }>
-  >(new Map());
-
-  // Cache DOM rects when elements change
-  useEffect(() => {
-    if (pointerRef.current) {
-      pointerRectRef.current = pointerRef.current.getBoundingClientRect();
-    }
-    if (secondaryPointerRef.current) {
-      secondaryPointerRectRef.current =
-        secondaryPointerRef.current.getBoundingClientRect();
-    }
+  // Mirror hover state in a ref so updatePointer can remain stable
+  const isHoveredRef = useRef(false);
+  const setIsHovered = useCallback((v: boolean) => {
+    isHoveredRef.current = v;
+    setIsHoveredState(v);
   }, []);
 
-  // Memoized pointer update logic
+  // Stable throttled mouse handler ref
+  const throttledMouseMoveRef = useRef<
+    ((clientX: number, clientY: number, isInWindow: boolean) => void) | null
+  >(null);
+
+  // Stable pointer updater that reads latest hover state from ref
   const updatePointer = useCallback(
     (clientX: number, clientY: number, isInWindow: boolean) => {
-      const pointerRect = pointerRectRef.current;
-      const secondaryPointerRect = secondaryPointerRectRef.current;
+      if (!pointerRef.current || !secondaryPointerRef.current) return;
 
-      if (isInWindow && pointerRect && secondaryPointerRect) {
-        // Kill previous tweens before starting new ones
-        gsap.killTweensOf(pointerRef.current);
-        gsap.killTweensOf(secondaryPointerRef.current);
-
+      if (isInWindow) {
+        // Rely on overwrite:auto instead of killing tweens every frame
         gsap.to(pointerRef.current, {
           left: clientX,
           top: clientY,
           x: "-50%",
           y: "-50%",
-          scale: isHovered ? 3 : 1,
-          backgroundColor: isHovered ? THEME.IVORY : THEME.RED,
+          scale: isHoveredRef.current ? 3 : 1,
+          backgroundColor: isHoveredRef.current ? THEME.IVORY : THEME.RED,
           display: "block",
           duration: 0.1,
           ease: "power3.out",
           overwrite: "auto",
-          force3D: true, // Hardware acceleration
+          force3D: true,
         });
 
         gsap.to(secondaryPointerRef.current, {
@@ -70,11 +56,9 @@ const CustomMousePointer: React.FC = () => {
           duration: 0.4,
           ease: "power3.out",
           overwrite: "auto",
-          force3D: true, // Hardware acceleration
+          force3D: true,
         });
       } else {
-        gsap.killTweensOf(pointerRef.current);
-        gsap.killTweensOf(secondaryPointerRef.current);
         gsap.to(pointerRef.current, { display: "none", overwrite: "auto" });
         gsap.to(secondaryPointerRef.current, {
           display: "none",
@@ -82,58 +66,21 @@ const CustomMousePointer: React.FC = () => {
         });
       }
     },
-    [isHovered],
+    [],
   );
-
-  // Function to add event listeners to clickable elements
-  const addEventListenersToElement = useCallback((element: Element) => {
-    if (eventListenersRef.current.has(element)) return; // Already has listeners
-
-    const onMouseEnter = () => setIsHovered(true);
-    const onMouseLeave = () => setIsHovered(false);
-
-    element.addEventListener("mouseenter", onMouseEnter);
-    element.addEventListener("mouseleave", onMouseLeave);
-
-    // Store references for cleanup
-    eventListenersRef.current.set(element, {
-      enter: onMouseEnter,
-      leave: onMouseLeave,
-    });
-  }, []);
-
-  // Function to remove event listeners from an element
-  const removeEventListenersFromElement = useCallback((element: Element) => {
-    const listeners = eventListenersRef.current.get(element);
-    if (listeners) {
-      element.removeEventListener("mouseenter", listeners.enter);
-      element.removeEventListener("mouseleave", listeners.leave);
-      eventListenersRef.current.delete(element);
-    }
-  }, []);
-
-  // Function to add listeners to all current clickable elements
-  const addListenersToAllClickableElements = useCallback(() => {
-    const clickableElements = document.querySelectorAll(
-      'a, button:not([disabled]), [role="button"]',
-    );
-    clickableElements.forEach(addEventListenersToElement);
-  }, [addEventListenersToElement]);
-
-  // Function to remove all event listeners
-  const removeAllEventListeners = useCallback(() => {
-    eventListenersRef.current.forEach((listeners, element) => {
-      element.removeEventListener("mouseenter", listeners.enter);
-      element.removeEventListener("mouseleave", listeners.leave);
-    });
-    eventListenersRef.current.clear();
-  }, []);
 
   useEffect(() => {
     if (isTouchDevice) return;
 
-    // Throttle mousemove to 32ms (30fps) instead of 16ms (60fps) for better performance
-    throttledMouseMoveRef.current = throttle((event: MouseEvent) => {
+    // Create a single throttled wrapper that calls our stable updatePointer
+    throttledMouseMoveRef.current = throttle(
+      (clientX: number, clientY: number, isInWindow: boolean) => {
+        updatePointer(clientX, clientY, isInWindow);
+      },
+      32,
+    );
+
+    const handleMouseMove = (event: MouseEvent) => {
       const { clientX, clientY } = event;
       const { innerWidth, innerHeight } = window;
       const isInWindow =
@@ -141,91 +88,67 @@ const CustomMousePointer: React.FC = () => {
         clientX <= innerWidth &&
         clientY >= 0 &&
         clientY <= innerHeight;
-      updatePointer(clientX, clientY, isInWindow);
-    }, 32); // Increased from 16ms to 32ms
+      throttledMouseMoveRef.current?.(clientX, clientY, isInWindow);
+    };
 
-    // Add listeners to existing elements
-    addListenersToAllClickableElements();
+    // Use event delegation on document to detect hover on clickable elements instead
+    const handleDocMouseOver = (e: MouseEvent) => {
+      const target = e.target as Element | null;
+      if (!target) return;
+      if (target.closest && target.closest(CLICKABLE_SELECTOR)) {
+        setIsHovered(true);
+      }
+    };
 
-    // Set up MutationObserver to watch for new elements
-    mutationObserverRef.current = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        mutation.addedNodes.forEach((node) => {
-          if (node.nodeType === Node.ELEMENT_NODE) {
-            const element = node as Element;
-            // Check if the added element is clickable
-            if (element.matches('a, button:not([disabled]), [role="button"]')) {
-              addEventListenersToElement(element);
-            }
-            // Check children of added element
-            element
-              .querySelectorAll('a, button:not([disabled]), [role="button"]')
-              .forEach(addEventListenersToElement);
-          }
-        });
+    const handleDocMouseOut = (e: MouseEvent) => {
+      const target = e.target as Element | null;
+      const related = (e as any).relatedTarget as Element | null;
+      if (!target) return;
+      const leftClickable =
+        target.closest && target.closest(CLICKABLE_SELECTOR);
+      // If we left a clickable element and the relatedTarget isn't inside a clickable, clear hover
+      if (leftClickable) {
+        if (
+          !related ||
+          !related.closest ||
+          !related.closest(CLICKABLE_SELECTOR)
+        ) {
+          setIsHovered(false);
+        }
+      }
+    };
 
-        mutation.removedNodes.forEach((node) => {
-          if (node.nodeType === Node.ELEMENT_NODE) {
-            const element = node as Element;
-            // Remove listeners from removed element
-            if (element.matches('a, button:not([disabled]), [role="button"]')) {
-              removeEventListenersFromElement(element);
-            }
-            // Remove listeners from children of removed element
-            element
-              .querySelectorAll('a, button:not([disabled]), [role="button"]')
-              .forEach(removeEventListenersFromElement);
-          }
-        });
-      });
-    });
+    window.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseover", handleDocMouseOver);
+    document.addEventListener("mouseout", handleDocMouseOut);
 
-    // Start observing
-    mutationObserverRef.current.observe(document.body, {
-      childList: true,
-      subtree: true,
-    });
-
-    // Add window mousemove listener
-    window.addEventListener("mousemove", throttledMouseMoveRef.current);
-
-    // Cleanup function
     return () => {
-      // Clean up GSAP tweens
+      // Kill any running tweens once on unmount
       gsap.killTweensOf(pointerRef.current);
       gsap.killTweensOf(secondaryPointerRef.current);
 
-      // Clean up throttled function
-      if (throttledMouseMoveRef.current) {
-        throttledMouseMoveRef.current.cancel();
-        window.removeEventListener("mousemove", throttledMouseMoveRef.current);
+      window.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseover", handleDocMouseOver);
+      document.removeEventListener("mouseout", handleDocMouseOut);
+
+      if (
+        throttledMouseMoveRef.current &&
+        (throttledMouseMoveRef.current as any).cancel
+      ) {
+        (throttledMouseMoveRef.current as any).cancel();
         throttledMouseMoveRef.current = null;
       }
-
-      // Clean up mutation observer
-      if (mutationObserverRef.current) {
-        mutationObserverRef.current.disconnect();
-        mutationObserverRef.current = null;
-      }
-
-      // Clean up all event listeners
-      removeAllEventListeners();
     };
-  }, [
-    isTouchDevice,
-    updatePointer,
-    addEventListenersToElement,
-    removeEventListenersFromElement,
-    addListenersToAllClickableElements,
-    removeAllEventListeners,
-  ]);
+  }, [isTouchDevice, updatePointer]);
 
   if (isTouchDevice) return null;
   return (
     <>
       <div
         ref={pointerRef}
-        className={`fixed w-5 h-5 opacity-50 rounded-full pointer-events-none z-[1000] hidden ${isHovered ? "bg-theme-red" : "bg-theme-white"}`}
+        className={`fixed w-5 h-5 opacity-50 rounded-full pointer-events-none z-[1000] hidden ${
+          isHovered ? "bg-theme-white" : "bg-theme-red"
+        }`}
       />
       <div
         ref={secondaryPointerRef}

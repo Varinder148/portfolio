@@ -1,7 +1,13 @@
 import Button from "@/Components/Button";
 import gsap from "gsap";
 import Image from "next/image";
-import React, { useRef, useState, useEffect } from "react";
+import React, {
+  useRef,
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+} from "react";
 import Overview from "./Overview";
 import "./Card.css";
 import { useViewport } from "@/Providers/ViewportProvider";
@@ -31,16 +37,23 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(({ data }, ref) => {
   const backRef = useRef<HTMLAnchorElement>(null);
 
   useEffect(() => {
-    gsap.set([frontRef.current, backRef.current], {
-      backfaceVisibility: "hidden",
-    });
-    gsap.set(cardRef.current, {
-      transformOrigin: "center center",
-      transformPerspective: 1000,
-    });
+    if (!cardRef.current) return;
+    const ctx = gsap.context(() => {
+      gsap.set([frontRef.current, backRef.current], {
+        backfaceVisibility: "hidden",
+      });
+      gsap.set(cardRef.current, {
+        transformOrigin: "center center",
+        transformPerspective: 1000,
+      });
+    }, cardRef.current);
+
+    return () => {
+      ctx.revert();
+    };
   }, []);
 
-  const flipCard = () => {
+  const flipCard = useCallback(() => {
     const duration = 0.6;
     if (!isFlipped) {
       gsap.to(cardRef.current, {
@@ -63,7 +76,7 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(({ data }, ref) => {
         },
       });
     }
-  };
+  }, [isFlipped]);
 
   return (
     <div
@@ -78,9 +91,10 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(({ data }, ref) => {
         }}
         data-flipped={isFlipped}
         className="relative card border-2 border-theme-black bg-theme-ivory w-full h-[600px] md:w-[600px] stackingcard rounded-2xl"
-        style={{
-          height: viewportHeight - viewportHeight * 0.2,
-        }}
+        style={useMemo(
+          () => ({ height: viewportHeight - viewportHeight * 0.2 }),
+          [viewportHeight],
+        )}
       >
         <div
           ref={frontRef}

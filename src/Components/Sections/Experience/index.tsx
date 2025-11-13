@@ -1,89 +1,98 @@
 "use client";
 
-import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { Draggable, InertiaPlugin, ScrollTrigger } from "gsap/all";
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import { CARDS } from "./constants";
 import Card from "./Card";
 
 const Experience: React.FC = () => {
   const cardRefs = useRef<Array<HTMLDivElement | null>>([]);
 
-  useGSAP(() => {
+  useEffect(() => {
     if (typeof window === "undefined") return;
 
     const draggables: any[] = [];
-    if (window && window.innerWidth > 768) {
-      gsap.registerPlugin(Draggable);
-      gsap.registerPlugin(InertiaPlugin);
 
-      cardRefs.current.forEach((card: any, index) => {
-        const instances = Draggable.create(card, {
-          bounds: document.querySelector("#experience_bounds"),
-          type: "x",
-          edgeResistance: 0.5,
-          inertia: true,
-          trigger: `.drag-trigger-${index}`,
+    const ctx = gsap.context(() => {
+      if (window && window.innerWidth > 768) {
+        gsap.registerPlugin(Draggable);
+        gsap.registerPlugin(InertiaPlugin);
+
+        cardRefs.current.forEach((card: any, index) => {
+          const instances = Draggable.create(card, {
+            bounds: document.querySelector("#experience_bounds"),
+            type: "x",
+            edgeResistance: 0.5,
+            inertia: true,
+            trigger: `.drag-trigger-${index}`,
+          });
+          draggables.push(...instances);
         });
-        draggables.push(...instances);
-      });
-    }
-    return () => {
-      draggables.forEach(
-        (draggable) => draggable && draggable.kill && draggable.kill(),
-      );
-    };
-  });
+      }
+    }, document.body);
 
-  useGSAP(() => {
-    if (typeof window === "undefined") return;
-    // Only use refs instead of DOM queries
-    cardRefs.current.forEach((card, i) => {
-      if (!card) return;
-      const angleMultiplier = i % 2 === 1 ? -1 : 1;
-      gsap.set(card, {
-        transformOrigin: "center center",
-        rotationX: 0,
-        rotationY: 0,
-        rotationZ: 0,
-        overwrite: "auto",
-      });
-      ScrollTrigger.create({
-        trigger: card,
-        start: `top 10%`,
-        end: "top center",
-        endTrigger: ".end-element",
-        pin: true,
-        pinSpacing: false,
-        markers: false,
-        id: `card-${i}`,
-        onToggle: (self) => {
-          if (self.isActive) {
-            const isFlipped = card.getAttribute("data-flipped") === "true";
-            const targetRotation = isFlipped ? 180 : 0;
-            gsap.set(card, {
-              transformOrigin: "center center",
-              rotationX: 0,
-              rotationY: targetRotation,
-              rotationZ: 5 * angleMultiplier,
-              overwrite: "auto",
-            });
-          } else {
-            gsap.set(card, {
-              rotationX: 0,
-              rotationY: card.getAttribute("data-flipped") === "true" ? 180 : 0,
-              rotationZ: 0,
-              overwrite: "auto",
-            });
-          }
-        },
-      });
-    });
+    (ctx as any)._draggables = draggables;
+
     return () => {
+      (ctx as any)._draggables?.forEach((d: any) => d && d.kill && d.kill());
+      ctx.revert();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const ctx = gsap.context(() => {
+      // Only use refs instead of DOM queries
+      cardRefs.current.forEach((card, i) => {
+        if (!card) return;
+        const angleMultiplier = i % 2 === 1 ? -1 : 1;
+        gsap.set(card, {
+          transformOrigin: "center center",
+          rotationX: 0,
+          rotationY: 0,
+          rotationZ: 0,
+          overwrite: "auto",
+        });
+        ScrollTrigger.create({
+          trigger: card,
+          start: `top 10%`,
+          end: "top center",
+          endTrigger: ".end-element",
+          pin: true,
+          pinSpacing: false,
+          markers: false,
+          id: `card-${i}`,
+          onToggle: (self) => {
+            if (self.isActive) {
+              const isFlipped = card.getAttribute("data-flipped") === "true";
+              const targetRotation = isFlipped ? 180 : 0;
+              gsap.set(card, {
+                transformOrigin: "center center",
+                rotationX: 0,
+                rotationY: targetRotation,
+                rotationZ: 5 * angleMultiplier,
+                overwrite: "auto",
+              });
+            } else {
+              gsap.set(card, {
+                rotationX: 0,
+                rotationY:
+                  card.getAttribute("data-flipped") === "true" ? 180 : 0,
+                rotationZ: 0,
+                overwrite: "auto",
+              });
+            }
+          },
+        });
+      });
+    }, document.body);
+
+    return () => {
+      ctx.revert();
       ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     };
-  });
+  }, []);
 
   return (
     <>
