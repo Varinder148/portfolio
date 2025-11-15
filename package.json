@@ -8,8 +8,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "predeploy": "next build && touch out/.nojekyll",
-    "deploy:gh": "npm run predeploy && gh-pages -d out",
+    "predeploy": "next build && node -e \"require('fs').writeFileSync('out/.nojekyll','')\"",
+    "gh-pages-clean": "node -e \"require('fs').rmSync('node_modules/.cache/gh-pages', { recursive: true, force: true })\"",
+    "deploy:gh": "npm run gh-pages-clean && npm run predeploy && gh-pages -d out -r https://github.com/varinder148/portfolio.git",
     "lint:fix": "next lint --fix",
     "type-check": "tsc --noEmit",
     "prepare": "husky install"
