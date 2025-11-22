@@ -4,7 +4,7 @@ import React, {
   createContext,
   ReactNode,
   useContext,
-  useEffect,
+  useLayoutEffect,
   useState,
 } from "react";
 
@@ -30,7 +30,7 @@ const ViewportProvider = ({ children }: { children: ReactNode }) => {
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [isTouchDevice, setIsTouchDevice] = useState<boolean>(false);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const checkTouchDevice = () => {
       return (
         "ontouchstart" in window ||

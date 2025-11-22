@@ -32,15 +32,16 @@ const CustomMousePointer: React.FC = () => {
       if (!pointerRef.current || !secondaryPointerRef.current) return;
 
       if (isInWindow) {
-        // Rely on overwrite:auto instead of killing tweens every frame
+        // Use transform-based animation (x/y + xPercent/yPercent) to avoid
+        // layout thrashing caused by animating `left`/`top`.
         gsap.to(pointerRef.current, {
-          left: clientX,
-          top: clientY,
-          x: "-50%",
-          y: "-50%",
+          x: clientX,
+          y: clientY,
+          xPercent: -50,
+          yPercent: -50,
           scale: isHoveredRef.current ? 3 : 1,
           backgroundColor: isHoveredRef.current ? THEME.IVORY : THEME.RED,
-          display: "block",
+          autoAlpha: isHoveredRef.current ? 0.5 : 1,
           duration: 0.1,
           ease: "power3.out",
           overwrite: "auto",
@@ -48,20 +49,20 @@ const CustomMousePointer: React.FC = () => {
         });
 
         gsap.to(secondaryPointerRef.current, {
-          left: clientX,
-          top: clientY,
-          x: "-50%",
-          y: "-50%",
-          display: "block",
+          x: clientX,
+          y: clientY,
+          xPercent: -50,
+          yPercent: -50,
+          autoAlpha: isHoveredRef.current ? 0 : 1,
           duration: 0.4,
           ease: "power3.out",
           overwrite: "auto",
           force3D: true,
         });
       } else {
-        gsap.to(pointerRef.current, { display: "none", overwrite: "auto" });
+        gsap.to(pointerRef.current, { autoAlpha: 0, overwrite: "auto" });
         gsap.to(secondaryPointerRef.current, {
-          display: "none",
+          autoAlpha: 0,
           overwrite: "auto",
         });
       }
@@ -122,6 +123,18 @@ const CustomMousePointer: React.FC = () => {
     document.addEventListener("mouseover", handleDocMouseOver);
     document.addEventListener("mouseout", handleDocMouseOut);
 
+    // Initialize pointers off-screen and hidden so transforms work predictably
+    if (pointerRef.current) {
+      gsap.set(pointerRef.current, { x: -9999, y: -9999, autoAlpha: 0 });
+    }
+    if (secondaryPointerRef.current) {
+      gsap.set(secondaryPointerRef.current, {
+        x: -9999,
+        y: -9999,
+        autoAlpha: 0,
+      });
+    }
+
     return () => {
       // Kill any running tweens once on unmount
       gsap.killTweensOf(pointerRef.current);
@@ -141,19 +154,41 @@ const CustomMousePointer: React.FC = () => {
     };
   }, [isTouchDevice, updatePointer]);
 
+  useEffect(() => {
+    if (isTouchDevice) return;
+    // When hover state changes, hide/show the outer ring and set inner ring opacity
+    if (pointerRef.current) {
+      gsap.to(pointerRef.current, {
+        opacity: isHovered ? 0.5 : 1,
+        duration: 0.15,
+        overwrite: "auto",
+      });
+    }
+    if (secondaryPointerRef.current) {
+      gsap.to(secondaryPointerRef.current, {
+        autoAlpha: isHovered ? 0 : 1,
+        duration: 0.2,
+        overwrite: "auto",
+      });
+    }
+  }, [isHovered, isTouchDevice]);
+
   if (isTouchDevice) return null;
+
   return (
     <>
       <div
         ref={pointerRef}
-        className={`fixed w-5 h-5 opacity-50 rounded-full pointer-events-none z-[1000] hidden ${
+        style={{ willChange: "transform" }}
+        className={`fixed left-0 top-0 w-5 h-5 rounded-full pointer-events-none z-[1000] ${
           isHovered ? "bg-theme-white" : "bg-theme-red"
         }`}
       />
       <div
         ref={secondaryPointerRef}
+        style={{ willChange: "transform" }}
         className={clsx(
-          `fixed w-15 h-15 border-2 border-theme-gray rounded-full pointer-events-none z-[1000] hidden `,
+          `fixed left-0 top-0 w-15 h-15 border-2 border-theme-gray rounded-full pointer-events-none z-[1000] `,
           { invisible: isHovered },
         )}
       />
