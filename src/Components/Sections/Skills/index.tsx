@@ -45,6 +45,11 @@ const usePerformanceMonitor = () => {
   }, []);
 };
 
+// Register polygon decomposition once at module initialization
+if (Common && typeof Common.setDecomp === "function") {
+  Common.setDecomp(decomp);
+}
+
 function getScaleFactor(viewportWidth: number) {
   const maxWidth = 1200;
   const minWidth = 100;
@@ -211,6 +216,40 @@ function useSkillsPhysics() {
     [dimensions.width, dimensions.height],
   );
 
+  // Persist renderer, runner and mouse constraint across resizes to avoid recreating them
+  const renderRef = React.useRef<any | null>(null);
+  const runnerRef = React.useRef<any | null>(null);
+  const mouseConstraintRef = React.useRef<any | null>(null);
+
+  // Unmount cleanup: stop runner/render and remove canvas once when component unmounts
+  React.useEffect(() => {
+    return () => {
+      const render = renderRef.current;
+      const runner = runnerRef.current;
+      const mouseConstraint = mouseConstraintRef.current;
+      const engine = engineRef.current;
+      try {
+        if (mouseConstraint && engine) {
+          Composite.remove(engine.world, mouseConstraint);
+          mouseConstraintRef.current = null;
+        }
+        if (runner) {
+          Runner.stop(runner);
+          runnerRef.current = null;
+        }
+        if (render) {
+          Render.stop(render);
+          if (render.canvas && typeof render.canvas.remove === "function") {
+            render.canvas.remove();
+          }
+          renderRef.current = null;
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    };
+  }, []);
+
   // --- Engine instance (stable) ---
   const engineRef = React.useRef<ReturnType<typeof Engine.create> | null>(null);
   if (!engineRef.current) {
@@ -220,31 +259,59 @@ function useSkillsPhysics() {
   // --- World setup effect ---
   React.useEffect(() => {
     const engine = engineRef.current!;
-    Common.setDecomp(decomp);
-    // Clear previous world
+    // Clear previous world bodies (keep engine instance stable)
     Composite.clear(engine.world, false);
     Engine.clear(engine);
-    // Remove any previous renderers
+
+    // Ensure we only remove unrelated canvases (not the renderer we may be reusing)
     const prevCanvas = canvasRef.current?.querySelector("canvas");
-    if (prevCanvas) prevCanvas.remove();
-    // Setup renderer with performance optimizations
-    const render = Render.create({
-      element: canvasRef.current!,
-      engine: engine,
-      options: {
-        width: dimensions.width,
-        height: dimensions.height,
-        wireframes: false,
-        background: "transparent",
-        pixelRatio: Math.min(window.devicePixelRatio, 1.0), // Reduced from 1.5
-        showDebug: false,
-        showBounds: false,
-        showVelocity: false,
-      },
-    });
-    Render.run(render);
-    const runner = Runner.create();
-    Runner.run(runner, engine);
+    if (prevCanvas && prevCanvas !== renderRef.current?.canvas)
+      prevCanvas.remove();
+
+    // Setup or reuse renderer
+    let render = renderRef.current;
+    if (!render) {
+      render = Render.create({
+        element: canvasRef.current!,
+        engine: engine,
+        options: {
+          width: dimensions.width,
+          height: dimensions.height,
+          wireframes: false,
+          background: "transparent",
+          pixelRatio: Math.min(window.devicePixelRatio, 1.0), // Reduced from 1.5
+          showDebug: false,
+          showBounds: false,
+          showVelocity: false,
+        },
+      });
+      Render.run(render);
+      renderRef.current = render;
+    } else {
+      // Update size for existing renderer
+      render.options.width = dimensions.width;
+      render.options.height = dimensions.height;
+      try {
+        if (render.canvas) {
+          render.canvas.width = Math.floor(
+            dimensions.width * Math.min(window.devicePixelRatio, 1),
+          );
+          render.canvas.height = Math.floor(
+            dimensions.height * Math.min(window.devicePixelRatio, 1),
+          );
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    }
+
+    // Setup or reuse runner
+    let runner = runnerRef.current;
+    if (!runner) {
+      runner = Runner.create();
+      Runner.run(runner, engine);
+      runnerRef.current = runner;
+    }
 
     // Walls
     const ground = Bodies.rectangle(
@@ -279,12 +346,12 @@ function useSkillsPhysics() {
       { isStatic: true, render: { fillStyle: "#0F0F0F" } },
     );
     Composite.add(engine.world, [ground, leftWall, rightWall, roof]);
-    // Terrain
+    // Terrain bounds computed from scaled vertices (already transformed to viewport coords)
     const bounds = {
       min: { x: Infinity, y: Infinity },
       max: { x: -Infinity, y: -Infinity },
     };
-    vertexSets.forEach((vertices: { x: number; y: number }[]) => {
+    scaledVertices.forEach((vertices: { x: number; y: number }[]) => {
       vertices.forEach((vertex: { x: number; y: number }) => {
         bounds.min.x = Math.min(bounds.min.x, vertex.x);
         bounds.min.y = Math.min(bounds.min.y, vertex.y);
@@ -384,19 +451,24 @@ function useSkillsPhysics() {
         mouseConstraint.mouse.mouseup,
       );
     }
+    // Remove previous mouse constraint if present to avoid duplicates
+    if (mouseConstraintRef.current) {
+      try {
+        Composite.remove(engine.world, mouseConstraintRef.current);
+      } catch (e) {
+        console.log(e);
+      }
+      mouseConstraintRef.current = null;
+    }
     Composite.add(engine.world, mouseConstraint);
+    mouseConstraintRef.current = mouseConstraint;
     render.mouse = mouse;
     Render.lookAt(render, {
       min: { x: 0, y: 0 },
       max: { x: dimensions.width, y: dimensions.height },
     });
-    // Cleanup
-    return () => {
-      Render.stop(render);
-      Runner.stop(runner);
-      render.canvas.remove();
-      // Do not clear engineRef here, keep it stable
-    };
+    // No per-resize cleanup here. Full cleanup is handled on unmount.
+    return undefined;
   }, [
     dimensions.width,
     dimensions.height,
