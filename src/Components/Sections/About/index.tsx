@@ -29,6 +29,7 @@ const About: React.FC<AboutProps> = ({ className = "", scrollToContact }) => {
       // Kill previous timelines if any
       if (tlRef.current) tlRef.current.kill();
       if (animRef.current) animRef.current.kill();
+      if (splitRef.current) splitRef.current.revert();
 
       // hey text animation
       const tl = gsap
@@ -82,8 +83,19 @@ const About: React.FC<AboutProps> = ({ className = "", scrollToContact }) => {
     (ctx as any)._split = splitRef.current;
 
     return () => {
-      // revert SplitText first if present
-      splitRef.current?.revert?.();
+      // Properly kill and revert all animations and split text
+      if (tlRef.current) {
+        tlRef.current.kill();
+        tlRef.current = null;
+      }
+      if (animRef.current) {
+        animRef.current.kill();
+        animRef.current = null;
+      }
+      if (splitRef.current) {
+        splitRef.current.revert();
+        splitRef.current = null;
+      }
       ctx?.revert?.();
     };
     // run once on mount

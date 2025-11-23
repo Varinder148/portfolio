@@ -13,9 +13,11 @@ const CustomMousePointer: React.FC = () => {
   const secondaryPointerRef = useRef<HTMLDivElement>(null);
   const { isTouchDevice } = useViewport();
   const [isHovered, setIsHoveredState] = useState(false);
+  const [isScrolling, setIsScrolling] = useState(false);
 
   // Mirror hover state in a ref so updatePointer can remain stable
   const isHoveredRef = useRef(false);
+  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const setIsHovered = useCallback((v: boolean) => {
     isHoveredRef.current = v;
     setIsHoveredState(v);
@@ -82,6 +84,9 @@ const CustomMousePointer: React.FC = () => {
     );
 
     const handleMouseMove = (event: MouseEvent) => {
+      // Pause pointer updates during scroll for better performance
+      if (isScrolling) return;
+
       const { clientX, clientY } = event;
       const { innerWidth, innerHeight } = window;
       const isInWindow =
@@ -119,9 +124,22 @@ const CustomMousePointer: React.FC = () => {
       }
     };
 
+    const handleScroll = () => {
+      setIsScrolling(true);
+
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+
+      scrollTimeoutRef.current = setTimeout(() => {
+        setIsScrolling(false);
+      }, 150);
+    };
+
     window.addEventListener("mousemove", handleMouseMove);
     document.addEventListener("mouseover", handleDocMouseOver);
     document.addEventListener("mouseout", handleDocMouseOut);
+    window.addEventListener("scroll", handleScroll, { passive: true });
 
     // Initialize pointers off-screen and hidden so transforms work predictably
     if (pointerRef.current) {
@@ -143,6 +161,11 @@ const CustomMousePointer: React.FC = () => {
       window.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseover", handleDocMouseOver);
       document.removeEventListener("mouseout", handleDocMouseOut);
+      window.removeEventListener("scroll", handleScroll);
+
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
 
       if (
         throttledMouseMoveRef.current &&
@@ -152,7 +175,7 @@ const CustomMousePointer: React.FC = () => {
         throttledMouseMoveRef.current = null;
       }
     };
-  }, [isTouchDevice, updatePointer]);
+  }, [isTouchDevice, updatePointer, isScrolling]);
 
   useEffect(() => {
     if (isTouchDevice) return;
@@ -179,14 +202,22 @@ const CustomMousePointer: React.FC = () => {
     <>
       <div
         ref={pointerRef}
-        style={{ willChange: "transform" }}
+        style={{
+          willChange: "transform",
+          transform: "translate3d(-9999px, -9999px, 0)",
+          opacity: 0,
+        }}
         className={`fixed left-0 top-0 w-5 h-5 rounded-full pointer-events-none z-[1000] ${
           isHovered ? "bg-theme-white" : "bg-theme-red"
         }`}
       />
       <div
         ref={secondaryPointerRef}
-        style={{ willChange: "transform" }}
+        style={{
+          willChange: "transform",
+          transform: "translate3d(-9999px, -9999px, 0)",
+          opacity: 0,
+        }}
         className={clsx(
           `fixed left-0 top-0 w-15 h-15 border-2 border-theme-gray rounded-full pointer-events-none z-[1000] `,
           { invisible: isHovered },

@@ -8,11 +8,15 @@ import Card from "./Card";
 
 const Experience: React.FC = () => {
   const cardRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const scrollTriggersRef = useRef<any[]>([]);
+  const draggablesRef = useRef<any[]>([]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    const draggables: any[] = [];
+    // Kill existing draggables before creating new ones
+    draggablesRef.current.forEach((d: any) => d && d.kill && d.kill());
+    draggablesRef.current = [];
 
     const ctx = gsap.context(() => {
       if (window && window.innerWidth > 768) {
@@ -27,21 +31,26 @@ const Experience: React.FC = () => {
             inertia: true,
             trigger: `.drag-trigger-${index}`,
           });
-          draggables.push(...instances);
+          draggablesRef.current.push(...instances);
         });
       }
     }, document.body);
 
-    (ctx as any)._draggables = draggables;
-
     return () => {
-      (ctx as any)._draggables?.forEach((d: any) => d && d.kill && d.kill());
+      draggablesRef.current.forEach((d: any) => d && d.kill && d.kill());
       ctx.revert();
     };
   }, []);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
+
+    // Kill existing scroll triggers before creating new ones
+    scrollTriggersRef.current.forEach(
+      (trigger: any) => trigger && trigger.kill && trigger.kill(),
+    );
+    scrollTriggersRef.current = [];
+
     const ctx = gsap.context(() => {
       // Only use refs instead of DOM queries
       cardRefs.current.forEach((card, i) => {
@@ -54,7 +63,7 @@ const Experience: React.FC = () => {
           rotationZ: 0,
           overwrite: "auto",
         });
-        ScrollTrigger.create({
+        const trigger = ScrollTrigger.create({
           trigger: card,
           start: `top 10%`,
           end: "top center",
@@ -85,12 +94,15 @@ const Experience: React.FC = () => {
             }
           },
         });
+        scrollTriggersRef.current.push(trigger);
       });
     }, document.body);
 
     return () => {
+      scrollTriggersRef.current.forEach(
+        (trigger: any) => trigger && trigger.kill && trigger.kill(),
+      );
       ctx.revert();
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     };
   }, []);
 
